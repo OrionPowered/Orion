@@ -1,6 +1,11 @@
 package pro.prysm.orion.server.event;
 
+import pro.prysm.orion.server.event.events.PacketEvent;
+import pro.prysm.orion.server.protocol.Packet;
+
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,6 +18,21 @@ public class EventBus {
 
     public void unSubscribe(Listener listener) {
         listeners.remove(listener);
+    }
+
+    public synchronized void post(PacketEvent event, Packet packet) {
+        listeners.forEach((listener, methods) -> methods.forEach(method -> {
+            try {
+                Parameter[] parameters = method.getParameters();
+                System.out.println(Arrays.toString(parameters));
+                if (parameters[0].getType().equals(event.getClass()) && parameters[1].getType().equals(packet.getClass())) {
+                    System.out.println("METHOD FOUND");
+                    method.invoke(listener, event, packet);
+                }
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }));
     }
 
     public synchronized void post(Event event) {
