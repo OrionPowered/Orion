@@ -16,9 +16,9 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
     public Orion() {
         this.logger = new Logger("Orion");
         logger.info("Starting Orion...");
-        TCPListener = new TCPListener();
         EVENT_BUS.subscribe(this);
         EVENT_BUS.post(new TestEvent());
+        TCPListener = new TCPListener();
     }
 
     @EventHandler
