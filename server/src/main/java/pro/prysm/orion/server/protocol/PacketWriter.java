@@ -31,17 +31,24 @@ public abstract class PacketWriter {
      * @param buf Buffer to read from
      * @return Integer
      */
-    protected int readVarInt(ByteBuf buf) {
-        int value = 0;
-        int length = 0;
-        byte currentByte;
-        while((value & 0x80) != 0x80) {
-            currentByte = buf.readByte();
-            value |= (currentByte & 0x7F) << (length * 7);
-            length ++;
-            if (length > 5) throw new RuntimeException("VarInt is too big");
-        }
-        return value;
+    public static int readVarInt(ByteBuf buf) {
+        // This method was taken from MiniDigger/Minicraft (MIT)
+        // https://github.com/MiniDigger/MiniCraft/blob/4109c25ceac99e97a668269b73dacbac939c8e8d/src/main/java/me/minidigger/minicraft/protocol/DataTypes.java#L48
+        int numRead = 0;
+        int result = 0;
+        byte read;
+        do {
+            read = buf.readByte();
+            int value = (read & 0b01111111);
+            result |= (value << (7 * numRead));
+
+            numRead++;
+            if (numRead > 5) {
+                throw new RuntimeException("VarInt is too big");
+            }
+        } while ((read & 0b10000000) != 0);
+
+        return result;
     }
 
     /**
