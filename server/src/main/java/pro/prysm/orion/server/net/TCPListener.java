@@ -8,8 +8,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 import java.net.InetSocketAddress;
 
-public class Listener {
-    public Listener() {
+public class TCPListener {
+    public TCPListener() {
         try {
             listen(new InetSocketAddress("localhost", 25565));
         } catch (InterruptedException e) {
