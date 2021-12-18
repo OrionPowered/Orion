@@ -1,4 +1,4 @@
-package pro.prysm.orion.server.protocol;
+package pro.prysm.orion.api.protocol;
 
 public enum PacketState {
     HANDSHAKE,
