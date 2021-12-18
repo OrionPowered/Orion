@@ -12,7 +12,7 @@ public interface Listener {
         List<Method> methods = new ArrayList<>();
         for (Method method : this.getClass().getMethods()) {
             if (!method.isAccessible()) method.setAccessible(true);
-            if (method.isAnnotationPresent(CustomEventHandler.class)) {
+            if (method.isAnnotationPresent(EventHandler.class)) {
                 if (method.getParameterCount() == 1) {
                     Class<?> param = method.getParameters()[0].getType();
                     if (param.getSuperclass().equals(Event.class) || param.getSuperclass().getSuperclass().equals(Event.class)) {
@@ -23,7 +23,7 @@ public interface Listener {
         }
         return methods
                 .stream()
-                .sorted(Comparator.comparing(m -> m.getAnnotation(CustomEventHandler.class).priority()))
+                .sorted(Comparator.comparing(m -> m.getAnnotation(EventHandler.class).priority()))
                 .collect(Collectors.toList()); //Return all methods tagged with @EventHandler sorted by priority
     }
 }
