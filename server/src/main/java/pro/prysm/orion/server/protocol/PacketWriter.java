@@ -102,4 +102,67 @@ public abstract class PacketWriter {
         buf.readBytes(bytes);
         return new String(bytes, StandardCharsets.UTF_8);
     }
+
+    /**
+     * Writes a byte array to the Byte Buffer
+     * @param array Byte array to write
+     * @param buf Buffer to write to
+     */
+    protected void writeByteArray(byte[] array, ByteBuf buf) {
+        writeVarInt(array.length, buf);
+        buf.writeBytes(array);
+    }
+
+    /**
+     * Reads a byte array from the Byte Buffer
+     * @param buf Buffer to read from
+     * @return byte[]
+     */
+    protected byte[] readBytesArray(ByteBuf buf) {
+        byte[] array = new byte[readVarInt(buf)];
+        buf.readBytes(array);
+        return array;
+    }
+
+    /**
+     * Writes an int array to the Byte Buffer
+     * @param array Int array to write
+     * @param buf Buffer to write to
+     */
+    protected void writeIntArray(int[] array, ByteBuf buf) {
+        writeVarInt(array.length, buf);
+        for (int i : array) buf.writeInt(i);
+    }
+
+    /**
+     * Reads an int array from the Byte Buffer
+     * @param buf Buffer to read from
+     * @return int[]
+     */
+    protected int[] readIntArray(ByteBuf buf) {
+        int[] array = new int[readVarInt(buf)];
+        for (int i = 0; i < array.length; i++) array[i] = buf.readInt();
+        return array;
+    }
+
+    /**
+     * Writes a long array to the Byte Buffer
+     * @param array Long array to write
+     * @param buf Buffer to write to
+     */
+    protected void writeLongArray(long[] array, ByteBuf buf) {
+        writeVarInt(array.length, buf);
+        for (long i : array) buf.writeLong(i);
+    }
+
+    /**
+     * Reads a long array from the Byte Buffer
+     * @param buf Buffer to read from
+     * @return long[]
+     */
+    protected long[] readLongArray(ByteBuf buf) {
+        long[] array = new long[readVarInt(buf)];
+        for (int i = 0; i < array.length; i++) array[i] = buf.readLong();
+        return array;
+    }
 }
