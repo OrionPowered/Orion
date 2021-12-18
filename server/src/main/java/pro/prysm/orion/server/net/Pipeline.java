@@ -9,5 +9,7 @@ public class Pipeline extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel socketChannel) {
         ChannelPipeline pipeline = socketChannel.pipeline();
+        pipeline.addLast("encoder", new PacketEncoder());
+
     }
 }

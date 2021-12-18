@@ -1,6 +1,7 @@
 package pro.prysm.orion.server.protocol;
 
-import io.netty.buffer.ByteBuf;
+import pro.prysm.orion.api.protocol.PacketDirection;
+import pro.prysm.orion.api.protocol.PacketState;
 
 public abstract class Packet extends PacketWriter {
     private PacketDirection direction;
@@ -18,8 +19,4 @@ public abstract class Packet extends PacketWriter {
     public int getId() {
         return id;
     }
-
-    public abstract void write(ByteBuf buf);
-
-    public abstract void read(ByteBuf buf);
 }
