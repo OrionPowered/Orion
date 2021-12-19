@@ -26,7 +26,6 @@ public class EventBus {
                 Parameter[] parameters = method.getParameters();
                 System.out.println(Arrays.toString(parameters));
                 if (parameters[0].getType().equals(event.getClass()) && parameters[1].getType().equals(packet.getClass())) {
-                    System.out.println("METHOD FOUND");
                     method.invoke(listener, event, packet);
                 }
             } catch (Throwable t) {
