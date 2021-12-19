@@ -1,5 +1,7 @@
 package pro.prysm.orion.server;
 
+import pro.prysm.orion.server.command.CommandHandler;
+import pro.prysm.orion.server.command.commands.HelpCommand;
 import pro.prysm.orion.server.event.EventBus;
 import pro.prysm.orion.server.event.EventHandler;
 import pro.prysm.orion.server.event.events.IncomingPacketEvent;
@@ -9,16 +11,18 @@ import pro.prysm.orion.server.protocol.incoming.status.Handshake;
 import pro.prysm.orion.server.util.Logger;
 
 public class Orion implements pro.prysm.orion.server.event.Listener {
-    private final Logger logger;
+    private static final Logger logger = new Logger("Orion");
     public static final EventBus EVENT_BUS = new EventBus();
     private final TCPListener TCPListener;
+    private final CommandHandler commandHandler;
 
     public Orion() {
-        this.logger = new Logger("Orion");
         logger.info("Starting Orion...");
-        TCPListener = new TCPListener();
         EVENT_BUS.subscribe(this);
         EVENT_BUS.post(new TestEvent());
+        commandHandler = new CommandHandler();
+        commandHandler.registerCommand(new HelpCommand());
+        TCPListener = new TCPListener();
     }
 
     @EventHandler
@@ -31,7 +35,7 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
         System.out.println("Handshake packet!");
     }
 
-    public Logger getLogger() {
+    public static Logger getLogger() {
         return logger;
     }
 
@@ -41,5 +45,13 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
      */
     public static void main(String[] args) {
         new Orion();
+    }
+
+    public CommandHandler getCommandHandler() {
+        return commandHandler;
+    }
+
+    public pro.prysm.orion.server.net.TCPListener getTCPListener() {
+        return TCPListener;
     }
 }
