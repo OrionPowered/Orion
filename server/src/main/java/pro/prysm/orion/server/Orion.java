@@ -24,7 +24,6 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
     private final CommandHandler commandHandler;
 
     public Orion() {
-        logger.setLevel(Level.FINE);
         logger.info("Starting Orion...");
         EVENT_BUS.subscribe(this);
         commandHandler = new CommandHandler();
