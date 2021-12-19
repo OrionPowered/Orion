@@ -4,8 +4,15 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.command.commands.SendPacketCommand;
 
 public class Pipeline extends ChannelInitializer<SocketChannel> {
+    private final Orion orion;
+    public Pipeline(Orion orion) {
+        this.orion = orion;
+    }
+
     @Override
     protected void initChannel(SocketChannel socketChannel) {
 
@@ -18,5 +25,7 @@ public class Pipeline extends ChannelInitializer<SocketChannel> {
         pipeline.addLast("encoder", new PacketEncoder());
         pipeline.addLast("timeout", new ReadTimeoutHandler(10));
         pipeline.addLast(channelHandler);
+        orion.getCommandHandler().registerCommand(new SendPacketCommand(channelHandler));
+
     }
 }

@@ -14,14 +14,18 @@ public class ChannelHandler extends ChannelInboundHandlerAdapter {
         connections = new HashMap<>();
     }
 
+    public HashMap<Integer, Connection> getConnections() {
+        return connections;
+    }
+
     @Override
-    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+    public void handlerAdded(ChannelHandlerContext ctx) {
         connections.put(ctx.channel().remoteAddress().hashCode(), new Connection(ctx));
         System.out.println("Handler added");
     }
 
     @Override
-    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+    public void handlerRemoved(ChannelHandlerContext ctx) {
         connections.remove(ctx.channel().remoteAddress().hashCode());
         System.out.println("Handler removed");
     }
