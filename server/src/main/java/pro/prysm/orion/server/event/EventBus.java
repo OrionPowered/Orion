@@ -1,5 +1,6 @@
 package pro.prysm.orion.server.event;
 
+import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.event.events.PacketEvent;
 import pro.prysm.orion.server.protocol.Packet;
 
@@ -24,9 +25,7 @@ public class EventBus {
         listeners.forEach((listener, methods) -> methods.forEach(method -> {
             try {
                 Parameter[] parameters = method.getParameters();
-                System.out.println(Arrays.toString(parameters));
                 if (parameters[0].getType().equals(event.getClass()) && parameters[1].getType().equals(packet.getClass())) {
-                    System.out.println("METHOD FOUND");
                     method.invoke(listener, event, packet);
                 }
             } catch (Throwable t) {

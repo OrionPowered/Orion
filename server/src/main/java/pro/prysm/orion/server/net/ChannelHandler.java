@@ -2,7 +2,6 @@ package pro.prysm.orion.server.net;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import pro.prysm.orion.server.Orion;
 
 import java.net.SocketAddress;
 import java.util.HashMap;
