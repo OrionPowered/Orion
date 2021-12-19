@@ -1,12 +1,14 @@
 package pro.prysm.orion.server;
 
 import net.kyori.adventure.text.Component;
+import pro.prysm.orion.api.chat.Chat;
 import pro.prysm.orion.api.protocol.ServerListResponse;
 import pro.prysm.orion.server.command.CommandHandler;
 import pro.prysm.orion.server.command.commands.HelpCommand;
 import pro.prysm.orion.server.event.EventBus;
 import pro.prysm.orion.server.event.EventHandler;
 import pro.prysm.orion.server.event.events.OutgoingPacketEvent;
+import pro.prysm.orion.server.event.events.ServerReadyEvent;
 import pro.prysm.orion.server.net.TCPListener;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
 import pro.prysm.orion.server.util.Logger;
@@ -14,6 +16,7 @@ import pro.prysm.orion.server.util.Logger;
 import java.util.logging.Level;
 
 public class Orion implements pro.prysm.orion.server.event.Listener {
+    private final long startupTime = System.currentTimeMillis();
     private static final Logger logger = new Logger("Orion");
     public static final EventBus EVENT_BUS = new EventBus();
     private final TCPListener TCPListener;
@@ -26,6 +29,12 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
         commandHandler = new CommandHandler();
         commandHandler.registerCommand(new HelpCommand());
         TCPListener = new TCPListener(this);
+    }
+
+    @EventHandler
+    public void onServerReady(ServerReadyEvent e) {
+        long difference = System.currentTimeMillis() - startupTime;
+        getLogger().info(String.format("Done (%dms)", difference));
     }
 
     @EventHandler
