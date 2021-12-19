@@ -4,8 +4,34 @@ import io.netty.buffer.ByteBuf;
 
 import java.nio.charset.StandardCharsets;
 
-// https://github.com/MiniDigger/MiniCraft/blob/4109c25ceac99e97a668269b73dacbac939c8e8d/src/main/java/me/minidigger/minicraft/protocol/DataTypes.java#L90
-// https://wiki.vg/Data_types
+/*
+A huge portion of this class can be credited to MiniDigger
+https://github.com/MiniDigger/MiniCraft/blob/master/src/main/java/me/minidigger/minicraft/protocol/DataTypes.java
+
+MiniDigger/MiniCraft
+MIT License
+
+Copyright (c) 2019 MiniDigger
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 public abstract class PacketWriter {
     /**
      * Writes a VarInt to the Byte Buffer.
@@ -13,16 +39,16 @@ public abstract class PacketWriter {
      * @param value Integer to write
      * @param buf Buffer to write to
      */
-    protected void writeVarInt(int value, ByteBuf buf) {
-        while (value != 0) {
-            if ((value & ~0x7F) == 0) {
-                buf.writeByte(value);
-                value = 0; // Break the while loop
-            }
-            buf.writeByte((value & 0x7F) | 0x80);
+    public static void writeVarInt(int value, ByteBuf buf) {
+        do {
+            byte temp = (byte) (value & 0b01111111);
             // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
             value >>>= 7;
-        }
+            if (value != 0) {
+                temp |= 0b10000000;
+            }
+            buf.writeByte(temp);
+        } while (value != 0);
     }
 
     /**
@@ -32,22 +58,17 @@ public abstract class PacketWriter {
      * @return Integer
      */
     public static int readVarInt(ByteBuf buf) {
-        // This method was taken from MiniDigger/Minicraft (MIT)
-        // https://github.com/MiniDigger/MiniCraft/blob/4109c25ceac99e97a668269b73dacbac939c8e8d/src/main/java/me/minidigger/minicraft/protocol/DataTypes.java#L48
-        int numRead = 0;
+        int length = 0;
         int result = 0;
         byte read;
         do {
             read = buf.readByte();
-            int value = (read & 0b01111111);
-            result |= (value << (7 * numRead));
-
-            numRead++;
-            if (numRead > 5) {
+            result |= (read & 0x7F) << (7 * length);
+            length++;
+            if (length > 5) {
                 throw new RuntimeException("VarInt is too big");
             }
-        } while ((read & 0b10000000) != 0);
-
+        } while ((read & 0x80) != 0);
         return result;
     }
 
@@ -58,15 +79,15 @@ public abstract class PacketWriter {
      * @param buf Buffer to write to
      */
     protected void writeVarLong(long value, ByteBuf buf) {
-        while (value != 0) {
-            if ((value & ~0x7F) == 0) {
-                buf.writeByte((byte)value);
-                value = 0; // Break the while loop
-            }
-            buf.writeByte((byte)(value & 0x7F) | 0x80);
+        do {
+            byte temp = (byte) (value & 0b01111111);
             // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
             value >>>= 7;
-        }
+            if (value != 0) {
+                temp |= 0b10000000;
+            }
+            buf.writeByte(temp);
+        } while (value != 0);
     }
 
     /**
@@ -76,16 +97,21 @@ public abstract class PacketWriter {
      * @return Long
      */
     protected long readVarLong(ByteBuf buf) {
-        long value = 0;
-        int length = 0;
-        byte currentByte;
-        while ((value & 0x80) != 0x80) {
-            currentByte = buf.readByte();
-            value |= (long) (currentByte & 0x7F) << (length * 7);
-            length += 1;
-            if (length > 10) throw new RuntimeException("VarLong is too big");
-        }
-        return value;
+        int numRead = 0;
+        long result = 0;
+        byte read;
+        do {
+            read = buf.readByte();
+            int value = (read & 0b01111111);
+            result |= (value << (7 * numRead));
+
+            numRead++;
+            if (numRead > 10) {
+                throw new RuntimeException("VarLong is too big");
+            }
+        } while ((read & 0b10000000) != 0);
+
+        return result;
     }
 
     /**
