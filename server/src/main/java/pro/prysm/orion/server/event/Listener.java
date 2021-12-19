@@ -13,7 +13,7 @@ public interface Listener {
         for (Method method : this.getClass().getMethods()) {
             if (!method.isAccessible()) method.setAccessible(true);
             if (method.isAnnotationPresent(EventHandler.class)) {
-                if (method.getParameterCount() == 1) {
+                if (method.getParameterCount() >= 1) {
                     Class<?> param = method.getParameters()[0].getType();
                     if (param.getSuperclass().equals(Event.class) || param.getSuperclass().getSuperclass().equals(Event.class)) {
                         methods.add(method);
