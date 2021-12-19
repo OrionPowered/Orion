@@ -10,13 +10,14 @@ public class Logger extends java.util.logging.Logger {
      * Creates a new Logger instance
      * @param name Logger name
      */
-    public Logger(String name) {
+    public Logger(String name, Level level) {
         super(name, null);
         this.setUseParentHandlers(false);
         ConsoleHandler handler = new ConsoleHandler();
+        handler.setLevel(level);
         handler.setFormatter(new ConsoleFormat());
-        handler.setLevel(Level.FINE);
         this.addHandler(handler);
+        setLevel(level);
     }
 
     public void debug(String msg) {
@@ -56,8 +57,13 @@ class ConsoleFormat extends Formatter {
             builder.append(LogColor.WHITE).append("[").append(df.format(new Date(record.getMillis()))).append("] ");
             builder.append("[").append(record.getLoggerName()).append(" - ").append(record.getLevel()).append("]: ");
             levelKnown = true;
-        } else if (level == Level.FINER) {
-            builder.append(LogColor.WHITE).append("[").append(df.format(new Date(record.getMillis()))).append("] ");
+        } else if (level == Level.FINE) {
+            builder.append(LogColor.BLUE).append("[").append(df.format(new Date(record.getMillis()))).append("] ");
+            builder.append("[").append(record.getLoggerName()).append(" - ").append(record.getLevel()).append("]: ");
+            levelKnown = true;
+        }
+        else if (level == Level.FINER) {
+            builder.append(LogColor.GREEN).append("[").append(df.format(new Date(record.getMillis()))).append("] ");
             builder.append("[").append(record.getLoggerName()).append(" - ").append(record.getLevel()).append("]: ");
             levelKnown = true;
         }

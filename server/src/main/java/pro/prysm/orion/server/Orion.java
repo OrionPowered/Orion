@@ -17,7 +17,7 @@ import java.util.logging.Level;
 
 public class Orion implements pro.prysm.orion.server.event.Listener {
     private final long startupTime = System.currentTimeMillis();
-    private static final Logger logger = new Logger("Orion");
+    private static final Logger logger = new Logger("Orion", Level.FINER);
     public static final EventBus EVENT_BUS = new EventBus();
     private final TCPListener TCPListener;
     private final CommandHandler commandHandler;
