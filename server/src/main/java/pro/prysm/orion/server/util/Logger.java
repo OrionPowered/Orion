@@ -3,10 +3,7 @@ package pro.prysm.orion.server.util;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
+import java.util.logging.*;
 
 public class Logger extends java.util.logging.Logger {
     /**
@@ -18,7 +15,12 @@ public class Logger extends java.util.logging.Logger {
         this.setUseParentHandlers(false);
         ConsoleHandler handler = new ConsoleHandler();
         handler.setFormatter(new ConsoleFormat());
+        handler.setLevel(Level.FINE);
         this.addHandler(handler);
+    }
+
+    public void debug(String msg) {
+        log(Level.FINE, msg);
     }
 }
 
@@ -51,6 +53,10 @@ class ConsoleFormat extends Formatter {
             builder.append("[").append(record.getLoggerName()).append(" - ").append(record.getLevel()).append("]: ");
             levelKnown = true;
         } else if (level == Level.INFO) {
+            builder.append(LogColor.WHITE).append("[").append(df.format(new Date(record.getMillis()))).append("] ");
+            builder.append("[").append(record.getLoggerName()).append(" - ").append(record.getLevel()).append("]: ");
+            levelKnown = true;
+        } else if (level == Level.FINER) {
             builder.append(LogColor.WHITE).append("[").append(df.format(new Date(record.getMillis()))).append("] ");
             builder.append("[").append(record.getLoggerName()).append(" - ").append(record.getLevel()).append("]: ");
             levelKnown = true;
