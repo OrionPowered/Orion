@@ -13,6 +13,7 @@ import pro.prysm.orion.server.net.TCPListener;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
 import pro.prysm.orion.server.util.Logger;
 
+import java.net.InetSocketAddress;
 import java.util.logging.Level;
 
 public class Orion implements pro.prysm.orion.server.event.Listener {
@@ -28,7 +29,7 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
         EVENT_BUS.subscribe(this);
         commandHandler = new CommandHandler();
         commandHandler.registerCommand(new HelpCommand());
-        TCPListener = new TCPListener(this);
+        TCPListener = new TCPListener(this, new InetSocketAddress("127.0.0.1", 25565));
     }
 
     @EventHandler

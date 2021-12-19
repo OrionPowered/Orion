@@ -9,14 +9,14 @@ import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.event.events.ServerReadyEvent;
 
 import java.net.InetSocketAddress;
-import java.util.logging.Level;
 
 public class TCPListener {
     private final Orion orion;
-    public TCPListener(Orion orion) {
+    public TCPListener(Orion orion, InetSocketAddress address) {
         this.orion = orion;
         try {
-            listen(new InetSocketAddress("localhost", 25565));
+            Orion.getLogger().info(String.format("Starting listener on %s", address));
+            listen(address);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
