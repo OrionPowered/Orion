@@ -1,12 +1,14 @@
 package pro.prysm.orion.server;
 
+import net.kyori.adventure.text.Component;
+import pro.prysm.orion.api.protocol.ServerListResponse;
 import pro.prysm.orion.server.command.CommandHandler;
 import pro.prysm.orion.server.command.commands.HelpCommand;
 import pro.prysm.orion.server.event.EventBus;
 import pro.prysm.orion.server.event.EventHandler;
-import pro.prysm.orion.server.event.events.IncomingPacketEvent;
+import pro.prysm.orion.server.event.events.OutgoingPacketEvent;
 import pro.prysm.orion.server.net.TCPListener;
-import pro.prysm.orion.server.protocol.incoming.status.Handshake;
+import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
 import pro.prysm.orion.server.util.Logger;
 
 import java.util.logging.Level;
@@ -27,8 +29,14 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
     }
 
     @EventHandler
-    public void onHandshake(IncomingPacketEvent e, Handshake packet) {
-        System.out.println("Handshake packet!");
+    public void onSLPResponse(OutgoingPacketEvent e, SLPResponse packet) {
+        ServerListResponse response = new ServerListResponse();
+        response.setProtocolVersion(757);
+        response.setServerName("Orion");
+        response.setMaxPlayers(20);
+        response.setOnlinePlayers(0);
+        response.setDescription(Component.text("Test Server"));
+        packet.setResponse(response);
     }
 
     public static Logger getLogger() {
