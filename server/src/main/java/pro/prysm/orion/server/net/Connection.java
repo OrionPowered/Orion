@@ -2,6 +2,8 @@ package pro.prysm.orion.server.net;
 
 import io.netty.channel.ChannelHandlerContext;
 import pro.prysm.orion.api.protocol.PacketState;
+import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.event.events.OutgoingPacketEvent;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
 import java.net.SocketAddress;
@@ -32,6 +34,7 @@ public class Connection {
     }
 
     public void sendPacket(OutgoingPacket packet) {
+        Orion.EVENT_BUS.post(new OutgoingPacketEvent(), packet);
         ctx.writeAndFlush(packet);
     }
 }
