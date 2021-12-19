@@ -25,7 +25,7 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
         EVENT_BUS.subscribe(this);
         commandHandler = new CommandHandler();
         commandHandler.registerCommand(new HelpCommand());
-        TCPListener = new TCPListener();
+        TCPListener = new TCPListener(this);
     }
 
     @EventHandler

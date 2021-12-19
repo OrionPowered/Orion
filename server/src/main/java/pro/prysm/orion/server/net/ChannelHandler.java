@@ -14,6 +14,10 @@ public class ChannelHandler extends ChannelInboundHandlerAdapter {
         connections = new HashMap<>();
     }
 
+    public HashMap<Integer, Connection> getConnections() {
+        return connections;
+    }
+
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) {
         connections.put(ctx.channel().remoteAddress().hashCode(), new Connection(ctx));
