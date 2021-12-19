@@ -35,7 +35,7 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
         response.setServerName("Orion");
         response.setMaxPlayers(20);
         response.setOnlinePlayers(0);
-        response.setDescription(Component.text("Test Server"));
+        response.setDescription(Chat.miniMessage().parse("<color:#2fc1fa>Orion Server Software</color>"));
         packet.setResponse(response);
     }
 
