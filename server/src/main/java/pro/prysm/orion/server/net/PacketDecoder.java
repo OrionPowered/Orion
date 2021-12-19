@@ -10,6 +10,7 @@ import pro.prysm.orion.server.protocol.PacketWriter;
 import pro.prysm.orion.server.protocol.incoming.status.Handshake;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 import pro.prysm.orion.server.protocol.incoming.status.Ping;
+import pro.prysm.orion.server.protocol.outgoing.login.Disconnect;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +50,11 @@ public class PacketDecoder extends ByteToMessageDecoder {
                 packet.read(byteBuf);
                 Orion.EVENT_BUS.post(new IncomingPacketEvent(), packet);
             }
+        } else {
+            // Disconnect for a bad packet
+            if (state == PacketState.LOGIN) connection.sendPacket(new Disconnect(String.format("<red>Invalid Packet ID: %d</red>", id)));
+            // else if (state == PacketState.PLAY)
+            ctx.flush().close(); // Finish disconnecting
         }
     }
 }
