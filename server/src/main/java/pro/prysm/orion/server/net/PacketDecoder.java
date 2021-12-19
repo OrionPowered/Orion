@@ -42,7 +42,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
         }
         int id = PacketWriter.readVarInt(byteBuf);
         if (packets != null && packets.containsKey(id)) {
-            System.out.printf("Packet: %d, State: %s\n", id, state);
+            Orion.getLogger().finer(String.format("Received packet with ID %d and state: %s", id, state));
             Class<? extends IncomingPacket> packetClass = packets.get(id);
             if (packetClass != null) {
                 IncomingPacket packet = (IncomingPacket) packetClass.getConstructors()[0].newInstance(connection);
