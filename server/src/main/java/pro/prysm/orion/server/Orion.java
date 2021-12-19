@@ -5,7 +5,7 @@ import pro.prysm.orion.server.event.EventHandler;
 import pro.prysm.orion.server.event.events.IncomingPacketEvent;
 import pro.prysm.orion.server.event.events.TestEvent;
 import pro.prysm.orion.server.net.TCPListener;
-import pro.prysm.orion.server.protocol.incoming.Handshake;
+import pro.prysm.orion.server.protocol.incoming.status.Handshake;
 import pro.prysm.orion.server.util.Logger;
 
 public class Orion implements pro.prysm.orion.server.event.Listener {
