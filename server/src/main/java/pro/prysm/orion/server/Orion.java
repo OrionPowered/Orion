@@ -1,6 +1,5 @@
 package pro.prysm.orion.server;
 
-import net.kyori.adventure.text.Component;
 import pro.prysm.orion.api.chat.Chat;
 import pro.prysm.orion.api.protocol.ServerListResponse;
 import pro.prysm.orion.server.command.CommandHandler;
