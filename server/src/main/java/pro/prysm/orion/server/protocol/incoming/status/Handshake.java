@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.protocol.PacketRegistry;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
 
@@ -47,7 +48,7 @@ public class Handshake extends IncomingPacket {
         connection.setState(nextState);
         if (nextState == PacketState.STATUS) {
             Orion.getLogger().debug(String.format("%s has pinged", connection.getAddress()));
-            connection.sendPacket(new SLPResponse());
+            connection.sendPacket(new SLPResponse(PacketRegistry.defaultSLPResponse));
         }
     }
 }
