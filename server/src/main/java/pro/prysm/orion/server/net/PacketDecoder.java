@@ -7,6 +7,7 @@ import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.event.events.IncomingPacketEvent;
 import pro.prysm.orion.server.protocol.PacketWriter;
+import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
 import pro.prysm.orion.server.protocol.incoming.status.Handshake;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 import pro.prysm.orion.server.protocol.incoming.status.Ping;
@@ -25,6 +26,10 @@ public class PacketDecoder extends ByteToMessageDecoder {
         put(0x01, Ping.class);
     }};
 
+    HashMap<Integer, Class<? extends IncomingPacket>> loginPackets = new HashMap<>() {{
+        put(0x00, LoginStart.class);
+    }};
+
     private final ChannelHandler channelHandler;
     public PacketDecoder(ChannelHandler channelHandler) {
         this.channelHandler = channelHandler;
@@ -40,6 +45,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
         switch (state) {
             case HANDSHAKE -> packets = handshakePackets;
             case STATUS -> packets = statusPackets;
+            case LOGIN -> packets = loginPackets;
         }
         int id = PacketWriter.readVarInt(byteBuf);
         if (packets != null && packets.containsKey(id)) {
