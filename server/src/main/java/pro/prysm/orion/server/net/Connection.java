@@ -40,6 +40,10 @@ public class Connection {
         return active;
     }
 
+    /**
+     * Forcibly disconnects the connection and attempts to send a disconnect packet
+     * @param reason Reason for disconnect
+     */
     public void disconnect(String reason) {
         if (active) {
             if (state == PacketState.LOGIN) sendPacket(new Disconnect(reason));
