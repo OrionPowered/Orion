@@ -13,3 +13,6 @@ buildNumber.properties
 # JetBrains
 .idea/
 *.iml
+
+# Project
+run/
