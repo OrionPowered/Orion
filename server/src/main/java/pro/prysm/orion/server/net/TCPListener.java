@@ -2,6 +2,7 @@ package pro.prysm.orion.server.net;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -31,7 +32,10 @@ public class TCPListener {
             bootstrap.localAddress(address);
             bootstrap.childHandler(new Pipeline(orion));
             ChannelFuture channelFuture = bootstrap.bind().sync();
-            Orion.EVENT_BUS.post(new ServerReadyEvent());
+            channelFuture.addListener((ChannelFutureListener) future -> {
+                if (channelFuture.isSuccess()) Orion.EVENT_BUS.post(new ServerReadyEvent());
+                else Orion.getLogger().severe(String.format("Failed to listen on %s", address));
+            });
             channelFuture.channel().closeFuture().sync();
         } catch (Exception e) {
             e.printStackTrace();
