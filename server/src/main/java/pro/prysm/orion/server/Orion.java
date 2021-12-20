@@ -9,6 +9,7 @@ import pro.prysm.orion.server.event.EventHandler;
 import pro.prysm.orion.server.event.events.OutgoingPacketEvent;
 import pro.prysm.orion.server.event.events.ServerReadyEvent;
 import pro.prysm.orion.server.net.TCPListener;
+import pro.prysm.orion.server.protocol.PacketRegistry;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
 import pro.prysm.orion.server.util.Logger;
 
@@ -27,6 +28,16 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
         EVENT_BUS.subscribe(this);
         commandHandler = new CommandHandler();
         commandHandler.registerCommand(new HelpCommand());
+
+        // Temporary for now
+        ServerListResponse defaultSLPResponse = new ServerListResponse();
+        defaultSLPResponse.setProtocolVersion(757);
+        defaultSLPResponse.setServerName("Orion");
+        defaultSLPResponse.setMaxPlayers(20);
+        defaultSLPResponse.setOnlinePlayers(0);
+        defaultSLPResponse.setDescription(Chat.miniMessage().parse("<color:#2fc1fa>Orion Server Software</color>"));
+        PacketRegistry.defaultSLPResponse = defaultSLPResponse;
+
         TCPListener = new TCPListener(this, new InetSocketAddress("127.0.0.1", 25565));
     }
 
@@ -34,17 +45,6 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
     public void onServerReady(ServerReadyEvent e) {
         long difference = System.currentTimeMillis() - startupTime;
         getLogger().info(String.format("Done (%dms)", difference));
-    }
-
-    @EventHandler
-    public void onSLPResponse(OutgoingPacketEvent e, SLPResponse packet) {
-        ServerListResponse response = new ServerListResponse();
-        response.setProtocolVersion(757);
-        response.setServerName("Orion");
-        response.setMaxPlayers(20);
-        response.setOnlinePlayers(0);
-        response.setDescription(Chat.miniMessage().parse("<color:#2fc1fa>Orion Server Software</color>"));
-        packet.setResponse(response);
     }
 
     public static Logger getLogger() {
