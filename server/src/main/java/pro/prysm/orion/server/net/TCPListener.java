@@ -24,7 +24,7 @@ public class TCPListener {
     }
 
     void listen(InetSocketAddress address) throws InterruptedException {
-        EventLoopGroup group = new NioEventLoopGroup();
+        EventLoopGroup group = new NioEventLoopGroup(4);
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(group);
