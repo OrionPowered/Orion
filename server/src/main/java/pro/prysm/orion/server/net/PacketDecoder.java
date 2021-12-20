@@ -6,33 +6,18 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.event.events.IncomingPacketEvent;
+import pro.prysm.orion.server.protocol.PacketRegistry;
 import pro.prysm.orion.server.protocol.PacketWriter;
-import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
-import pro.prysm.orion.server.protocol.incoming.status.Handshake;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
-import pro.prysm.orion.server.protocol.incoming.status.Ping;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PacketDecoder extends ByteToMessageDecoder {
-    HashMap<Integer, Class<? extends IncomingPacket>> handshakePackets = new HashMap<>() {{
-        put(0x00, Handshake.class);
-    }};
-
-    HashMap<Integer, Class<? extends IncomingPacket>> statusPackets = new HashMap<>() {{
-        put(0x00, null);
-        put(0x01, Ping.class);
-    }};
-
-    HashMap<Integer, Class<? extends IncomingPacket>> loginPackets = new HashMap<>() {{
-        put(0x00, LoginStart.class);
-    }};
-
+    private final PacketRegistry registry;
     private final ChannelHandler channelHandler;
-    public PacketDecoder(ChannelHandler channelHandler) {
+    public PacketDecoder(PacketRegistry registry, ChannelHandler channelHandler) {
         this.channelHandler = channelHandler;
+        this.registry = registry;
     }
 
     @Override
@@ -41,21 +26,17 @@ public class PacketDecoder extends ByteToMessageDecoder {
         if (!connection.isActive()) return;
         PacketState state = connection.getState();
 
-        Map<Integer, Class<? extends IncomingPacket>> packets = null;
-        switch (state) {
-            case HANDSHAKE -> packets = handshakePackets;
-            case STATUS -> packets = statusPackets;
-            case LOGIN -> packets = loginPackets;
-        }
         int id = PacketWriter.readVarInt(byteBuf);
-        if (packets != null && packets.containsKey(id)) {
+        if (registry.getIncoming(state, id) != null) {
             Orion.getLogger().finer(String.format("Received packet with ID %d and state: %s", id, state));
-            Class<? extends IncomingPacket> packetClass = packets.get(id);
-            if (packetClass != null) {
+            Class<? extends IncomingPacket> packetClass = registry.getIncoming(state, id);
+            if (packetClass != null && packetClass != IncomingPacket.class) {
                 IncomingPacket packet = (IncomingPacket) packetClass.getConstructors()[0].newInstance(connection);
                 packet.read(byteBuf);
                 Orion.EVENT_BUS.post(new IncomingPacketEvent(), packet);
             }
-        } else connection.disconnect(String.format("<red>Invalid packet ID: %d</red>", id));
+        } else {
+            connection.disconnect(String.format("<red>Invalid packet ID: %d</red>", id));
+        }
     }
 }
