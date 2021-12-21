@@ -1,6 +1,5 @@
 package pro.prysm.orion.api;
 
-import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import pro.prysm.orion.api.exception.ResourceNotFoundException;
 import com.google.gson.JsonElement;
@@ -20,6 +19,12 @@ public class JSONConfig {
         this.directory = file.getParentFile();
         this.fileName = file.getName();
         JsonReader reader = new JsonReader(new InputStreamReader(new FileInputStream(getFile(_class)), StandardCharsets.UTF_8));
+        json = JsonParser.parseReader(reader).getAsJsonObject();
+    }
+    public JSONConfig(File file) throws IOException {
+        this.directory = file.getParentFile();
+        this.fileName = file.getName();
+        JsonReader reader = new JsonReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
         json = JsonParser.parseReader(reader).getAsJsonObject();
     }
 

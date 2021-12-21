@@ -5,9 +5,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
-import pro.prysm.orion.server.event.events.IncomingPacketEvent;
+import pro.prysm.orion.api.event.events.IncomingPacketEvent;
 import pro.prysm.orion.server.net.Connection;
-import pro.prysm.orion.server.protocol.PacketRegistry;
 import pro.prysm.orion.server.protocol.PacketWriter;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
@@ -36,7 +35,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
             if (packetClass != null && packetClass != IncomingPacket.class) {
                 IncomingPacket packet = (IncomingPacket) packetClass.getConstructors()[0].newInstance(protocol, connection);
                 packet.read(byteBuf);
-                Orion.getEventBus().post(new IncomingPacketEvent(), packet);
+                pro.prysm.orion.api.Orion.getEventBus().post(new IncomingPacketEvent(), packet);
             }
         } else {
             connection.disconnect(String.format("<red>Invalid packet ID: %d</red>", id));

@@ -1,13 +1,18 @@
 package pro.prysm.orion.server.plugin;
 
-import pro.prysm.orion.api.exception.InvalidPluginException;
+import pro.prysm.orion.api.JSONConfig;
+import pro.prysm.orion.api.plugin.JavaPlugin;
+import pro.prysm.orion.api.plugin.PluginDescription;
+import pro.prysm.orion.server.util.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.logging.Level;
 
 /**
  * @author 254n_m
@@ -15,47 +20,52 @@ import java.util.jar.JarFile;
  * This file was created as a part of Orion
  */
 public class PluginClassLoader extends URLClassLoader {
-    public PluginClassLoader(URL[] urls, ClassLoader parent) {
+    private Field dataFolderF;
+    private Field loggerF;
+    private Field descriptionF;
+    private final PluginLoader loader;
+    public PluginClassLoader(URL[] urls, ClassLoader parent, PluginLoader loader) {
         super(urls, parent);
+        this.loader = loader;
+        try {
+            dataFolderF = JavaPlugin.class.getDeclaredField("dataFolder");
+            dataFolderF.setAccessible(true);
+            loggerF = JavaPlugin.class.getDeclaredField("logger");
+            loggerF.setAccessible(true);
+            descriptionF = JavaPlugin.class.getDeclaredField("description");
+            descriptionF.setAccessible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void loadPlugin(File... files) {
         for (File file : files) {
             try {
-                if (!getFileExtension(file).equals(".jar")) { //Check if the file is a jar
-                    throw new InvalidPluginException("File " + file.getName() + " in folder plugins is not a JarFile");
-                } else {
-                    addURL(file.toURI().toURL());
-                    JarFile jarFile = new JarFile(file);
-                    loadClasses(jarFile);
-                    for (JarEntry entry : jarFile.stream().toList()) System.out.println(entry.getName());
-
-                }
-            } catch (InvalidPluginException | IOException e) {
+                addURL(file.toURI().toURL());
+                JarFile jarFile = new JarFile(file);
+                loadClasses(jarFile);
+                PluginDescription description = new PluginDescription(jarFile);
+                JavaPlugin plugin = (JavaPlugin)  Class.forName(description.getMainClass(), false, this).getConstructors()[0].newInstance();
+                dataFolderF.set(plugin, new File("./plugins", description.getName()));
+                loggerF.set(plugin, new Logger(description.getName(), Level.ALL));
+                descriptionF.set(plugin, description);
+                loader.plugins.add(plugin);
+                plugin.onEnable();
+            } catch (IOException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
     }
+
     private void loadClasses(JarFile jarFile) {
         jarFile.stream(). //Load all the classes in the plugin
-                filter(e -> e.getName().endsWith(".class")).
-                map(je -> je.getName().replace("/", ".").replace(".class", "")).
-                toList().
-                forEach(str -> {
-                    try {
-                        loadClass(str);
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                });
-    }
-
-    public String getFileExtension(File file) {
-        String name = file.getName();
-        int index = name.lastIndexOf(".");
-        if (index == -1) {
-            return "";
-        }
-        return name.substring(index);
+                filter(e -> e.getName().endsWith(".class")).map(je -> je.getName().replace("/", ".").replace(".class", "")).toList().forEach(str -> {
+            try {
+                loadClass(str);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

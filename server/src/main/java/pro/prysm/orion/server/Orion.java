@@ -1,12 +1,18 @@
 package pro.prysm.orion.server;
 
 import pro.prysm.orion.api.JSONConfig;
+import pro.prysm.orion.api.event.Listener;
+import pro.prysm.orion.api.event.events.IncomingPacketEvent;
+import pro.prysm.orion.api.event.events.OutgoingPacketEvent;
+import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
+import pro.prysm.orion.api.protocol.outgoing.status.SLPResponse;
 import pro.prysm.orion.server.command.CommandHandler;
 import pro.prysm.orion.server.command.commands.HelpCommand;
-import pro.prysm.orion.server.event.EventBus;
-import pro.prysm.orion.server.event.EventHandler;
-import pro.prysm.orion.server.event.events.ServerReadyEvent;
+import pro.prysm.orion.api.event.EventBus;
+import pro.prysm.orion.api.event.EventHandler;
+import pro.prysm.orion.api.event.events.ServerReadyEvent;
 import pro.prysm.orion.server.net.TCPListener;
+import pro.prysm.orion.server.plugin.PluginLoader;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.util.Logger;
 
@@ -15,7 +21,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.logging.Level;
 
-public class Orion implements pro.prysm.orion.server.event.Listener {
+public class Orion implements Listener, pro.prysm.orion.api.Orion {
 
     /**
      * Main Entry Point
@@ -30,11 +36,12 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
 
     // Logger and EventBus are the only objects that should be static.
     private static final Logger logger = new Logger("Orion", Level.INFO);
-    private static final EventBus eventBus = new EventBus();
+//    private static final EventBus eventBus = new EventBus();
 
     private final TCPListener listener;
     private final Protocol protocol;
     private final CommandHandler commandHandler;
+    private final PluginLoader pluginLoader;
 
     public Orion() {
         logger.info("Starting Orion...");
@@ -43,9 +50,10 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
         logger.setLevel(Level.parse(config.getString("log-level")));
         protocol = new Protocol(config);
         commandHandler = new CommandHandler();
+        pluginLoader = new PluginLoader();
         commandHandler.registerCommand(new HelpCommand());
 
-        eventBus.subscribe(this);
+        EVENT_BUS.subscribe(this);
 
         listener = new TCPListener(
                 protocol,
@@ -72,6 +80,10 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
         long difference = System.currentTimeMillis() - startupTime;
         getLogger().info(String.format("Done (%dms)", difference));
     }
+    @EventHandler
+    public void onPacket(OutgoingPacketEvent event, SLPResponse packet) {
+        System.out.println(packet.getResponse().toJsonString());
+    }
 
     // ================================================================================================================
     // Getters
@@ -97,7 +109,7 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
         return logger;
     }
 
-    public static EventBus getEventBus() {
-        return eventBus;
+    public PluginLoader getPluginLoader() {
+        return pluginLoader;
     }
 }
