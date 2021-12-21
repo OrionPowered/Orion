@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.logging.*;
 
 public class Logger extends java.util.logging.Logger {
+    private final ConsoleHandler handler;
     /**
      * Creates a new Logger instance
      * @param name Logger name
@@ -13,11 +14,15 @@ public class Logger extends java.util.logging.Logger {
     public Logger(String name, Level level) {
         super(name, null);
         this.setUseParentHandlers(false);
-        ConsoleHandler handler = new ConsoleHandler();
-        handler.setLevel(level);
+        handler = new ConsoleHandler();
         handler.setFormatter(new ConsoleFormat());
         this.addHandler(handler);
         setLevel(level);
+    }
+
+    public void setLevel(Level level) {
+        handler.setLevel(level);
+        super.setLevel(level);
     }
 
     public void debug(String msg) {

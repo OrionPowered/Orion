@@ -26,12 +26,12 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
     }
 
     private final long startupTime = System.currentTimeMillis();
+    private JSONConfig config;
 
     // Logger and EventBus are the only objects that should be static.
-    private static final Logger logger = new Logger("Orion", Level.FINER);
+    private static final Logger logger = new Logger("Orion", Level.INFO);
     private static final EventBus eventBus = new EventBus();
 
-    private JSONConfig config;
     private final TCPListener listener;
     private final Protocol protocol;
     private final CommandHandler commandHandler;
@@ -40,6 +40,7 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
         logger.info("Starting Orion...");
         loadConfig();
 
+        logger.setLevel(Level.parse(config.getString("log-level")));
         protocol = new Protocol(config);
         commandHandler = new CommandHandler();
         commandHandler.registerCommand(new HelpCommand());
