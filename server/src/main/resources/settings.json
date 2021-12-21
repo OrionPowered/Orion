@@ -1,4 +1,5 @@
 {
+  "log-level": "INFO",
   "threads": 4,
   "listener": {
     "address": "127.0.0.1",
