@@ -1,44 +1,69 @@
 package pro.prysm.orion.server;
 
-import pro.prysm.orion.api.chat.Chat;
-import pro.prysm.orion.api.protocol.ServerListResponse;
+import pro.prysm.orion.api.JSONConfig;
 import pro.prysm.orion.server.command.CommandHandler;
 import pro.prysm.orion.server.command.commands.HelpCommand;
 import pro.prysm.orion.server.event.EventBus;
 import pro.prysm.orion.server.event.EventHandler;
-import pro.prysm.orion.server.event.events.OutgoingPacketEvent;
 import pro.prysm.orion.server.event.events.ServerReadyEvent;
 import pro.prysm.orion.server.net.TCPListener;
-import pro.prysm.orion.server.protocol.PacketRegistry;
-import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
+import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.util.Logger;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.logging.Level;
 
 public class Orion implements pro.prysm.orion.server.event.Listener {
+
+    /**
+     * Main Entry Point
+     * @param args Startup arguments
+     */
+    public static void main(String[] args) {
+        new Orion(); // Escape static
+    }
+
     private final long startupTime = System.currentTimeMillis();
+
+    // Logger and EventBus are the only objects that should be static.
     private static final Logger logger = new Logger("Orion", Level.FINER);
-    public static final EventBus EVENT_BUS = new EventBus();
-    private final TCPListener TCPListener;
+    private static final EventBus eventBus = new EventBus();
+
+    private JSONConfig config;
+    private final TCPListener listener;
+    private final Protocol protocol;
     private final CommandHandler commandHandler;
 
     public Orion() {
         logger.info("Starting Orion...");
-        EVENT_BUS.subscribe(this);
+        loadConfig();
+
+        protocol = new Protocol(config);
         commandHandler = new CommandHandler();
         commandHandler.registerCommand(new HelpCommand());
 
-        // Temporary for now
-        ServerListResponse defaultSLPResponse = new ServerListResponse();
-        defaultSLPResponse.setProtocolVersion(757);
-        defaultSLPResponse.setServerName("Orion");
-        defaultSLPResponse.setMaxPlayers(20);
-        defaultSLPResponse.setOnlinePlayers(0);
-        defaultSLPResponse.setDescription(Chat.miniMessage().parse("<color:#2fc1fa>Orion Server Software</color>"));
-        PacketRegistry.defaultSLPResponse = defaultSLPResponse;
+        eventBus.subscribe(this);
 
-        TCPListener = new TCPListener(this, new InetSocketAddress("127.0.0.1", 25565));
+        listener = new TCPListener(
+                protocol,
+                new InetSocketAddress(config.getString("listener.address"), config.getInt("listener.port")),
+                config.getInt("threads")
+        );
+
+        listener.listen(); // Start listening, any code below this will NOT execute
+    }
+
+    private void loadConfig() {
+        try {
+            config = new JSONConfig(getClass(), new File("settings.json"));
+        }
+        catch (IOException e) {
+            logger.warning("Failed to load settings.json!");
+            e.printStackTrace();
+
+        }
     }
 
     @EventHandler
@@ -47,23 +72,31 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
         getLogger().info(String.format("Done (%dms)", difference));
     }
 
-    public static Logger getLogger() {
-        return logger;
+    // ================================================================================================================
+    // Getters
+    // ================================================================================================================
+
+    public JSONConfig getConfig() {
+        return config;
     }
 
-    /**
-     * Main Entry Point
-     * @param args
-     */
-    public static void main(String[] args) {
-        new Orion();
+    public Protocol getProtocol() {
+        return protocol;
+    }
+
+    public TCPListener getListener() {
+        return listener;
     }
 
     public CommandHandler getCommandHandler() {
         return commandHandler;
     }
 
-    public TCPListener getTCPListener() {
-        return TCPListener;
+    public static Logger getLogger() {
+        return logger;
+    }
+
+    public static EventBus getEventBus() {
+        return eventBus;
     }
 }

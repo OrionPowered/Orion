@@ -2,7 +2,7 @@ package pro.prysm.orion.server.command.commands;
 
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.command.Command;
-import pro.prysm.orion.server.net.ChannelHandler;
+import pro.prysm.orion.server.net.pipeline.ChannelHandler;
 
 import java.util.logging.Level;
 

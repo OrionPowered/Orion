@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.event.events.OutgoingPacketEvent;
+import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.server.protocol.outgoing.login.Disconnect;
 
@@ -46,7 +47,7 @@ public class Connection {
      */
     public void disconnect(String reason) {
         if (active) {
-            if (state == PacketState.LOGIN) sendPacket(new Disconnect(reason));
+            if (state == PacketState.LOGIN) sendPacket(new Disconnect(null, reason));
             // else if (state == PacketState.PLAY)
             active = false;
             ctx.flush().close();
@@ -55,7 +56,7 @@ public class Connection {
     }
 
     public void sendPacket(OutgoingPacket packet) {
-        Orion.EVENT_BUS.post(new OutgoingPacketEvent(), packet);
+        Orion.getEventBus().post(new OutgoingPacketEvent(), packet);
         ctx.writeAndFlush(packet);
     }
 }

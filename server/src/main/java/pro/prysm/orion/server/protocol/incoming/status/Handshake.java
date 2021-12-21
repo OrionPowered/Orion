@@ -5,20 +5,18 @@ import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.protocol.PacketRegistry;
+import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
-
-import java.net.InetSocketAddress;
 
 public class Handshake extends IncomingPacket {
     private int protocolVersion;
     private String hostname;
     private short port;
     private PacketState nextState;
-    private InetSocketAddress socketAddress;
 
-    public Handshake(Connection connection) {
-        super(connection);
+    public Handshake(Protocol protocol, Connection connection) {
+        super(protocol, connection);
         id = 0x00;
         state = PacketState.HANDSHAKE;
     }
@@ -48,7 +46,7 @@ public class Handshake extends IncomingPacket {
         connection.setState(nextState);
         if (nextState == PacketState.STATUS) {
             Orion.getLogger().debug(String.format("%s has pinged", connection.getAddress()));
-            connection.sendPacket(new SLPResponse(PacketRegistry.defaultSLPResponse));
+            connection.sendPacket(protocol.getDefaultSLP());
         }
     }
 }

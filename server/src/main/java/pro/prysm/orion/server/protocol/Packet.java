@@ -7,6 +7,11 @@ public abstract class Packet extends PacketWriter {
     protected PacketDirection direction;
     protected PacketState state;
     protected int id;
+    protected Protocol protocol;
+
+    public Packet(Protocol protocol) {
+        this.protocol = protocol;
+    }
 
     public PacketDirection getDirection() {
         return direction;

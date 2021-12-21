@@ -1,4 +1,4 @@
-package pro.prysm.orion.server.net;
+package pro.prysm.orion.server.net.pipeline;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -7,7 +7,7 @@ import pro.prysm.orion.server.protocol.Packet;
 
 public class PacketLengthEncoder extends MessageToByteEncoder<ByteBuf> {
     @Override
-    protected void encode(ChannelHandlerContext ctx, ByteBuf msg, ByteBuf out) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, ByteBuf msg, ByteBuf out) {
         Packet.writeVarInt(msg.readableBytes(), out);
         out.writeBytes(msg);
     }

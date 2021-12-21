@@ -1,4 +1,4 @@
-package pro.prysm.orion.server.net;
+package pro.prysm.orion.server.net.pipeline;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

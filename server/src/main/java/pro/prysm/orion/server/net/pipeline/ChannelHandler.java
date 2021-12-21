@@ -1,19 +1,18 @@
-package pro.prysm.orion.server.net;
+package pro.prysm.orion.server.net.pipeline;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import pro.prysm.orion.server.net.Connection;
 
 import java.net.SocketAddress;
 import java.util.HashMap;
 
+@ChannelHandler.Sharable
 public class ChannelHandler extends ChannelInboundHandlerAdapter {
-
     private final HashMap<Integer, Connection> connections;
-
     public ChannelHandler() {
         connections = new HashMap<>();
     }
-
     public HashMap<Integer, Connection> getConnections() {
         return connections;
     }
@@ -31,5 +30,4 @@ public class ChannelHandler extends ChannelInboundHandlerAdapter {
     public Connection getConnection(SocketAddress remoteAddress) {
         return connections.get(remoteAddress.hashCode());
     }
-
 }
