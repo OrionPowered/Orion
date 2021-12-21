@@ -11,6 +11,7 @@
     <modules>
         <module>server</module>
         <module>api</module>
+        <module>TestPlugin</module>
     </modules>
 
     <properties>

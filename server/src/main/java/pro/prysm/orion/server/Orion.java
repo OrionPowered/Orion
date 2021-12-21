@@ -8,6 +8,7 @@ import pro.prysm.orion.server.event.EventBus;
 import pro.prysm.orion.server.event.EventHandler;
 import pro.prysm.orion.server.event.events.OutgoingPacketEvent;
 import pro.prysm.orion.server.net.TCPListener;
+import pro.prysm.orion.server.plugin.PluginLoader;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
 import pro.prysm.orion.server.util.Logger;
 
@@ -18,12 +19,14 @@ public class Orion implements pro.prysm.orion.server.event.Listener {
     public static final EventBus EVENT_BUS = new EventBus();
     private final TCPListener TCPListener;
     private final CommandHandler commandHandler;
+    private final PluginLoader pluginLoader;
 
     public Orion() {
         logger.setLevel(Level.FINE);
         logger.info("Starting Orion...");
         EVENT_BUS.subscribe(this);
         commandHandler = new CommandHandler();
+        pluginLoader = new PluginLoader();
         commandHandler.registerCommand(new HelpCommand());
         TCPListener = new TCPListener(this);
     }
