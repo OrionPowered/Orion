@@ -151,7 +151,7 @@ public abstract class PacketWriter {
      * @param buf Buffer to read from
      * @return byte[]
      */
-    protected byte[] readBytesArray(ByteBuf buf) {
+    protected byte[] readByteArray(ByteBuf buf) {
         byte[] array = new byte[readVarInt(buf)];
         buf.readBytes(array);
         return array;
