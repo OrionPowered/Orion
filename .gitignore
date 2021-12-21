@@ -14,5 +14,6 @@ buildNumber.properties
 .idea/
 *.iml
 
-#Run directory
+# Project
 run/
+settings.json

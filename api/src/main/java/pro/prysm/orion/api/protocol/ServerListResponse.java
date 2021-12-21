@@ -49,7 +49,6 @@ public class ServerListResponse {
     }
 
     public void setDescription(Component description) {
-
         this.description = description;
     }
 
