@@ -1,8 +1,8 @@
 package pro.prysm.orion.server.protocol;
 
 import pro.prysm.orion.api.protocol.PacketState;
-import pro.prysm.orion.api.protocol.ServerListResponse;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
+import pro.prysm.orion.server.protocol.incoming.login.EncryptionResponse;
 import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
 import pro.prysm.orion.server.protocol.incoming.status.Handshake;
 import pro.prysm.orion.server.protocol.incoming.status.Ping;
@@ -24,8 +24,6 @@ public class PacketRegistry {
         put(0x00, LoginStart.class);
         put(0x01, EncryptionResponse.class);
     }};
-
-    public static ServerListResponse defaultSLPResponse;
 
     public PacketRegistry() {}
 
