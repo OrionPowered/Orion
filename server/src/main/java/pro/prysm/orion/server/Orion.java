@@ -11,6 +11,7 @@ import pro.prysm.orion.server.command.commands.HelpCommand;
 import pro.prysm.orion.api.event.EventBus;
 import pro.prysm.orion.api.event.EventHandler;
 import pro.prysm.orion.api.event.events.ServerReadyEvent;
+import pro.prysm.orion.server.command.commands.SendPacketCommand;
 import pro.prysm.orion.server.net.TCPListener;
 import pro.prysm.orion.server.plugin.PluginLoader;
 import pro.prysm.orion.server.protocol.Protocol;
@@ -51,7 +52,6 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         protocol = new Protocol(config);
         commandHandler = new CommandHandler();
         pluginLoader = new PluginLoader();
-        commandHandler.registerCommand(new HelpCommand());
 
         EVENT_BUS.subscribe(this);
 
@@ -60,6 +60,9 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
                 new InetSocketAddress(config.getString("listener.address"), config.getInt("listener.port")),
                 config.getInt("threads")
         );
+
+        commandHandler.registerCommand(new HelpCommand());
+        commandHandler.registerCommand(new SendPacketCommand(listener.getPipeline().getChannelHandler()));
 
         listener.listen(); // Start listening, any code below this will NOT execute
     }

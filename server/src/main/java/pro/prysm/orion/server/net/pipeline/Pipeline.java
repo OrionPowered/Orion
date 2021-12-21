@@ -21,7 +21,6 @@ public class Pipeline extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(Protocol.ENCODER, new PacketEncoder());
         pipeline.addLast("timeout", new ReadTimeoutHandler(10));
         pipeline.addLast(channelHandler);
-        // TODO: orion.getCommandHandler().registerCommand(new SendPacketCommand(channelHandler));
     }
 
     public ChannelHandler getChannelHandler() {
