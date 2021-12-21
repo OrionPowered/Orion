@@ -17,10 +17,10 @@ public class Pipeline extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel socketChannel) {
         ChannelPipeline pipeline = socketChannel.pipeline();
-        pipeline.addLast("lengthDecoder", new PacketLengthDecoder());
-        pipeline.addLast("decoder", new PacketDecoder(protocol, channelHandler));
-        pipeline.addLast("lengthEncoder", new PacketLengthEncoder());
-        pipeline.addLast("encoder", new PacketEncoder());
+        pipeline.addLast(Protocol.LENGTH_DECODER, new PacketLengthDecoder());
+        pipeline.addLast(Protocol.DECODER, new PacketDecoder(protocol, channelHandler));
+        pipeline.addLast(Protocol.LENGTH_ENCODER, new PacketLengthEncoder());
+        pipeline.addLast(Protocol.ENCODER, new PacketEncoder());
         pipeline.addLast("timeout", new ReadTimeoutHandler(10));
         pipeline.addLast(channelHandler);
         // TODO: orion.getCommandHandler().registerCommand(new SendPacketCommand(channelHandler));

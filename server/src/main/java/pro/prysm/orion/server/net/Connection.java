@@ -1,17 +1,30 @@
 package pro.prysm.orion.server.net;
 
+import com.velocitypowered.natives.encryption.VelocityCipher;
+import com.velocitypowered.natives.encryption.VelocityCipherFactory;
+import com.velocitypowered.natives.util.Natives;
 import io.netty.channel.ChannelHandlerContext;
-import pro.prysm.orion.api.protocol.PacketState;
-import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.api.event.events.OutgoingPacketEvent;
-import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
+import pro.prysm.orion.api.protocol.Packet;
+import pro.prysm.orion.api.protocol.PacketState;
+import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
+import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.net.pipeline.CipherDecoder;
+import pro.prysm.orion.server.net.pipeline.CipherEncoder;
+import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.outgoing.login.Disconnect;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.net.SocketAddress;
+import java.security.GeneralSecurityException;
 
-public class Connection implements pro.prysm.orion.api.net.Connection {
+public class Connection {
     private final ChannelHandlerContext ctx;
     private PacketState state;
+    private byte[] sharedSecret;
+    private byte[] verifyToken;
     private boolean active;
 
     public Connection(ChannelHandlerContext ctx) {
@@ -20,12 +33,10 @@ public class Connection implements pro.prysm.orion.api.net.Connection {
         active = true;
     }
 
-    @Override
     public ChannelHandlerContext getCtx() {
         return ctx;
     }
 
-    @Override
     public SocketAddress getAddress() {
         return ctx.channel().remoteAddress();
     }
@@ -34,21 +45,44 @@ public class Connection implements pro.prysm.orion.api.net.Connection {
         this.state = state;
     }
 
-    @Override
     public PacketState getState() {
         return state;
     }
 
-    @Override
+    public byte[] getSharedSecret() {
+        return sharedSecret;
+    }
+
+    public void setSharedSecret(byte[] sharedSecret) {
+        this.sharedSecret = sharedSecret;
+    }
+
+    public byte[] getVerifyToken() {
+        return verifyToken;
+    }
+
+    public void setVerifyToken(byte[] verifyToken) {
+        this.verifyToken = verifyToken;
+    }
+
     public boolean isActive() {
         return active;
+    }
+
+    public void enableEncryption(byte[] secret) throws GeneralSecurityException {
+        if (!active || secret == null) return;
+        SecretKey key = new SecretKeySpec(secret, "AES");
+        VelocityCipherFactory factory = Natives.cipher.get();
+        VelocityCipher decryptionCipher = factory.forDecryption(key);
+        VelocityCipher encryptionCipher = factory.forEncryption(key);
+        ctx.channel().pipeline().addBefore(Protocol.ENCODER, Protocol.CIPHER_ENCODER, new CipherEncoder(encryptionCipher));
+        ctx.channel().pipeline().addBefore(Protocol.DECODER, Protocol.CIPHER_DECODER, new CipherDecoder(decryptionCipher));
     }
 
     /**
      * Forcibly disconnects the connection and attempts to send a disconnect packet
      * @param reason Reason for disconnect
      */
-    @Override
     public void disconnect(String reason) {
         if (active) {
             if (state == PacketState.LOGIN) sendPacket(new Disconnect(null, reason));
@@ -59,9 +93,9 @@ public class Connection implements pro.prysm.orion.api.net.Connection {
         }
     }
 
-    @Override
-    public void sendPacket(pro.prysm.orion.api.protocol.outgoing.OutgoingPacket packet) {
-        pro.prysm.orion.api.Orion.getEventBus().post(new OutgoingPacketEvent(), (OutgoingPacket) packet);
-        ctx.writeAndFlush(packet);
+    public void sendPacket(OutgoingPacket packet) {
+        OutgoingPacketEvent event = new OutgoingPacketEvent();
+        pro.prysm.orion.api.Orion.getEventBus().post(event, packet);
+        if (!event.isCancelled()) ctx.writeAndFlush(packet);
     }
 }

@@ -22,6 +22,7 @@ public class PacketRegistry {
 
     HashMap<Integer, Class<? extends IncomingPacket>> incomingLogin = new HashMap<>() {{
         put(0x00, LoginStart.class);
+        put(0x01, EncryptionResponse.class);
     }};
 
     public static ServerListResponse defaultSLPResponse;
