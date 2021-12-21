@@ -5,7 +5,9 @@ import pro.prysm.orion.api.chat.Message;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
-public class Disconnect extends OutgoingPacket {
+public class Disconnect extends OutgoingPacket implements pro.prysm.orion.api.protocol.outgoing.login.Disconnect {
+
+
     private final Message message;
     public Disconnect(Protocol protocol, String message) {
         super(protocol);
@@ -15,5 +17,9 @@ public class Disconnect extends OutgoingPacket {
     @Override
     public void write(ByteBuf buf) {
         writeString(message.toJsonString(), buf);
+    }
+    @Override
+    public Message getMessage() {
+        return message;
     }
 }

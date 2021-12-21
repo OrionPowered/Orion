@@ -6,7 +6,7 @@ import pro.prysm.orion.api.protocol.ServerListResponse;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
-public class SLPResponse extends OutgoingPacket {
+public class SLPResponse extends OutgoingPacket implements pro.prysm.orion.api.protocol.outgoing.status.SLPResponse {
     private ServerListResponse response;
 
     public SLPResponse(Protocol protocol) {
@@ -19,10 +19,12 @@ public class SLPResponse extends OutgoingPacket {
         this.response = response;
     }
 
+    @Override
     public void setResponse(ServerListResponse response) {
         this.response = response;
     }
 
+    @Override
     public ServerListResponse getResponse() {
         return response;
     }

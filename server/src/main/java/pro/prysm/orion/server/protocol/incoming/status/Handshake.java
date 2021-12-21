@@ -4,12 +4,10 @@ import io.netty.buffer.ByteBuf;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.net.Connection;
-import pro.prysm.orion.server.protocol.PacketRegistry;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
-import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
 
-public class Handshake extends IncomingPacket {
+public class Handshake extends IncomingPacket implements pro.prysm.orion.api.protocol.incoming.status.Handshake {
     private int protocolVersion;
     private String hostname;
     private short port;
@@ -21,18 +19,22 @@ public class Handshake extends IncomingPacket {
         state = PacketState.HANDSHAKE;
     }
 
+    @Override
     public int getProtocolVersion() {
         return protocolVersion;
     }
 
+    @Override
     public String getHostname() {
         return hostname;
     }
 
+    @Override
     public short getPort() {
         return port;
     }
 
+    @Override
     public PacketState getNextState() {
         return nextState;
     }

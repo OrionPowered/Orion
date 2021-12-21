@@ -5,7 +5,7 @@ import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
-public class LoginStart extends IncomingPacket  {
+public class LoginStart extends IncomingPacket implements pro.prysm.orion.api.protocol.incoming.login.LoginStart {
     String username;
 
     public LoginStart(Protocol protocol, Connection connection) {
@@ -16,5 +16,10 @@ public class LoginStart extends IncomingPacket  {
     public void read(ByteBuf buf) {
         username = readString(buf);
         connection.disconnect(String.format("<color:#2fc1fa>Hello %s!</color>", username));
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
     }
 }

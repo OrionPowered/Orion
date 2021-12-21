@@ -3,14 +3,13 @@ package pro.prysm.orion.server.net;
 import io.netty.channel.ChannelHandlerContext;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
-import pro.prysm.orion.server.event.events.OutgoingPacketEvent;
-import pro.prysm.orion.server.protocol.Protocol;
+import pro.prysm.orion.api.event.events.OutgoingPacketEvent;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.server.protocol.outgoing.login.Disconnect;
 
 import java.net.SocketAddress;
 
-public class Connection {
+public class Connection implements pro.prysm.orion.api.net.Connection {
     private final ChannelHandlerContext ctx;
     private PacketState state;
     private boolean active;
@@ -21,10 +20,12 @@ public class Connection {
         active = true;
     }
 
+    @Override
     public ChannelHandlerContext getCtx() {
         return ctx;
     }
 
+    @Override
     public SocketAddress getAddress() {
         return ctx.channel().remoteAddress();
     }
@@ -33,10 +34,12 @@ public class Connection {
         this.state = state;
     }
 
+    @Override
     public PacketState getState() {
         return state;
     }
 
+    @Override
     public boolean isActive() {
         return active;
     }
@@ -45,6 +48,7 @@ public class Connection {
      * Forcibly disconnects the connection and attempts to send a disconnect packet
      * @param reason Reason for disconnect
      */
+    @Override
     public void disconnect(String reason) {
         if (active) {
             if (state == PacketState.LOGIN) sendPacket(new Disconnect(null, reason));
@@ -55,8 +59,9 @@ public class Connection {
         }
     }
 
-    public void sendPacket(OutgoingPacket packet) {
-        Orion.getEventBus().post(new OutgoingPacketEvent(), packet);
+    @Override
+    public void sendPacket(pro.prysm.orion.api.protocol.outgoing.OutgoingPacket packet) {
+        pro.prysm.orion.api.Orion.getEventBus().post(new OutgoingPacketEvent(), (OutgoingPacket) packet);
         ctx.writeAndFlush(packet);
     }
 }
