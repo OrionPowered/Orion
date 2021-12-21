@@ -15,7 +15,7 @@ public class LoginStart extends IncomingPacket implements pro.prysm.orion.api.pr
     @Override
     public void read(ByteBuf buf) {
         username = readString(buf);
-        connection.disconnect(String.format("<color:#2fc1fa>Hello %s!</color>", username));
+        connection.sendPacket(protocol.newEncryptionRequest());
     }
 
     @Override
