@@ -1,7 +1,7 @@
-package pro.prysm.orion.server.event.events;
+package pro.prysm.orion.api.event.events;
 
-import pro.prysm.orion.server.event.Cancellable;
-import pro.prysm.orion.server.event.Event;
+import pro.prysm.orion.api.event.Cancellable;
+import pro.prysm.orion.api.event.Event;
 
 public class TestEvent extends Event implements Cancellable {
     @Override
