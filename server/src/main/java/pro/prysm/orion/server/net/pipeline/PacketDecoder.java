@@ -8,17 +8,14 @@ import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.api.event.events.IncomingPacketEvent;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.protocol.PacketWriter;
-import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 import java.util.List;
 
 public class PacketDecoder extends ByteToMessageDecoder {
-    private final Protocol protocol;
     private final ChannelHandler channelHandler;
 
-    public PacketDecoder(Protocol protocol, ChannelHandler channelHandler) {
-        this.protocol = protocol;
+    public PacketDecoder(ChannelHandler channelHandler) {
         this.channelHandler = channelHandler;
     }
 
@@ -29,11 +26,11 @@ public class PacketDecoder extends ByteToMessageDecoder {
         PacketState state = connection.getState();
 
         int id = PacketWriter.readVarInt(byteBuf);
-        if (protocol.getPacketRegistry().getIncoming(state, id) != null) {
+        if (connection.getProtocol().getPacketRegistry().getIncoming(state, id) != null) {
             Orion.getLogger().finer(String.format("Received packet with ID %d and state: %s", id, state));
-            Class<? extends IncomingPacket> packetClass = protocol.getPacketRegistry().getIncoming(state, id);
+            Class<? extends IncomingPacket> packetClass = connection.getProtocol().getPacketRegistry().getIncoming(state, id);
             if (packetClass != null && packetClass != IncomingPacket.class) {
-                IncomingPacket packet = (IncomingPacket) packetClass.getConstructors()[0].newInstance(protocol, connection);
+                IncomingPacket packet = (IncomingPacket) packetClass.getConstructors()[0].newInstance(connection);
                 packet.read(byteBuf);
                 pro.prysm.orion.api.Orion.getEventBus().post(new IncomingPacketEvent(), packet);
             }

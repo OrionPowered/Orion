@@ -3,6 +3,7 @@ package pro.prysm.orion.server.net.pipeline;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.protocol.Protocol;
 
 import java.net.SocketAddress;
 import java.util.HashMap;
@@ -10,8 +11,10 @@ import java.util.HashMap;
 @ChannelHandler.Sharable
 public class ChannelHandler extends ChannelInboundHandlerAdapter {
     private final HashMap<Integer, Connection> connections;
-    public ChannelHandler() {
+    private final Protocol protocol;
+    public ChannelHandler(Protocol protocol) {
         connections = new HashMap<>();
+        this.protocol = protocol;
     }
     public HashMap<Integer, Connection> getConnections() {
         return connections;
@@ -19,7 +22,7 @@ public class ChannelHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) {
-        connections.put(ctx.channel().remoteAddress().hashCode(), new Connection(ctx));
+        connections.put(ctx.channel().remoteAddress().hashCode(), new Connection(ctx, protocol));
     }
 
     @Override

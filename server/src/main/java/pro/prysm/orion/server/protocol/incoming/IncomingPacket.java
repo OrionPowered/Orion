@@ -3,12 +3,10 @@ package pro.prysm.orion.server.protocol.incoming;
 import io.netty.buffer.ByteBuf;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.protocol.Packet;
-import pro.prysm.orion.server.protocol.Protocol;
 
 public abstract class IncomingPacket extends Packet implements pro.prysm.orion.api.protocol.incoming.IncomingPacket {
     protected Connection connection;
-    public IncomingPacket(Protocol protocol, Connection connection) {
-        super(protocol);
+    public IncomingPacket(Connection connection) {
         this.connection = connection;
     }
 

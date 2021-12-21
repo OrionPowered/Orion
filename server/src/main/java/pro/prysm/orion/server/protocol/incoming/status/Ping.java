@@ -2,18 +2,22 @@ package pro.prysm.orion.server.protocol.incoming.status;
 
 import io.netty.buffer.ByteBuf;
 import pro.prysm.orion.server.net.Connection;
-import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
-import pro.prysm.orion.server.protocol.outgoing.status.Pong;
 
 public class Ping extends IncomingPacket implements pro.prysm.orion.api.protocol.incoming.status.Ping {
-    public Ping(Protocol protocol, Connection connection) {
-        super(protocol, connection);
+    private long value;
+    public Ping(Connection connection) {
+        super(connection);
         id = 0x01;
+    }
+
+    public long getValue() {
+        return value;
     }
 
     @Override
     public void read(ByteBuf buf) {
-        connection.sendPacket(new Pong(protocol, buf.readLong()));
+        value = buf.readLong();
+        connection.getHandler().handle(this);
     }
 }

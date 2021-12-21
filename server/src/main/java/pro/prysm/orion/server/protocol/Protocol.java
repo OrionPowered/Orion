@@ -1,6 +1,5 @@
 package pro.prysm.orion.server.protocol;
 
-import com.mojang.authlib.GameProfile;
 import pro.prysm.orion.api.JSONConfig;
 import pro.prysm.orion.api.chat.Message;
 import pro.prysm.orion.api.protocol.ServerListResponse;
@@ -73,7 +72,7 @@ public class Protocol {
 
     public SLPResponse getDefaultSLP() {
         defaultSLPResponse.setOnlinePlayers(0); // TODO: implement online players
-        return new SLPResponse(this, defaultSLPResponse);
+        return new SLPResponse(defaultSLPResponse);
     }
 
     public int getMaxPlayers() {
@@ -87,6 +86,6 @@ public class Protocol {
     public EncryptionRequest newEncryptionRequest() {
         byte[] verifyToken = new byte[4];
         ThreadLocalRandom.current().nextBytes(verifyToken);
-        return new EncryptionRequest(this, keyPair.getPublic().getEncoded(), verifyToken);
+        return new EncryptionRequest(keyPair.getPublic().getEncoded(), verifyToken);
     }
 }

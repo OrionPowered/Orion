@@ -7,11 +7,6 @@ public abstract class Packet extends PacketWriter implements pro.prysm.orion.api
     protected PacketDirection direction;
     protected PacketState state;
     protected int id;
-    protected Protocol protocol;
-
-    public Packet(Protocol protocol) {
-        this.protocol = protocol;
-    }
 
     @Override
     public PacketDirection getDirection() {

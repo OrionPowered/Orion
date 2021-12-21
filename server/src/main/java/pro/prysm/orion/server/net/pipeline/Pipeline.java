@@ -8,17 +8,15 @@ import pro.prysm.orion.server.protocol.Protocol;
 
 public class Pipeline extends ChannelInitializer<SocketChannel> {
     private final ChannelHandler channelHandler;
-    private final Protocol protocol;
     public Pipeline(Protocol protocol) {
-        this.protocol = protocol;
-        channelHandler = new ChannelHandler();
+        channelHandler = new ChannelHandler(protocol);
     }
 
     @Override
     protected void initChannel(SocketChannel socketChannel) {
         ChannelPipeline pipeline = socketChannel.pipeline();
         pipeline.addLast(Protocol.LENGTH_DECODER, new PacketLengthDecoder());
-        pipeline.addLast(Protocol.DECODER, new PacketDecoder(protocol, channelHandler));
+        pipeline.addLast(Protocol.DECODER, new PacketDecoder(channelHandler));
         pipeline.addLast(Protocol.LENGTH_ENCODER, new PacketLengthEncoder());
         pipeline.addLast(Protocol.ENCODER, new PacketEncoder());
         pipeline.addLast("timeout", new ReadTimeoutHandler(10));
