@@ -11,6 +11,7 @@ import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.net.pipeline.CipherDecoder;
 import pro.prysm.orion.server.net.pipeline.CipherEncoder;
+import pro.prysm.orion.server.protocol.GameProfile;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.handler.*;
 import pro.prysm.orion.server.protocol.outgoing.login.Disconnect;
@@ -28,6 +29,7 @@ public class Connection {
     private byte[] sharedSecret;
     private byte[] verifyToken;
     private boolean active;
+    private GameProfile profile;
 
     public Connection(ChannelHandlerContext ctx, Protocol protocol) {
         this.ctx = ctx;
@@ -81,6 +83,14 @@ public class Connection {
 
     public void setVerifyToken(byte[] verifyToken) {
         this.verifyToken = verifyToken;
+    }
+
+    public void setGameProfile(GameProfile profile) {
+        this.profile = profile;
+    }
+
+    public GameProfile getProfile() {
+        return profile;
     }
 
     public boolean isActive() {
