@@ -19,8 +19,9 @@ public class Pipeline extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(Protocol.DECODER, new PacketDecoder(channelHandler));
         pipeline.addLast(Protocol.LENGTH_ENCODER, new PacketLengthEncoder());
         pipeline.addLast(Protocol.ENCODER, new PacketEncoder());
-        pipeline.addLast("timeout", new ReadTimeoutHandler(10));
         pipeline.addLast(channelHandler);
+        pipeline.addLast("timeout", new ReadTimeoutHandler(10));
+        pipeline.addLast(new ExceptionHandler());
     }
 
     public ChannelHandler getChannelHandler() {
