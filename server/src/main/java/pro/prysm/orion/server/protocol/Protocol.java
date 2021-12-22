@@ -116,9 +116,9 @@ public class Protocol {
             HttpRequest request = HttpRequest.newBuilder(
                     URI.create(String.format("%s/session/minecraft/hasJoined?username=%s&serverId=%s", sessionServer, username, serverId)
                 )).header("accept", "application/json").GET().build();
-
-            CompletableFuture<HttpResponse<String>> response = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
-            profile = new GameProfile(JsonParser.parseString(response.get().body()).getAsJsonObject());
+            CompletableFuture<HttpResponse<String>> future = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = future.get();
+            profile = new GameProfile(JsonParser.parseString(response.body()).getAsJsonObject());
         } catch(InterruptedException | ExecutionException e) {
             Orion.getLogger().severe("Got error when attempting to authenticate session");
             e.printStackTrace();
