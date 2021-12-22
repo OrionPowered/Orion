@@ -7,5 +7,6 @@
   },
   "motd": "<color:#2fc1fa>Orion Server Software</color>",
   "serverName": "Orion",
-  "max-players": "100"
+  "max-players": "100",
+  "session-server": "https://sessionserver.mojang.com"
 }
