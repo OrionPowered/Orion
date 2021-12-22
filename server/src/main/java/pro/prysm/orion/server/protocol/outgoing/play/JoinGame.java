@@ -1,9 +1,8 @@
 package pro.prysm.orion.server.protocol.outgoing.play;
 
 import io.netty.buffer.ByteBuf;
-import net.kyori.nbt.CompoundTag;
 import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
-import pro.prysm.orion.server.protocol.GameProfile;
+import pro.prysm.orion.server.GameMode;
 
 /**
  * @author 254n_m
@@ -11,6 +10,22 @@ import pro.prysm.orion.server.protocol.GameProfile;
  * This file was created as a part of Orion
  */
 public class JoinGame extends pro.prysm.orion.server.protocol.outgoing.OutgoingPacket implements OutgoingPacket {
+    private int entityId;
+    private boolean hardcore;
+    private GameMode gamemode;
+    private GameMode previousGamemode;
+    private String[] worlds;
+    private Object dimensionCodec;
+    private Object dimension;
+    private String worldName;
+    private long hashedSeed;
+    private int maxPlayers;
+    private int viewDistance;
+    private int simulationDistance;
+    private boolean reducedDebugInfo;
+    private boolean respawnScreen;
+    private boolean debug;
+    private boolean flat;
 
     public JoinGame() {
         id = 0x26;
@@ -18,66 +33,25 @@ public class JoinGame extends pro.prysm.orion.server.protocol.outgoing.OutgoingP
 
     @Override
     public void write(ByteBuf buf) {
-        buf.writeInt(0);
-        buf.writeBoolean(false);
-        buf.writeByte(1);
-        buf.writeByte(1);
-        writeVarInt(1, buf);
-        writeString("world", buf);
-        writeNBT(genTag(), buf);
-        writeNBT(genDimensionType(), buf);
-        writeString("world", buf);
-        buf.writeLong(0L);
-        writeVarInt(100, buf);
-        writeVarInt(5,buf);
-        buf.writeBoolean(false);
-        buf.writeBoolean(true);
-        buf.writeBoolean(false);
-        buf.writeBoolean(false);
-
-    }
-
-    private CompoundTag genTag() {
-        CompoundTag tag = new CompoundTag();
-        tag.putString("name", "minecraft:desert");
-        tag.putInt("id", 2);
-        CompoundTag element = new CompoundTag();
-        element.putString("precipitation", "none");
-        CompoundTag effects = new CompoundTag();
-        effects.putInt("sky_color", 7254527);
-        effects.putInt("water_fog_color", 329011);
-        effects.putInt("fog_color", 12638463);
-        effects.putInt("water_color", 4159204);
-        element.put("effects", effects);
-        element.putFloat("depth", 0.125F);
-        element.putFloat("temperature", 2.0F);
-        element.putFloat("scale", 0.05F);
-        element.putFloat("downfall", 0.0F);
-        element.putString("category", "desert");
-        tag.put("element", element);
-        return tag;
-    }
-    private CompoundTag genDimensionType() {
-        CompoundTag main = new CompoundTag();
-        main.putString("name", "minecraft:overworld");
-        main.putInt("id", 0);
-        CompoundTag element = new CompoundTag();
-        element.putByte("piglin_safe", (byte) 0);
-        element.putByte("natural", (byte) 1);
-        element.putFloat("ambient_light", 0.0F);
-        element.putString("infiniburn", "minecraft:infiniburn_overworld");
-        element.putByte("respawn_anchor_works", (byte) 0);
-        element.putByte("has_skylight", (byte) 1);
-        element.putByte("bed_works", (byte) 1);
-        element.putString("effects", "minecraft:overworld");
-        element.putByte("has_raids", (byte) 1);
-        element.putInt("min_y", 0);
-        element.putInt("height", 256);
-        element.putInt("logical_height", 256);
-        element.putFloat("coordinate_scale", 1.0F);
-        element.putByte("ultrawarm", (byte) 0);
-        element.putByte("has_ceiling", (byte) 0);
-        main.put("element", element);
-        return main;
+        buf.writeInt(entityId);
+        buf.writeBoolean(hardcore);
+        buf.writeByte(1);   // Gamemode
+        buf.writeByte(1);   // Previous Gamemode
+        writeVarInt(worlds.length, buf);
+        for (String w : worlds) {
+            writeString(w, buf);
+        }
+        // NBT
+        // dimensionCodec
+        // dimension
+        writeString(worldName, buf);
+        buf.writeLong(hashedSeed);
+        writeVarInt(maxPlayers, buf);
+        writeVarInt(viewDistance, buf);
+        writeVarInt(simulationDistance, buf);
+        buf.writeBoolean(reducedDebugInfo);
+        buf.writeBoolean(respawnScreen);
+        buf.writeBoolean(debug);
+        buf.writeBoolean(flat);
     }
 }
