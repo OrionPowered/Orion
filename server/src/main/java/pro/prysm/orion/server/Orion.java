@@ -1,6 +1,6 @@
 package pro.prysm.orion.server;
 
-import pro.prysm.orion.api.JSONConfig;
+import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.event.Listener;
 import pro.prysm.orion.api.event.events.IncomingPacketEvent;
 import pro.prysm.orion.api.event.events.OutgoingPacketEvent;
@@ -33,7 +33,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
     }
 
     private final long startupTime = System.currentTimeMillis();
-    private JSONConfig config;
+    private Config config;
 
     // Logger and EventBus are the only objects that should be static.
     private static final Logger logger = new Logger("Orion", Level.INFO);
@@ -69,7 +69,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
 
     private void loadConfig() {
         try {
-            config = new JSONConfig(getClass(), new File("settings.json"));
+            config = new Config(getClass(), new File("settings.json"));
         }
         catch (IOException e) {
             logger.warning("Failed to load settings.json!");
@@ -92,7 +92,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
     // Getters
     // ================================================================================================================
 
-    public JSONConfig getConfig() {
+    public Config getConfig() {
         return config;
     }
 

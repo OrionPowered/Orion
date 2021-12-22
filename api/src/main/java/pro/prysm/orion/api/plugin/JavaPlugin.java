@@ -1,6 +1,6 @@
 package pro.prysm.orion.api.plugin;
 
-import pro.prysm.orion.api.JSONConfig;
+import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.exception.ResourceNotFoundException;
 
 import java.io.File;
@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * This file was created as a part of Orion
  */
 public abstract class JavaPlugin {
-    private JSONConfig config;
+    private Config config;
     private File dataFolder;
     private Logger logger;
     private PluginDescription description;
@@ -35,7 +35,7 @@ public abstract class JavaPlugin {
             File configFile = new File(dataFolder, "config.json");
             if (configFile.exists()) return;
             Files.copy(is, configFile.toPath());
-            config = new JSONConfig(configFile);
+            config = new Config(configFile);
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -49,7 +49,7 @@ public abstract class JavaPlugin {
         return dataFolder;
     }
 
-    public JSONConfig getConfig() {
+    public Config getConfig() {
         return config;
     }
 

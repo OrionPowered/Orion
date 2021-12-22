@@ -1,6 +1,5 @@
 package pro.prysm.orion.server.plugin;
 
-import pro.prysm.orion.api.JSONConfig;
 import pro.prysm.orion.api.plugin.JavaPlugin;
 import pro.prysm.orion.api.plugin.PluginDescription;
 import pro.prysm.orion.server.util.Logger;
