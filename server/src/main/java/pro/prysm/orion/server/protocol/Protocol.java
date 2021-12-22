@@ -92,10 +92,6 @@ public class Protocol {
         this.defaultSLPResponse =  response;
     }
 
-    public void getMOTDfromConfig(Config config) {
-
-    }
-
     public SLPResponse getDefaultSLP() {
         defaultSLPResponse.setOnlinePlayers(0); // TODO: implement online players
         return new SLPResponse(defaultSLPResponse);
