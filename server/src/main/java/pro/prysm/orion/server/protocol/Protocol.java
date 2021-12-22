@@ -3,7 +3,6 @@ package pro.prysm.orion.server.protocol;
 import com.google.gson.JsonParser;
 import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.chat.Message;
-import pro.prysm.orion.api.json.JSONParser;
 import pro.prysm.orion.api.protocol.ServerListResponse;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.protocol.outgoing.login.EncryptionRequest;
@@ -47,7 +46,8 @@ public class Protocol {
         defaultSLPResponse.setDescription(new Message(config.getString("motd")).toComponent());
         defaultSLPResponse.setServerName(config.getString("serverName"));
         defaultSLPResponse.setMaxPlayers(maxPlayers);
-        sessionServer = config.getString("session-server");
+        sessionServer = config.getStringOrDefault("session-server", "https://sessionserver.mojang.com");
+        Orion.getLogger().finer(String.format("Using session server %s", sessionServer));
     }
 
     private KeyPair genKeyPair() {
