@@ -3,6 +3,7 @@ package pro.prysm.orion.server.net;
 import com.velocitypowered.natives.encryption.VelocityCipher;
 import com.velocitypowered.natives.encryption.VelocityCipherFactory;
 import com.velocitypowered.natives.util.Natives;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import pro.prysm.orion.api.event.events.OutgoingPacketEvent;
 import pro.prysm.orion.api.protocol.PacketState;
@@ -105,7 +106,7 @@ public class Connection {
             if (state == PacketState.LOGIN) sendPacket(new Disconnect(reason));
             // else if (state == PacketState.PLAY)
             active = false;
-            ctx.flush().close();
+            ctx.flush().close().addListener(ChannelFutureListener.CLOSE);
             Orion.getLogger().finer(String.format("Forcibly closed connection %s", getAddress()));
         }
     }

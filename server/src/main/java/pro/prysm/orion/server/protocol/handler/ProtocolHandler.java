@@ -10,6 +10,7 @@ import pro.prysm.orion.server.protocol.incoming.status.Ping;
 public abstract class ProtocolHandler {
     protected final Connection connection;
     protected final Protocol protocol;
+
     public ProtocolHandler(Connection connection) {
         this.connection = connection;
         this.protocol = connection.getProtocol();
