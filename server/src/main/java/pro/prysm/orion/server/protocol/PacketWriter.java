@@ -1,14 +1,10 @@
 package pro.prysm.orion.server.protocol;
 
 import io.netty.buffer.ByteBuf;
-import net.kyori.nbt.CompoundTag;
-import net.kyori.nbt.ListTag;
-import net.kyori.nbt.Tag;
-import net.kyori.nbt.TagIO;
+import net.kyori.adventure.nbt.BinaryTagIO;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
@@ -225,19 +221,14 @@ public abstract class PacketWriter {
      * @param tag NBT to write
      * @param buf Buffer to write to
      */
-    public static void writeNBT(CompoundTag tag, ByteBuf buf) {
+    public static void writeNBT(CompoundBinaryTag tag, ByteBuf buf) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream(stream);
+        OutputStream out = new DataOutputStream(stream);
         try {
-            TagIO.writeDataOutput(tag, out);
+            BinaryTagIO.writer().write(tag, out);
         } catch (IOException e) {
             e.printStackTrace();
         }
         buf.writeBytes(stream.toByteArray());
-    }
-
-    public static void writeNBTList(ListTag listTag, ByteBuf buf) {
-        writeVarInt(listTag.size(), buf);
-        for (Tag tag : listTag) writeNBT((CompoundTag) tag, buf);
     }
 }
