@@ -42,6 +42,7 @@ public class LoginHandler extends ProtocolHandler {
         if (profile == null) connection.disconnect("Bad login.");
         else {
             connection.sendPacket(new LoginSuccess(profile.getUniqueId(), profile.getUsername()));
+            connection.setGameProfile(profile);
             connection.setState(PacketState.PLAY);
             Orion.getLogger().info(String.format("%s/%s joining...", profile.getUsername(), profile.getUniqueId()));
         }
