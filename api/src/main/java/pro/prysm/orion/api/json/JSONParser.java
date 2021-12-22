@@ -31,29 +31,52 @@ public class JSONParser {
     }
 
     public String getString(String key) {
-        return get(key).getAsString();
+        JsonElement e = get(key);
+        return (e == null)
+                ? null
+                : e.getAsString();
     }
 
     public UUID getUUID(String key) {
-        return UUID.fromString(getString(key).replaceFirst(
+        return (getString(key) == null)
+                ? null
+                : UUID.fromString(getString(key).replaceFirst(
                 "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
-        ));
+                    ));
     }
 
     public boolean getBoolean(String key) {
-        return get(key).getAsBoolean();
+        JsonElement e = get(key);
+        return (e == null)
+                ? null
+                : e.getAsBoolean();
     }
 
     public int getInt(String key) {
-        return get(key).getAsInt();
+        JsonElement e = get(key);
+        return (e == null)
+                ? null
+                : e.getAsInt();
     }
 
     public long getLong(String key) {
-        return get(key).getAsLong();
+        JsonElement e = get(key);
+        return (e == null)
+                ? null
+                : e.getAsLong();
     }
 
     public double getDouble(String key) {
-        return get(key).getAsDouble();
+        JsonElement e = get(key);
+        return (e == null)
+                ? null
+                : e.getAsDouble();
     }
 
+    public String getStringOrDefault(String key, String defaultString) {
+        String string = getString(key);
+        return (string == null)
+                ? defaultString
+                : string;
+    }
 }
