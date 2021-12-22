@@ -11,11 +11,9 @@ import pro.prysm.orion.server.protocol.GameProfile;
  * This file was created as a part of Orion
  */
 public class JoinGame extends pro.prysm.orion.server.protocol.outgoing.OutgoingPacket implements OutgoingPacket {
-    private final GameProfile profile;
 
-    public JoinGame(GameProfile profile) {
+    public JoinGame() {
         id = 0x26;
-        this.profile = profile;
     }
 
     @Override
