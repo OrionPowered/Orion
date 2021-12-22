@@ -24,7 +24,7 @@ public class LoginSuccess extends OutgoingPacket implements pro.prysm.orion.api.
 
     @Override
     public void write(ByteBuf buf) {
-        writeString(uniqueId.toString(), buf);
+        writeUuidIntArray(uniqueId, buf);
         writeString(username, buf);
     }
 }

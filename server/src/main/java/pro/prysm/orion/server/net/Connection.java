@@ -103,8 +103,8 @@ public class Connection {
         VelocityCipherFactory factory = Natives.cipher.get();
         VelocityCipher decryptionCipher = factory.forDecryption(key);
         VelocityCipher encryptionCipher = factory.forEncryption(key);
-        ctx.channel().pipeline().addBefore(Protocol.ENCODER, Protocol.CIPHER_ENCODER, new CipherEncoder(encryptionCipher));
-        ctx.channel().pipeline().addBefore(Protocol.DECODER, Protocol.CIPHER_DECODER, new CipherDecoder(decryptionCipher));
+        ctx.channel().pipeline().addBefore(Protocol.LENGTH_DECODER, Protocol.CIPHER_DECODER, new CipherDecoder(decryptionCipher));
+        ctx.channel().pipeline().addBefore(Protocol.LENGTH_ENCODER, Protocol.CIPHER_ENCODER, new CipherEncoder(encryptionCipher));
     }
 
     /**

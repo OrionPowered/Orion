@@ -16,11 +16,11 @@ public class Pipeline extends ChannelInitializer<SocketChannel> {
     protected void initChannel(SocketChannel socketChannel) {
         ChannelPipeline pipeline = socketChannel.pipeline();
         pipeline.addLast(Protocol.LENGTH_DECODER, new PacketLengthDecoder());
-        pipeline.addLast(Protocol.DECODER, new PacketDecoder(channelHandler));
+        pipeline.addLast("read-timeout", new ReadTimeoutHandler(10));
         pipeline.addLast(Protocol.LENGTH_ENCODER, new PacketLengthEncoder());
+        pipeline.addLast(Protocol.DECODER, new PacketDecoder(channelHandler));
         pipeline.addLast(Protocol.ENCODER, new PacketEncoder());
         pipeline.addLast(channelHandler);
-        pipeline.addLast("timeout", new ReadTimeoutHandler(10));
         pipeline.addLast(new ExceptionHandler());
     }
 

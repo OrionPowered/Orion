@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 /*
 A huge portion of this class can be credited to MiniDigger
@@ -204,6 +205,19 @@ public abstract class PacketWriter {
         long[] array = new long[readVarInt(buf)];
         for (int i = 0; i < array.length; i++) array[i] = buf.readLong();
         return array;
+    }
+
+    /**
+     * Writes a UUID to the Byte Buffer
+     * See more: <a href="https://wiki.vg/Data_types">wiki.vg/Data_types</a>
+     * @param uuid UUID to write
+     * @param buf Buffer to write to
+     */
+    public static void writeUuidIntArray(UUID uuid, ByteBuf buf) {
+        buf.writeInt((int) (uuid.getMostSignificantBits() >> 32));
+        buf.writeInt((int) uuid.getMostSignificantBits());
+        buf.writeInt((int) (uuid.getLeastSignificantBits() >> 32));
+        buf.writeInt((int) uuid.getLeastSignificantBits());
     }
 
     /**
