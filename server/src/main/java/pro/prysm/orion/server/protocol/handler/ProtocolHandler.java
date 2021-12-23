@@ -2,11 +2,9 @@ package pro.prysm.orion.server.protocol.handler;
 
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.protocol.Protocol;
-import pro.prysm.orion.server.protocol.incoming.login.EncryptionResponse;
-import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
-import pro.prysm.orion.server.protocol.incoming.play.ClientSettings;
-import pro.prysm.orion.server.protocol.incoming.status.Handshake;
-import pro.prysm.orion.server.protocol.incoming.status.Ping;
+import pro.prysm.orion.server.protocol.incoming.status.*;
+import pro.prysm.orion.server.protocol.incoming.login.*;
+import pro.prysm.orion.server.protocol.incoming.play.*;
 
 public abstract class ProtocolHandler {
     protected final Connection connection;
@@ -26,4 +24,12 @@ public abstract class ProtocolHandler {
     public void handle(LoginStart packet) { }
 
     public void handle(ClientSettings packet) { }
+
+    public void handle(PluginMessage packet) { }
+
+    public void handle(PlayerPosition packet) { }
+
+    public void handle(PlayerRotation packet) { }
+
+    public void handle(PlayerPositionAndRotation packet) { }
 }

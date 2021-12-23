@@ -1,7 +1,14 @@
 package pro.prysm.orion.server.protocol.handler;
 
+import pro.prysm.orion.api.Orion;
+import pro.prysm.orion.api.data.*;
+import pro.prysm.orion.api.event.events.PlayerMoveEvent;
 import pro.prysm.orion.server.data.*;
 import pro.prysm.orion.server.entity.ImplPlayer;
+import pro.prysm.orion.server.protocol.incoming.play.PlayerPosition;
+import pro.prysm.orion.server.protocol.incoming.play.PlayerPositionAndRotation;
+import pro.prysm.orion.server.protocol.incoming.play.PlayerRotation;
+import pro.prysm.orion.server.protocol.incoming.play.PluginMessage;
 import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;
 
 public class PlayHandler extends ProtocolHandler {
@@ -16,8 +23,8 @@ public class PlayHandler extends ProtocolHandler {
         Dimension dimension = new Dimension();
         JoinGame packet = new JoinGame();
         packet.setEntityId(-1);
-        packet.setGamemode(GameMode.CREATIVE);
-        packet.setPreviousGamemode(GameMode.CREATIVE);
+        packet.setGamemode(GameMode.SPECTATOR);
+        packet.setPreviousGamemode(GameMode.SPECTATOR);
         packet.setWorlds(new String[]{"world"});
         packet.setDimensionCodec(dimension.getCodec());
         packet.setDimension(dimension.getType());
@@ -33,6 +40,7 @@ public class PlayHandler extends ProtocolHandler {
         connection.sendPacket(packet);
     }
 
+    @Override
     public void handle(pro.prysm.orion.server.protocol.incoming.play.ClientSettings packet) {
         ClientSettings settings = new ClientSettings(
                 packet.getLocale(),
@@ -40,10 +48,56 @@ public class PlayHandler extends ProtocolHandler {
                 (packet.getChatMode() == 0) ? ChatMode.ENABLED : (packet.getChatMode() == 1 ? ChatMode.COMMANDS_ONLY : ChatMode.HIDDEN),
                 packet.isColoredChat(),
                 packet.getSkinParts(),
-                (packet.getMainHand() == 0) ? MainHand.LEFT : MainHand.RIGHT
+                (packet.getMainHand() == 0) ? Hand.LEFT : Hand.RIGHT
         );
         player.setSettings(settings);
-        System.out.printf("%s joined the game with UUID %s and locale %s\n", player.getProfile().getUsername(), player.getProfile().getUniqueId(), player.getSettings().getLocale());
     }
 
+    @Override
+    public void handle(PluginMessage packet) {
+        if (packet.getChannel().equals("minecraft:brand")) player.setBrand(new String(packet.getData()));
+    }
+
+    @Override
+    public void handle(PlayerPosition packet) {
+        Location to = player.getLocation();
+        to.setX(packet.getX());
+        to.setY(packet.getY());
+        to.setZ(packet.getZ());
+        player.setLocation(playerMove(to, player.getLocation()));
+    }
+
+    @Override
+    public void handle(PlayerRotation packet) {
+        Location to = player.getLocation();
+        to.setYaw(packet.getYaw());
+        to.setPitch(packet.getPitch());
+        to.setOnGround(packet.isOnGround());
+        player.setLocation(playerMove(to, player.getLocation()));
+    }
+
+    @Override
+    public void handle(PlayerPositionAndRotation packet) {
+        Location to = player.getLocation();
+        to.setX(packet.getX());
+        to.setY(packet.getY());
+        to.setZ(packet.getZ());
+        to.setYaw(packet.getYaw());
+        to.setPitch(packet.getPitch());
+        to.setOnGround(packet.isOnGround());
+        player.setLocation(playerMove(to, player.getLocation()));
+    }
+
+    private Location playerMove(Location to, Location from) {
+        if (to.equals(from)) return from;
+        PlayerMoveEvent event = new PlayerMoveEvent(player, to, player.getLocation());
+        Orion.getEventBus().post(event);
+        if (!event.isCancelled()) {
+            // if (!event.getTo().equals(to)) // TODO: implement teleporting
+            return to;
+        } else {
+            // TODO: teleport player back to their original location
+            return from;
+        }
+    }
 }
