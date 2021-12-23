@@ -10,19 +10,24 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.TitlePart;
 import org.jetbrains.annotations.NotNull;
 import pro.prysm.orion.api.entity.Player;
-import pro.prysm.orion.server.data.ClientSettings;
+import pro.prysm.orion.api.data.ClientSettings;
+import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.server.net.Connection;
-import pro.prysm.orion.server.data.GameProfile;
+import pro.prysm.orion.api.data.GameProfile;
 
 // TODO: Fully implement methods from Audience
+// TODO: Write JavaDoc comments
 public class ImplPlayer implements Player {
     private final Connection connection;
     private final GameProfile profile;
     private ClientSettings settings;
+    private Location location;
+    private String brand;
 
     public ImplPlayer(Connection connection, GameProfile profile) {
         this.connection = connection;
         this.profile = profile;
+        this.location = new Location();
     }
 
     public Connection getConnection() {
@@ -39,6 +44,22 @@ public class ImplPlayer implements Player {
 
     public void setSettings(ClientSettings settings) {
         this.settings = settings;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     // ===============================================================================================================
