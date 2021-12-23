@@ -23,6 +23,43 @@ public class Dimension {
 
     private void genCodec() {
         CompoundBinaryTag.Builder codecBuilder = CompoundBinaryTag.builder();
+
+        codecBuilder.put("minecraft:dimension_type", genDimensionType());
+        codecBuilder.put("minecraft:worldgen/biome", genWorldGenBiome());
+
+        codec = codecBuilder.build();
+    }
+
+    private void genType() {
+        CompoundBinaryTag.Builder typeBuilder = CompoundBinaryTag.builder();
+        typeBuilder.putString("type", "minecraft:overworld");
+        typeBuilder.putInt("id", 0);
+        typeBuilder.put("element", desertElement());
+        type = typeBuilder.build();
+    }
+
+    private CompoundBinaryTag desertElement() {
+        CompoundBinaryTag.Builder element = CompoundBinaryTag.builder();
+        element.putBoolean("piglin_safe", false);
+        element.putBoolean("natural", true);
+        element.putFloat("ambient_light", 0.0F);
+        element.putString("infiniburn", "minecraft:infiniburn_overworld");
+        element.putBoolean("respawn_anchor_works", false);
+        element.putBoolean("has_skylight", true);
+        element.putBoolean("bed_works", true);
+        element.putString("effects", "minecraft_overworld");
+        element.putBoolean("has_raids", true);
+        element.putInt("min_y", 0);
+        element.putInt("height", 256);
+        element.putInt("logical_height", 256);
+        element.putDouble("coordinate_scale", 1D);
+        element.putBoolean("ultrawarm", false);
+        element.putBoolean("has_ceiling", false);
+        return element.build();
+    }
+
+    private CompoundBinaryTag genDimensionType() {
+        CompoundBinaryTag.Builder out = CompoundBinaryTag.builder();
         CompoundBinaryTag.Builder dimensionType = CompoundBinaryTag.builder();
         dimensionType.putString("type", "minecraft:dimension_type");
         ListBinaryTag.Builder<BinaryTag> dimensionValues = ListBinaryTag.builder();
@@ -35,13 +72,17 @@ public class Dimension {
         dimensionValues.add(overworld.build());
         dimensionType.put("value", dimensionValues.build());
 
-        codecBuilder.put(dimensionType.build());
-        CompoundBinaryTag.Builder worldGenBiome = CompoundBinaryTag.builder();
-        worldGenBiome.putString("type", "minecraft:worldgen/biome");
+        out.put(dimensionType.build());
+        return out.build();
+    }
+
+    private CompoundBinaryTag genWorldGenBiome() {
+        CompoundBinaryTag.Builder out = CompoundBinaryTag.builder();
+        out.putString("type", "minecraft:worldgen/biome");
         ListBinaryTag.Builder<BinaryTag> genValues = ListBinaryTag.builder();
 
         CompoundBinaryTag.Builder desert = CompoundBinaryTag.builder();
-        desert.putString("type", "minecraft:desert");
+        desert.putString("name", "minecraft:desert");
         desert.putInt("id", 0);
 
         CompoundBinaryTag.Builder desertElement = CompoundBinaryTag.builder();
@@ -58,40 +99,11 @@ public class Dimension {
         desertElement.putFloat("temperature", 2.0F);
         desertElement.putFloat("downfall", 0.0F);
         desertElement.putString("category", "desert");
-        desert.put(desertElement.build());
+        desert.put("element", desertElement.build());
 
         genValues.add(desert.build());
-        worldGenBiome.put("value", genValues.build());
-        codecBuilder.put(worldGenBiome.build());
-        codec = codecBuilder.build();
-    }
-
-    private void genType() {
-        CompoundBinaryTag.Builder typeBuilder = CompoundBinaryTag.builder();
-        typeBuilder.putString("type", "minecraft:overworld");
-        typeBuilder.putInt("id", 0);
-        typeBuilder.put("element", desertElement());
-        type = typeBuilder.build();
-    }
-
-    private CompoundBinaryTag desertElement() {
-        CompoundBinaryTag.Builder element = CompoundBinaryTag.builder();
-        element.putBoolean("piglin_safe", false);
-        element.putBoolean("natural", true);
-        element.putFloat("ambient_light", 0F);
-        element.putString("infiniburn", "minecraft:infiniburn_overworld");
-        element.putBoolean("respawn_anchor_works", false);
-        element.putBoolean("has_skylight", true);
-        element.putBoolean("bed_works", true);
-        element.putString("effects", "minecraft_overworld");
-        element.putBoolean("has_raids", true);
-        element.putInt("min_y", 0);
-        element.putInt("height", 256);
-        element.putInt("logical_height", 256);
-        element.putDouble("coordinate_scale", 1D);
-        element.putBoolean("ultrawarm", false);
-        element.putBoolean("has_ceiling", false);
-        return element.build();
+        out.put("value", genValues.build());
+        return out.build();
     }
 
 }
