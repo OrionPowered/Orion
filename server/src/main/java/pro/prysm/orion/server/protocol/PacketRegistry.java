@@ -1,9 +1,11 @@
 package pro.prysm.orion.server.protocol;
 
 import pro.prysm.orion.api.protocol.PacketState;
+import pro.prysm.orion.server.protocol.incoming.IgnoredPacket;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 import pro.prysm.orion.server.protocol.incoming.login.EncryptionResponse;
 import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
+import pro.prysm.orion.server.protocol.incoming.play.ClientSettings;
 import pro.prysm.orion.server.protocol.incoming.status.Handshake;
 import pro.prysm.orion.server.protocol.incoming.status.Ping;
 
@@ -25,6 +27,11 @@ public class PacketRegistry {
         put(0x01, EncryptionResponse.class);
     }};
 
+    HashMap<Integer, Class<? extends IncomingPacket>> incomingPlay = new HashMap<>() {{
+        put(0x05, ClientSettings.class);
+        put(0x0A, IgnoredPacket.class); // Server bound plugin message, ignore for now to get past it
+    }};
+
     public PacketRegistry() {}
 
     public Class<? extends IncomingPacket> getIncoming(PacketState state, int id) {
@@ -33,6 +40,7 @@ public class PacketRegistry {
             case HANDSHAKE -> packet = incomingHandshake.getOrDefault(id, null);
             case STATUS -> packet = incomingStatus.getOrDefault(id, null);
             case LOGIN -> packet = incomingLogin.getOrDefault(id, null);
+            case PLAY -> packet = incomingPlay.getOrDefault(id, null);
         }
         return packet;
     }
