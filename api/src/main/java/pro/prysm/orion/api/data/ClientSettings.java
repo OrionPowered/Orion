@@ -1,4 +1,4 @@
-package pro.prysm.orion.server.data;
+package pro.prysm.orion.api.data;
 
 public class ClientSettings {
     private String locale;
@@ -6,11 +6,11 @@ public class ClientSettings {
     private ChatMode chatMode;
     private boolean coloredChat;
     private short displayedSkinParts;
-    private MainHand mainHand;
+    private Hand mainHand;
     // private final boolean textFiltering; (this is always false as filtering is always disabled by the client as of 757)
     // private final boolean showInList; (The client can ask to hide itself from the server list, but this is not good, so we ignore it)
 
-    public ClientSettings(String locale, int viewDistance, ChatMode chatMode, boolean coloredChat, short displayedSkinParts, MainHand mainHand) {
+    public ClientSettings(String locale, int viewDistance, ChatMode chatMode, boolean coloredChat, short displayedSkinParts, Hand mainHand) {
         this.locale = locale;
         this.viewDistance = viewDistance;
         this.chatMode = chatMode;
@@ -55,11 +55,11 @@ public class ClientSettings {
         this.coloredChat = coloredChat;
     }
 
-    public MainHand getMainHand() {
+    public Hand getMainHand() {
         return mainHand;
     }
 
-    public void setMainHand(MainHand mainHand) {
+    public void setMainHand(Hand mainHand) {
         this.mainHand = mainHand;
     }
 }

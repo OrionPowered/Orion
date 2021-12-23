@@ -1,4 +1,4 @@
-package pro.prysm.orion.server.data;
+package pro.prysm.orion.api.data;
 
 public enum GameMode {
     SURVIVAL(0),
