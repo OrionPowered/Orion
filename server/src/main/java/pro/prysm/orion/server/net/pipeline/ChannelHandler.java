@@ -2,6 +2,7 @@ package pro.prysm.orion.server.net.pipeline;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.ChannelOption;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.protocol.Protocol;
 
@@ -22,6 +23,7 @@ public class ChannelHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) {
+        ctx.channel().config().setOption(ChannelOption.TCP_NODELAY, true);
         connections.put(ctx.channel().remoteAddress().hashCode(), new Connection(ctx, protocol));
     }
 
