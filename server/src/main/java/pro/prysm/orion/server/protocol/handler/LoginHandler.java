@@ -4,7 +4,7 @@ import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.entity.ImplPlayer;
 import pro.prysm.orion.server.net.Connection;
-import pro.prysm.orion.server.data.GameProfile;
+import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.server.protocol.incoming.login.EncryptionResponse;
 import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
 import pro.prysm.orion.server.protocol.outgoing.login.LoginSuccess;
