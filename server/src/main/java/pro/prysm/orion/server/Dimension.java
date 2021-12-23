@@ -32,13 +32,13 @@ public class Dimension {
 
     private void genType() {
         CompoundBinaryTag.Builder typeBuilder = CompoundBinaryTag.builder();
-        typeBuilder.putString("type", "minecraft:overworld");
+        typeBuilder.putString("name", "minecraft:overworld");
         typeBuilder.putInt("id", 0);
-        typeBuilder.put("element", desertElement());
+        typeBuilder.put(plainsElement());
         type = typeBuilder.build();
     }
 
-    private CompoundBinaryTag desertElement() {
+    private CompoundBinaryTag plainsElement() {
         CompoundBinaryTag.Builder element = CompoundBinaryTag.builder();
         element.putBoolean("piglin_safe", false);
         element.putBoolean("natural", true);
@@ -52,7 +52,7 @@ public class Dimension {
         element.putInt("min_y", 0);
         element.putInt("height", 256);
         element.putInt("logical_height", 256);
-        element.putDouble("coordinate_scale", 1D);
+        element.putDouble("coordinate_scale", 1.0D);
         element.putBoolean("ultrawarm", false);
         element.putBoolean("has_ceiling", false);
         return element.build();
@@ -67,7 +67,7 @@ public class Dimension {
         overworld.putString("name", "minecraft:overworld");
         overworld.putInt("id", 0);
 
-        overworld.put("element", desertElement());
+        overworld.put("element", plainsElement());
 
         dimensionValues.add(overworld.build());
         dimensionType.put("value", dimensionValues.build());
@@ -81,27 +81,27 @@ public class Dimension {
         out.putString("type", "minecraft:worldgen/biome");
         ListBinaryTag.Builder<BinaryTag> genValues = ListBinaryTag.builder();
 
-        CompoundBinaryTag.Builder desert = CompoundBinaryTag.builder();
-        desert.putString("name", "minecraft:desert");
-        desert.putInt("id", 0);
+        CompoundBinaryTag.Builder plains = CompoundBinaryTag.builder();
+        plains.putString("name", "minecraft:plains");
+        plains.putInt("id", 0);
 
-        CompoundBinaryTag.Builder desertElement = CompoundBinaryTag.builder();
-        desertElement.putString("precipitation", "none");
+        CompoundBinaryTag.Builder plainsElement = CompoundBinaryTag.builder();
+        plainsElement.putString("precipitation", "none");
 
-        CompoundBinaryTag.Builder desertEffects = CompoundBinaryTag.builder();
-        desertEffects.putInt("sky_color", 7254527);
-        desertEffects.putInt("water_fog_color", 329011);
-        desertEffects.putInt("fog_color", 12638463);
-        desertEffects.putInt("water_color", 4159204);
-        desertElement.put("effects", desertEffects.build());
+        CompoundBinaryTag.Builder plainsEffects = CompoundBinaryTag.builder();
+        plainsEffects.putInt("sky_color", 7254527);
+        plainsEffects.putInt("water_fog_color", 329011);
+        plainsEffects.putInt("fog_color", 12638463);
+        plainsEffects.putInt("water_color", 4159204);
+        plainsElement.put("effects", plainsEffects.build());
 
-        desertElement.putFloat("depth", 0.125F);
-        desertElement.putFloat("temperature", 2.0F);
-        desertElement.putFloat("downfall", 0.0F);
-        desertElement.putString("category", "desert");
-        desert.put("element", desertElement.build());
+        plainsElement.putFloat("depth", 0.125F);
+        plainsElement.putFloat("temperature", 2.0F);
+        plainsElement.putFloat("downfall", 0.0F);
+        plainsElement.putString("category", "plains");
+        plains.put("element", plainsElement.build());
 
-        genValues.add(desert.build());
+        genValues.add(plains.build());
         out.put("value", genValues.build());
         return out.build();
     }
