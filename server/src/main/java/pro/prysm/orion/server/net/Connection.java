@@ -14,7 +14,8 @@ import pro.prysm.orion.server.net.pipeline.CipherEncoder;
 import pro.prysm.orion.server.protocol.GameProfile;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.handler.*;
-import pro.prysm.orion.server.protocol.outgoing.login.Disconnect;
+import pro.prysm.orion.server.protocol.outgoing.login.LoginDisconnected;
+import pro.prysm.orion.server.protocol.outgoing.play.PlayDisconnect;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -113,8 +114,8 @@ public class Connection {
      */
     public void disconnect(String reason) {
         if (active) {
-            if (state == PacketState.LOGIN) sendPacket(new Disconnect(reason));
-            // else if (state == PacketState.PLAY)
+            if (state == PacketState.LOGIN) sendPacket(new LoginDisconnected(reason));
+            else if (state == PacketState.PLAY) sendPacket(new PlayDisconnect(reason));
             active = false;
             ctx.flush().close().addListener(ChannelFutureListener.CLOSE);
             Orion.getLogger().finer(String.format("Forcibly closed connection %s", getAddress()));
