@@ -2,8 +2,9 @@ package pro.prysm.orion.server.protocol.handler;
 
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.entity.ImplPlayer;
 import pro.prysm.orion.server.net.Connection;
-import pro.prysm.orion.server.protocol.GameProfile;
+import pro.prysm.orion.server.data.GameProfile;
 import pro.prysm.orion.server.protocol.incoming.login.EncryptionResponse;
 import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
 import pro.prysm.orion.server.protocol.outgoing.login.LoginSuccess;
@@ -11,10 +12,15 @@ import pro.prysm.orion.server.protocol.outgoing.login.LoginSuccess;
 import java.security.GeneralSecurityException;
 
 public class LoginHandler extends ProtocolHandler {
+    private String username;
+    private ImplPlayer player;
     public LoginHandler(Connection connection) {
         super(connection);
     }
-    private String username;
+
+    public ImplPlayer getPlayer() {
+        return player;
+    }
 
     @Override
     public void handle(LoginStart packet) {
@@ -41,8 +47,8 @@ public class LoginHandler extends ProtocolHandler {
         GameProfile profile = protocol.join(protocol.generateServerId(connection.getSharedSecret()), username);
         if (profile == null) connection.disconnect("Bad login.");
         else {
-            connection.setGameProfile(profile);
             connection.sendPacket(new LoginSuccess(profile.getUniqueId(), profile.getUsername()));
+            player = new ImplPlayer(connection, profile);
             connection.setState(PacketState.PLAY);
             Orion.getLogger().info(String.format("%s/%s joining...", profile.getUsername(), profile.getUniqueId()));
         }

@@ -5,6 +5,7 @@ import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.chat.Message;
 import pro.prysm.orion.api.protocol.ServerListResponse;
 import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.data.GameProfile;
 import pro.prysm.orion.server.protocol.outgoing.login.EncryptionRequest;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
 
