@@ -1,13 +1,10 @@
 package pro.prysm.orion.server.protocol;
 
 import pro.prysm.orion.api.protocol.PacketState;
-import pro.prysm.orion.server.protocol.incoming.IgnoredPacket;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
-import pro.prysm.orion.server.protocol.incoming.login.EncryptionResponse;
-import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
-import pro.prysm.orion.server.protocol.incoming.play.ClientSettings;
-import pro.prysm.orion.server.protocol.incoming.status.Handshake;
-import pro.prysm.orion.server.protocol.incoming.status.Ping;
+import pro.prysm.orion.server.protocol.incoming.status.*;
+import pro.prysm.orion.server.protocol.incoming.login.*;
+import pro.prysm.orion.server.protocol.incoming.play.*;
 
 import java.util.HashMap;
 
@@ -29,7 +26,10 @@ public class PacketRegistry {
 
     HashMap<Integer, Class<? extends IncomingPacket>> incomingPlay = new HashMap<>() {{
         put(0x05, ClientSettings.class);
-        put(0x0A, IgnoredPacket.class); // Server bound plugin message, ignore for now to get past it
+        put(0x0A, PluginMessage.class);
+        put(0x11, PlayerPosition.class);
+        put(0x12, PlayerPositionAndRotation.class);
+        put(0x13, PlayerRotation.class);
     }};
 
     public PacketRegistry() {}
