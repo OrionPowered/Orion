@@ -10,7 +10,7 @@ public class ChunkManager {
 
     public ChunkManager() {
         try {
-            Native.load("libAnvilLoader.so");
+            Native.load("libAnvilLoader");
         } catch (ResourceNotFoundException | IOException e) {
             Orion.getLogger().severe("Failed to load native libraries!");
             e.printStackTrace();

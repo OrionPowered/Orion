@@ -1,3 +1,4 @@
+use std::path::Path;
 use jni::objects::{JClass, JString};
 use jni::JNIEnv;
 use fastanvil::{JavaChunk, RegionBuffer};
@@ -14,7 +15,7 @@ pub extern "system" fn Java_pro_prysm_orion_server_world_ChunkManager_loadRegion
 
     let s: String = env.get_string(path).expect("").into();
 
-    let file = std::fs::File::open(s.clone()).unwrap();
+    let file = std::fs::File::open(Path::new(&s).clone()).unwrap();
     let region = RegionBuffer::new(file);
     let data = region.load_chunk(0, 0).unwrap();
 

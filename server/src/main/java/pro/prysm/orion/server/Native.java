@@ -12,11 +12,14 @@ public class Native {
 
     /**
      * Loads a native library from the resources of this Jar
-     * @param name Library to load
+     * @param name Library to load (without extension)
      * @throws ResourceNotFoundException Library not found in resources
      * @throws IOException Cannot move library out of Jar
      */
     public static void load(String name) throws ResourceNotFoundException, IOException {
+        String os = System.getProperty("os.name");
+        if (os.contains("Linux")) name = name + ".so";
+        else if (os.contains("Mac OS")) name = name + ".dylib";
         File libDir = new File("lib");
         if (!libDir.exists()) libDir.mkdirs();
         File object = new File("lib", name);
