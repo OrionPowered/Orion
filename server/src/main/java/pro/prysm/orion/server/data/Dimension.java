@@ -1,4 +1,4 @@
-package pro.prysm.orion.server;
+package pro.prysm.orion.server.data;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;

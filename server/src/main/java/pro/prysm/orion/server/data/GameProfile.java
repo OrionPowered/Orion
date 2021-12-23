@@ -1,4 +1,4 @@
-package pro.prysm.orion.server.protocol;
+package pro.prysm.orion.server.data;
 
 import com.google.gson.JsonObject;
 import pro.prysm.orion.api.json.JSONParser;
