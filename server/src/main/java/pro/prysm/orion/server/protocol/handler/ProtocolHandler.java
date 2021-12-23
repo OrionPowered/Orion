@@ -4,6 +4,7 @@ import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.incoming.login.EncryptionResponse;
 import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
+import pro.prysm.orion.server.protocol.incoming.play.ClientSettings;
 import pro.prysm.orion.server.protocol.incoming.status.Handshake;
 import pro.prysm.orion.server.protocol.incoming.status.Ping;
 
@@ -23,4 +24,6 @@ public abstract class ProtocolHandler {
     public void handle(EncryptionResponse packet) { }
 
     public void handle(LoginStart packet) { }
+
+    public void handle(ClientSettings packet) { }
 }
