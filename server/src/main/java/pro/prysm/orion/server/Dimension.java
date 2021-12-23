@@ -3,7 +3,6 @@ package pro.prysm.orion.server;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 
 public class Dimension {
-
     private CompoundBinaryTag codec;
     private CompoundBinaryTag type;
 
@@ -34,21 +33,25 @@ public class Dimension {
 
     private void genType() {
         CompoundBinaryTag.Builder typeBuilder = CompoundBinaryTag.builder();
-        typeBuilder.putBoolean("piglin_safe", false);
-        typeBuilder.putBoolean("natural", true);
-        typeBuilder.putFloat("ambient_light", 0F);
-        typeBuilder.putString("infiniburn", "minecraft:infiniburn_overworld");
-        typeBuilder.putBoolean("respawn_anchor_works", false);
-        typeBuilder.putBoolean("has_skylight", true);
-        typeBuilder.putBoolean("bed_works", true);
-        typeBuilder.putString("effects", "minecraft_overworld");
-        typeBuilder.putBoolean("has_raids", true);
-        typeBuilder.putInt("min_y", 0);
-        typeBuilder.putInt("height", 256);
-        typeBuilder.putInt("logical_height", 256);
-        typeBuilder.putDouble("coordinate_scale", 1D);
-        typeBuilder.putBoolean("ultrawarm", false);
-        typeBuilder.putBoolean("has_ceiling", false);
+        typeBuilder.putString("type", "minecraft:overworld");
+        typeBuilder.putInt("id", 0);
+        CompoundBinaryTag.Builder element = CompoundBinaryTag.builder();
+        element.putBoolean("piglin_safe", false);
+        element.putBoolean("natural", true);
+        element.putFloat("ambient_light", 0F);
+        element.putString("infiniburn", "minecraft:infiniburn_overworld");
+        element.putBoolean("respawn_anchor_works", false);
+        element.putBoolean("has_skylight", true);
+        element.putBoolean("bed_works", true);
+        element.putString("effects", "minecraft_overworld");
+        element.putBoolean("has_raids", true);
+        element.putInt("min_y", 0);
+        element.putInt("height", 256);
+        element.putInt("logical_height", 256);
+        element.putDouble("coordinate_scale", 1D);
+        element.putBoolean("ultrawarm", false);
+        element.putBoolean("has_ceiling", false);
+        typeBuilder.put("element", element.build());
         type = typeBuilder.build();
     }
 }
