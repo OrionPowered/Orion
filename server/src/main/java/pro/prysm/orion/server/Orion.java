@@ -1,9 +1,11 @@
 package pro.prysm.orion.server;
 
+import pro.prysm.orion.api.event.events.PlayerMoveEvent;
 import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.event.Listener;
 import pro.prysm.orion.api.event.events.OutgoingPacketEvent;
 import pro.prysm.orion.api.protocol.outgoing.status.SLPResponse;
+import pro.prysm.orion.server.world.ChunkManager;
 import pro.prysm.orion.server.command.CommandHandler;
 import pro.prysm.orion.server.command.commands.HelpCommand;
 import pro.prysm.orion.api.event.EventHandler;
@@ -34,12 +36,12 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
 
     // Logger and EventBus are the only objects that should be static.
     private static final Logger logger = new Logger("Orion", Level.INFO);
-//    private static final EventBus eventBus = new EventBus();
 
     private final TCPListener listener;
     private final Protocol protocol;
     private final CommandHandler commandHandler;
     private final PluginLoader pluginLoader;
+    private final ChunkManager chunkManager;
 
     public Orion() {
         logger.info("Starting Orion...");
@@ -49,6 +51,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         protocol = new Protocol(config);
         commandHandler = new CommandHandler();
         pluginLoader = new PluginLoader();
+        chunkManager = new ChunkManager();
 
         EVENT_BUS.subscribe(this);
 
@@ -80,6 +83,15 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         long difference = System.currentTimeMillis() - startupTime;
         getLogger().info(String.format("Done (%dms)", difference));
     }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent e) {
+        System.out.println("Player move");
+        System.out.println(e.getPlayer().getProfile().getUsername());
+        System.out.println(e.getFrom());
+        System.out.println(e.getTo());
+    }
+
     @EventHandler
     public void onPacket(OutgoingPacketEvent event, SLPResponse packet) {
         System.out.println(packet.getResponse().toJsonString());
