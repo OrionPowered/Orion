@@ -8,6 +8,7 @@ Orion is a 1.18 (757) Minecraft server implementation written with the goal of b
 - [x] MOTD/Server Status
 - [x] Mojang Authentication
 - [x] Encryption (using velocity's native encryption library)
+- [ ] Compression
 - [x] Event system
 - [x] Plugin & module loading
 - [ ] Chunk loading (*in progress*) 
