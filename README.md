@@ -15,6 +15,8 @@ Orion is a 1.18 (757) Minecraft server implementation written with the goal of b
 - [ ] Player movement & mechanics
 - [ ] Chat
 - [ ] Tab list
+- [ ] Player permissions
+- [ ] Player data containers
 
 ## Modules & Plugins
 ### Modules
