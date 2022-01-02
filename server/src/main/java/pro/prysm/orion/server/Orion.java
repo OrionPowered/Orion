@@ -5,7 +5,6 @@ import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.event.Listener;
 import pro.prysm.orion.api.event.events.OutgoingPacketEvent;
 import pro.prysm.orion.api.protocol.outgoing.status.SLPResponse;
-import pro.prysm.orion.server.world.ChunkManager;
 import pro.prysm.orion.server.command.CommandHandler;
 import pro.prysm.orion.server.command.commands.HelpCommand;
 import pro.prysm.orion.api.event.EventHandler;
@@ -41,7 +40,6 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
     private final Protocol protocol;
     private final CommandHandler commandHandler;
     private final PluginLoader pluginLoader;
-    private final ChunkManager chunkManager;
 
     public Orion() {
         logger.info("Starting Orion...");
@@ -51,7 +49,6 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         protocol = new Protocol(config);
         commandHandler = new CommandHandler();
         pluginLoader = new PluginLoader();
-        chunkManager = new ChunkManager();
 
         EVENT_BUS.subscribe(this);
 
