@@ -19,6 +19,14 @@ Orion is a 1.18 (757) Minecraft server implementation written with the goal of b
 - [ ] Player data containers
 - [ ] Velocity Support
 
+## Setting up
+To build dependencies, you must have Rust and Cargo installed as we depend on Rust libraries. Additionally, GNU make is used for building.
+
+### Building Dependencies
+```sh
+make setup
+```
+
 ## Modules & Plugins
 ### Modules
 Modules are meant to hook into any of Orion's internal classes so that they may extend and/or add additional functionality. For example, PVP will not be part of Orion out of the box; but instead, a module for PVP will be created. This means servers that do not need PVP, such as lobbies, simply ignore any PVP mechanics clients attempt and therefore, save resources. On the other hand, servers that need PVP can simply load the module.
