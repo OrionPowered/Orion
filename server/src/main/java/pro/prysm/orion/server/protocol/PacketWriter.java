@@ -187,7 +187,7 @@ public abstract class PacketWriter {
      * @param array Long array to write
      * @param buf Buffer to write to
      */
-    protected void writeLongArray(long[] array, ByteBuf buf) {
+    public static void writeLongArray(long[] array, ByteBuf buf) {
         writeVarInt(array.length, buf);
         for (long i : array) buf.writeLong(i);
     }
