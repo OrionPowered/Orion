@@ -10,6 +10,7 @@ import pro.prysm.orion.server.command.commands.HelpCommand;
 import pro.prysm.orion.api.event.EventHandler;
 import pro.prysm.orion.api.event.events.ServerReadyEvent;
 import pro.prysm.orion.server.command.commands.SendPacketCommand;
+import pro.prysm.orion.server.data.WorldManager;
 import pro.prysm.orion.server.net.TCPListener;
 import pro.prysm.orion.server.plugin.PluginLoader;
 import pro.prysm.orion.server.protocol.Protocol;
@@ -38,6 +39,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
 
     private final TCPListener listener;
     private final Protocol protocol;
+    private final WorldManager worldManager;
     private final CommandHandler commandHandler;
     private final PluginLoader pluginLoader;
 
@@ -46,7 +48,8 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         loadConfig();
 
         logger.setLevel(Level.parse(config.getString("log-level")));
-        protocol = new Protocol(config);
+        worldManager = new WorldManager();
+        protocol = new Protocol(worldManager, config);
         commandHandler = new CommandHandler();
         pluginLoader = new PluginLoader();
 
@@ -104,6 +107,10 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
 
     public Protocol getProtocol() {
         return protocol;
+    }
+
+    public WorldManager getWorldManager() {
+        return worldManager;
     }
 
     public TCPListener getListener() {

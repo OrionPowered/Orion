@@ -6,6 +6,7 @@ import pro.prysm.orion.api.chat.Message;
 import pro.prysm.orion.api.protocol.ServerListResponse;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.api.data.GameProfile;
+import pro.prysm.orion.server.data.WorldManager;
 import pro.prysm.orion.server.protocol.outgoing.login.EncryptionRequest;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
 
@@ -33,11 +34,13 @@ public class Protocol {
     private ServerListResponse defaultSLPResponse;
     private final KeyPair keyPair;
     private int maxPlayers;
+    private final WorldManager worldManager;
 
-    public Protocol(Config config) {
+    public Protocol(WorldManager worldManager, Config config) {
         packetRegistry = new PacketRegistry();
         defaultSLPResponse = new ServerListResponse();
         keyPair = genKeyPair();
+        this.worldManager = worldManager;
         reload(config);
     }
 
@@ -127,5 +130,9 @@ public class Protocol {
         byte[] verifyToken = new byte[4];
         ThreadLocalRandom.current().nextBytes(verifyToken);
         return new EncryptionRequest(keyPair.getPublic().getEncoded(), verifyToken);
+    }
+
+    public WorldManager getWorldManager() {
+        return worldManager;
     }
 }
