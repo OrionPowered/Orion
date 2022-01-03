@@ -9,6 +9,7 @@ import pro.prysm.orion.server.protocol.incoming.play.PlayerPosition;
 import pro.prysm.orion.server.protocol.incoming.play.PlayerPositionAndRotation;
 import pro.prysm.orion.server.protocol.incoming.play.PlayerRotation;
 import pro.prysm.orion.server.protocol.incoming.play.PluginMessage;
+import pro.prysm.orion.server.protocol.outgoing.play.OutgoingChunk;
 import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;
 
 public class PlayHandler extends ProtocolHandler {
@@ -38,6 +39,7 @@ public class PlayHandler extends ProtocolHandler {
         packet.setDebug(true);
         packet.setFlat(false);
         connection.sendPacket(packet);
+        connection.sendPacket(new OutgoingChunk(protocol.getWorldManager().test));
     }
 
     @Override
@@ -56,6 +58,7 @@ public class PlayHandler extends ProtocolHandler {
     @Override
     public void handle(PluginMessage packet) {
         if (packet.getChannel().equals("minecraft:brand")) player.setBrand(new String(packet.getData()));
+        else System.out.println(packet.getChannel());
     }
 
     @Override
