@@ -46,6 +46,5 @@ public class ChunkData extends OutgoingPacket {
 
         buf.writeBytes(columnBuf);
         columnBuf.release();
-        System.out.println(buf.readableBytes());
     }
 }
