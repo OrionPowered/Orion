@@ -28,7 +28,7 @@
             <groupId>com.alexsobiek</groupId>
             <artifactId>anvil</artifactId>
             <version>1.0-ALPHA</version>
-            <scope>provided</scope>
+            <scope>system</scope>
             <systemPath>${project.basedir}/../anvil/java/target/anvil-1.0-ALPHA.jar</systemPath>
         </dependency>
         <dependency>
