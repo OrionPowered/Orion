@@ -1,8 +1,8 @@
 package pro.prysm.orion.server.data;
 
 import io.netty.buffer.ByteBuf;
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import pro.prysm.orion.server.data.palette.Palette;
 import pro.prysm.orion.server.protocol.PacketWriter;
 
 public class ChunkSection extends com.alexsobiek.anvil.ChunkSection {
@@ -12,11 +12,15 @@ public class ChunkSection extends com.alexsobiek.anvil.ChunkSection {
     }
 
     public void write(ByteBuf buf) {
-        if (getData().length > 0) {
-            buf.writeShort(getBlockCount());
-            buf.writeByte(getBitsPerBlock());
-            Palette.from(getBitsPerBlock()).write(buf);
-            PacketWriter.writeLongArray(getData(), buf);
+        buf.writeShort(getBlockCount());
+        buf.writeByte(getBitsPerBlock());
+
+        // write palette
+        PacketWriter.writeVarInt(getPalette().size(), buf);
+        for (BinaryTag tag : getPalette()) {
+            PacketWriter.writeVarInt(1, buf);
         }
+
+        PacketWriter.writeLongArray(getStates(), buf);
     }
 }
