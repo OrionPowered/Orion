@@ -1,5 +1,7 @@
 package pro.prysm.orion.server.protocol.handler;
 
+import com.alexsobiek.anvil.Chunk;
+import com.alexsobiek.anvil.Level;
 import pro.prysm.orion.api.Orion;
 import pro.prysm.orion.api.data.*;
 import pro.prysm.orion.api.event.events.PlayerMoveEvent;
@@ -10,12 +12,13 @@ import pro.prysm.orion.server.protocol.incoming.play.PlayerPosition;
 import pro.prysm.orion.server.protocol.incoming.play.PlayerPositionAndRotation;
 import pro.prysm.orion.server.protocol.incoming.play.PlayerRotation;
 import pro.prysm.orion.server.protocol.incoming.play.PluginMessage;
-import pro.prysm.orion.server.protocol.outgoing.play.OutgoingChunk;
+import pro.prysm.orion.server.protocol.outgoing.play.ChunkData;
 import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;
 import pro.prysm.orion.server.protocol.outgoing.play.PlayerPositionAndLook;
 
 public class PlayHandler extends ProtocolHandler {
     private final ImplPlayer player;
+    private final int teleportId = 0; // TODO: Implement checking of teleport ids
     public PlayHandler(ImplPlayer player) {
         super(player.getConnection());
         this.player = player;
@@ -23,25 +26,32 @@ public class PlayHandler extends ProtocolHandler {
     }
 
     private void joinGame() {
+        Level level = protocol.getWorldManager().getLevel();
+        player.readPlayerData(level.getPlayerData(player.getProfile().getUniqueId()));
+
         Dimension dimension = new Dimension();
         JoinGame packet = new JoinGame();
-        packet.setEntityId(-1);
-        packet.setGamemode(GameMode.SPECTATOR);
+        packet.setEntityId(-1); // TODO: Implement entity ids
+        packet.setGamemode(GameMode.SPECTATOR); // TODO: Implement Gamemode
         packet.setPreviousGamemode(GameMode.SPECTATOR);
-        packet.setWorlds(new String[]{"world"});
+        packet.setWorlds(new String[]{"world"}); // TODO: Implement worlds
         packet.setDimensionCodec(dimension.getCodec());
         packet.setDimension(dimension.getType());
-        packet.setWorldName("world");
+        packet.setWorldName("world"); // TODO: Implement worlds
         packet.setHashedSeed(12345678);
-        packet.setMaxPlayers(100);
-        packet.setViewDistance(10);
-        packet.setSimulationDistance(10);
+        packet.setMaxPlayers(protocol.getMaxPlayers());
+        packet.setViewDistance(10); // TODO: Implement view distance
+        packet.setSimulationDistance(10); // TODO: Implement simulation distance
         packet.setReducedDebugInfo(false);
         packet.setRespawnScreen(true);
         packet.setDebug(true);
         packet.setFlat(false);
         connection.sendPacket(packet);
-        connection.sendPacket(new PlayerPositionAndLook(new Location(0, 120, 0, 0, 0, false)));
+
+        connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
+
+        // Player has joined, send first chunk
+        connection.sendPacket(new ChunkData(protocol.getWorldManager().getChunk(player.getLocation())));
     }
 
     @Override
