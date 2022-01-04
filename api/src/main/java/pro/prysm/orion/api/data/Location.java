@@ -14,6 +14,10 @@ public class Location {
         this.onGround = onGround;
     }
 
+    public Location(double[] position, float[] rotation, boolean onGround) {
+        this(position[0], position[1], position[2], rotation[0], rotation[1], onGround);
+    }
+
     public Location() { }
 
     public double getX() {
