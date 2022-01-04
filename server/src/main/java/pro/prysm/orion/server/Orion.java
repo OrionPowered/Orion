@@ -64,7 +64,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         commandHandler.registerCommand(new HelpCommand());
         commandHandler.registerCommand(new SendPacketCommand(listener.getPipeline().getChannelHandler()));
 
-        listener.listen(); // Start listening, any code below this will NOT execute
+        listener.listen(); // Start listening, any code below this will NOT execute (blocking)
     }
 
     private void loadConfig() {
