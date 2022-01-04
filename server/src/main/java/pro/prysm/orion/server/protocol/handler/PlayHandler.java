@@ -18,6 +18,7 @@ import pro.prysm.orion.server.protocol.outgoing.play.PlayerPositionAndLook;
 public class PlayHandler extends ProtocolHandler {
     private final ImplPlayer player;
     private final int teleportId = 0; // TODO: Implement checking of teleport ids
+
     public PlayHandler(ImplPlayer player) {
         super(player.getConnection());
         this.player = player;
