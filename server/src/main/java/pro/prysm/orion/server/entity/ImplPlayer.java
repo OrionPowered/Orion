@@ -4,6 +4,8 @@ import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.ListBinaryTag;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
@@ -28,6 +30,26 @@ public class ImplPlayer implements Player {
         this.connection = connection;
         this.profile = profile;
         this.location = new Location();
+    }
+
+    public void readPlayerData(CompoundBinaryTag nbt) {
+        // Parse Location
+        ListBinaryTag pos = nbt.getList("Pos");
+        ListBinaryTag rot = nbt.getList("Rotation");
+        location = new Location(
+                new double[]{
+                        pos.getDouble(0),
+                        pos.getDouble(1),
+                        pos.getDouble(2)
+                },
+                new float[]{
+                        rot.getFloat(0),
+                        rot.getFloat(1)
+                },
+                nbt.getByte("OnGround") == 0x0
+        );
+
+        // TODO: Parse rest of player data file
     }
 
     public Connection getConnection() {
