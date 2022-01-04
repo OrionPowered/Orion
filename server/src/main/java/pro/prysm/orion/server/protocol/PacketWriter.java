@@ -3,6 +3,7 @@ package pro.prysm.orion.server.protocol;
 import io.netty.buffer.ByteBuf;
 import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import pro.prysm.orion.api.data.Location;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -230,5 +231,13 @@ public abstract class PacketWriter {
             e.printStackTrace();
         }
         buf.writeBytes(stream.toByteArray());
+    }
+
+    protected void writeLocation(Location location, ByteBuf buf) {
+        buf.writeDouble(location.getX());
+        buf.writeDouble(location.getY());
+        buf.writeDouble(location.getZ());
+        buf.writeFloat(location.getYaw());
+        buf.writeFloat(location.getPitch());
     }
 }
