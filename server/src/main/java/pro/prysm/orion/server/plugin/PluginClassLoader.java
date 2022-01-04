@@ -2,6 +2,7 @@ package pro.prysm.orion.server.plugin;
 
 import pro.prysm.orion.api.plugin.JavaPlugin;
 import pro.prysm.orion.api.plugin.PluginDescription;
+import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.util.Logger;
 
 import java.io.File;
@@ -22,6 +23,7 @@ public class PluginClassLoader extends URLClassLoader {
     private Field dataFolderF;
     private Field loggerF;
     private Field descriptionF;
+    private Field eventBusF;
     private final PluginLoader loader;
     public PluginClassLoader(URL[] urls, ClassLoader parent, PluginLoader loader) {
         super(urls, parent);
@@ -33,6 +35,8 @@ public class PluginClassLoader extends URLClassLoader {
             loggerF.setAccessible(true);
             descriptionF = JavaPlugin.class.getDeclaredField("description");
             descriptionF.setAccessible(true);
+            eventBusF = JavaPlugin.class.getDeclaredField("eventBus");
+            eventBusF.setAccessible(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,6 +53,7 @@ public class PluginClassLoader extends URLClassLoader {
                 dataFolderF.set(plugin, new File("./plugins", description.getName()));
                 loggerF.set(plugin, new Logger(description.getName(), Level.ALL));
                 descriptionF.set(plugin, description);
+                eventBusF.set(plugin, Orion.getEventBus());
                 loader.plugins.add(plugin);
                 plugin.onEnable();
             } catch (IOException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException e) {

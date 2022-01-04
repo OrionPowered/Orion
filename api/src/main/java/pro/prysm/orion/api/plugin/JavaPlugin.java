@@ -1,5 +1,6 @@
 package pro.prysm.orion.api.plugin;
 
+import pro.prysm.orion.api.event.EventBus;
 import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.exception.ResourceNotFoundException;
 
@@ -18,13 +19,13 @@ public abstract class JavaPlugin {
     private File dataFolder;
     private Logger logger;
     private PluginDescription description;
+    private EventBus eventBus;
 
     public abstract void onEnable();
 
     public abstract void onDisable();
 
     public abstract void reload();
-
 
     public void generateConfig() {
         try {
@@ -55,5 +56,9 @@ public abstract class JavaPlugin {
 
     public Logger getLogger() {
         return logger;
+    }
+
+    public EventBus getEventBus() {
+        return eventBus;
     }
 }

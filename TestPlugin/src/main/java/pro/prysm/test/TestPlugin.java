@@ -3,7 +3,6 @@ package pro.prysm.test;
 import pro.prysm.orion.api.Orion;
 import pro.prysm.orion.api.plugin.JavaPlugin;
 import pro.prysm.test.listener.ServerReadyListener;
-import pro.prysm.test.listener.TestPacketClass;
 
 /**
  * @author 254n_m
@@ -14,8 +13,7 @@ public class TestPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().info("Plugin " + getDescription().getName() + " loaded");
-        Orion.getEventBus().subscribe(new ServerReadyListener());
-        Orion.getEventBus().subscribe(new TestPacketClass());
+        getEventBus().subscribe(new ServerReadyListener());
         generateConfig();
     }
 
