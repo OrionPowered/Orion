@@ -5,7 +5,7 @@ import com.velocitypowered.natives.encryption.VelocityCipherFactory;
 import com.velocitypowered.natives.util.Natives;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
-import pro.prysm.orion.api.event.events.OutgoingPacketEvent;
+import pro.prysm.orion.server.event.events.OutgoingPacketEvent;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.server.Orion;
@@ -114,7 +114,7 @@ public class Connection implements pro.prysm.orion.api.net.Connection {
 
     public void sendPacket(OutgoingPacket packet) {
         OutgoingPacketEvent event = new OutgoingPacketEvent();
-        pro.prysm.orion.api.Orion.getEventBus().post(event, packet);
+        Orion.getEventBus().post(event, packet);
         if (!event.isCancelled()) ctx.writeAndFlush(packet);
     }
 }

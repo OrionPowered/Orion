@@ -1,16 +1,18 @@
-package pro.prysm.orion.api.event.events;
+package pro.prysm.orion.server.event.events;
 
 import pro.prysm.orion.api.event.Cancellable;
 import pro.prysm.orion.api.event.Event;
 
-public class TestEvent extends Event implements Cancellable {
+public abstract class PacketEvent extends Event implements Cancellable {
+    private boolean cancelled;
+
     @Override
     public boolean isCancelled() {
-        return false;
+        return cancelled;
     }
 
     @Override
     public void setCancelled(boolean cancel) {
-
+        cancelled = cancel;
     }
 }

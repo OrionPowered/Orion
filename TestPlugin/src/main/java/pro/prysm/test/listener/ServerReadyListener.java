@@ -2,7 +2,7 @@ package pro.prysm.test.listener;
 
 import pro.prysm.orion.api.event.EventHandler;
 import pro.prysm.orion.api.event.Listener;
-import pro.prysm.orion.api.event.events.ServerReadyEvent;
+import pro.prysm.orion.api.event.event.ServerReadyEvent;
 
 /**
  * @author 254n_m

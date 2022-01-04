@@ -1,19 +1,19 @@
 package pro.prysm.orion.server;
 
-import pro.prysm.orion.api.event.events.PlayerMoveEvent;
+import pro.prysm.orion.server.event.EventBus;
 import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.event.Listener;
-import pro.prysm.orion.api.event.events.OutgoingPacketEvent;
-import pro.prysm.orion.api.protocol.outgoing.status.SLPResponse;
+import pro.prysm.orion.server.event.events.OutgoingPacketEvent;
 import pro.prysm.orion.server.command.CommandHandler;
 import pro.prysm.orion.server.command.commands.HelpCommand;
 import pro.prysm.orion.api.event.EventHandler;
-import pro.prysm.orion.api.event.events.ServerReadyEvent;
+import pro.prysm.orion.api.event.event.ServerReadyEvent;
 import pro.prysm.orion.server.command.commands.SendPacketCommand;
 import pro.prysm.orion.server.data.WorldManager;
 import pro.prysm.orion.server.net.TCPListener;
 import pro.prysm.orion.server.plugin.PluginLoader;
 import pro.prysm.orion.server.protocol.Protocol;
+import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
 import pro.prysm.orion.server.util.Logger;
 
 import java.io.File;
@@ -36,6 +36,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
 
     // Logger and EventBus are the only objects that should be static.
     private static final Logger logger = new Logger("Orion", Level.INFO);
+    private static final EventBus EVENT_BUS = new pro.prysm.orion.server.event.EventBus();
 
     private final TCPListener listener;
     private final Protocol protocol;
@@ -85,16 +86,8 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent e) {
-        System.out.println("Player move");
-        System.out.println(e.getPlayer().getProfile().getUsername());
-        System.out.println(e.getFrom());
-        System.out.println(e.getTo());
-    }
-
-    @EventHandler
     public void onPacket(OutgoingPacketEvent event, SLPResponse packet) {
-        System.out.println(packet.getResponse().toJsonString());
+        // System.out.println(packet.getResponse().toJsonString());
     }
 
     // ================================================================================================================
@@ -127,5 +120,9 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
 
     public PluginLoader getPluginLoader() {
         return pluginLoader;
+    }
+
+    public static EventBus getEventBus() {
+        return EVENT_BUS;
     }
 }
