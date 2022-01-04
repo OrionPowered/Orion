@@ -11,5 +11,6 @@
   "motd": "<color:#2fc1fa>Orion Server Software</color>",
   "serverName": "Orion",
   "max-players": "100",
+  "online-mode": true,
   "session-server": "https://sessionserver.mojang.com"
 }

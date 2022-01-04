@@ -33,6 +33,7 @@ public class Protocol {
     private String sessionServer;
     private ServerListResponse defaultSLPResponse;
     private final KeyPair keyPair;
+    private boolean onlineMode;
     private int maxPlayers;
     private final WorldManager worldManager;
 
@@ -45,6 +46,7 @@ public class Protocol {
     }
 
     public void reload(Config config) {
+        onlineMode = config.getBoolean("online-mode");
         maxPlayers = config.getInt("max-players");
         defaultSLPResponse.setProtocolVersion(757); // 1.18.1
         defaultSLPResponse.setDescription(new Message(config.getString("motd")).toComponent());
@@ -99,6 +101,10 @@ public class Protocol {
     public SLPResponse getDefaultSLP() {
         defaultSLPResponse.setOnlinePlayers(0); // TODO: implement online players
         return new SLPResponse(defaultSLPResponse);
+    }
+
+    public boolean isOnlineMode() {
+        return onlineMode;
     }
 
     public int getMaxPlayers() {
