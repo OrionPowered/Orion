@@ -25,6 +25,7 @@ public class PacketRegistry {
     }};
 
     HashMap<Integer, Class<? extends IncomingPacket>> incomingPlay = new HashMap<>() {{
+        put(0x00, TeleportConfirm.class);
         put(0x05, ClientSettings.class);
         put(0x0A, PluginMessage.class);
         put(0x11, PlayerPosition.class);

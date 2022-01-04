@@ -5,6 +5,7 @@ import pro.prysm.orion.api.data.*;
 import pro.prysm.orion.api.event.events.PlayerMoveEvent;
 import pro.prysm.orion.server.data.*;
 import pro.prysm.orion.server.entity.ImplPlayer;
+import pro.prysm.orion.server.protocol.incoming.login.TeleportConfirm;
 import pro.prysm.orion.server.protocol.incoming.play.PlayerPosition;
 import pro.prysm.orion.server.protocol.incoming.play.PlayerPositionAndRotation;
 import pro.prysm.orion.server.protocol.incoming.play.PlayerRotation;
@@ -89,6 +90,10 @@ public class PlayHandler extends ProtocolHandler {
         to.setPitch(packet.getPitch());
         to.setOnGround(packet.isOnGround());
         player.setLocation(playerMove(to, player.getLocation()));
+    }
+
+    @Override
+    public void handle(TeleportConfirm packet) {
     }
 
     private Location playerMove(Location to, Location from) {

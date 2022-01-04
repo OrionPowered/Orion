@@ -32,4 +32,6 @@ public abstract class ProtocolHandler {
     public void handle(PlayerRotation packet) { }
 
     public void handle(PlayerPositionAndRotation packet) { }
+
+    public void handle(TeleportConfirm packet) { }
 }
