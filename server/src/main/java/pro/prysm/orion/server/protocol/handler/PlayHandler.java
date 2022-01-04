@@ -12,6 +12,7 @@ import pro.prysm.orion.server.protocol.incoming.play.PlayerRotation;
 import pro.prysm.orion.server.protocol.incoming.play.PluginMessage;
 import pro.prysm.orion.server.protocol.outgoing.play.OutgoingChunk;
 import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;
+import pro.prysm.orion.server.protocol.outgoing.play.PlayerPositionAndLook;
 
 public class PlayHandler extends ProtocolHandler {
     private final ImplPlayer player;
@@ -40,7 +41,7 @@ public class PlayHandler extends ProtocolHandler {
         packet.setDebug(true);
         packet.setFlat(false);
         connection.sendPacket(packet);
-        connection.sendPacket(new OutgoingChunk(protocol.getWorldManager().test));
+        connection.sendPacket(new PlayerPositionAndLook(new Location(0, 120, 0, 0, 0, false)));
     }
 
     @Override
