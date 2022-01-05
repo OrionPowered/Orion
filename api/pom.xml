@@ -29,7 +29,7 @@
             <artifactId>anvil</artifactId>
             <version>1.0-ALPHA</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/../anvil/java/target/anvil-1.0-ALPHA.jar</systemPath>
+            <systemPath>${project.basedir}/../anvil/java/build/libs/anvil-java-1.0-ALPHA.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>

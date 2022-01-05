@@ -1,4 +1,3 @@
 setup:
-	cd anvil/native && ./build.sh
-	cd anvil/java  && mvn clean package
+	cd anvil && chmod +x gradlew && ./gradlew build
 	mkdir -p run
