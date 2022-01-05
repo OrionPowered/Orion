@@ -1,5 +1,7 @@
 package pro.prysm.orion.server;
 
+import pro.prysm.orion.api.event.event.ReloadEvent;
+import pro.prysm.orion.server.command.commands.ReloadCommand;
 import pro.prysm.orion.server.event.EventBus;
 import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.event.Listener;
@@ -63,6 +65,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         );
 
         commandHandler.registerCommand(new HelpCommand());
+        commandHandler.registerCommand(new ReloadCommand());
         commandHandler.registerCommand(new SendPacketCommand(listener.getPipeline().getChannelHandler()));
 
         listener.listen(); // Start listening, any code below this will NOT execute (blocking)
@@ -80,9 +83,16 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
     }
 
     @EventHandler
-    public void onServerReady(ServerReadyEvent e) {
+    public void onServerReady(ServerReadyEvent event) {
         long difference = System.currentTimeMillis() - startupTime;
         getLogger().info(String.format("Done (%dms)", difference));
+    }
+
+    // All main reload handling should be done from here
+    @EventHandler
+    public void onReload(ReloadEvent event) {
+        loadConfig();
+        protocol.reload(config);
     }
 
     @EventHandler
