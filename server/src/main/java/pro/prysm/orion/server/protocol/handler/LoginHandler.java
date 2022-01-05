@@ -30,7 +30,7 @@ public class LoginHandler extends ProtocolHandler {
         else {
             // Offline mode, sends a LoginSuccess packet with an "empty" uuid
             // TODO: Check if this implementation is correct
-            GameProfile profile = new GameProfile(username, new UUID(0L, 0L));
+            GameProfile profile = new GameProfile(username, UUID.randomUUID());
             connection.sendPacket(new LoginSuccess(profile.getUniqueId(), username));
             player = new ImplPlayer(connection, profile);
             connection.setState(PacketState.PLAY);
