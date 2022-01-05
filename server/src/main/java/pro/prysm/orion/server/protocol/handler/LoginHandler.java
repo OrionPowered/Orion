@@ -9,6 +9,7 @@ import pro.prysm.orion.server.protocol.incoming.login.EncryptionResponse;
 import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
 import pro.prysm.orion.server.protocol.outgoing.login.LoginSuccess;
 
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.UUID;
 
@@ -28,9 +29,9 @@ public class LoginHandler extends ProtocolHandler {
         username = packet.getUsername();
         if(protocol.isOnlineMode()) connection.sendPacket(protocol.newEncryptionRequest());
         else {
-            // Offline mode, sends a LoginSuccess packet with an "empty" uuid
+            // Offline mode, sends a LoginSuccess packet with a UUID following "OfflinePlayer:<username>"
             // TODO: Check if this implementation is correct
-            GameProfile profile = new GameProfile(username, UUID.randomUUID());
+            GameProfile profile = new GameProfile(username, UUID.nameUUIDFromBytes(String.format("OfflinePlayer:%s", username).getBytes(StandardCharsets.UTF_8)));
             connection.sendPacket(new LoginSuccess(profile.getUniqueId(), username));
             player = new ImplPlayer(connection, profile);
             connection.setState(PacketState.PLAY);
