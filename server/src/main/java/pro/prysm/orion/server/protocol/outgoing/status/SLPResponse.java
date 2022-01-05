@@ -1,8 +1,7 @@
 package pro.prysm.orion.server.protocol.outgoing.status;
 
-import io.netty.buffer.ByteBuf;
-
 import pro.prysm.orion.api.protocol.ServerListResponse;
+import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
 public class SLPResponse extends OutgoingPacket implements pro.prysm.orion.api.protocol.outgoing.status.SLPResponse {
@@ -29,7 +28,7 @@ public class SLPResponse extends OutgoingPacket implements pro.prysm.orion.api.p
 
 
     @Override
-    public void write(ByteBuf buf) {
-        writeString(response.toJsonString(), buf);
+    public void write(PacketByteBuf buf) {
+        buf.writeString(response.toJsonString());
     }
 }

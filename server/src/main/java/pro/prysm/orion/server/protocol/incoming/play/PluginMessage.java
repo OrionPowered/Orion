@@ -1,7 +1,7 @@
 package pro.prysm.orion.server.protocol.incoming.play;
 
-import io.netty.buffer.ByteBuf;
 import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 public class PluginMessage extends IncomingPacket {
@@ -22,9 +22,9 @@ public class PluginMessage extends IncomingPacket {
     }
 
     @Override
-    public void read(ByteBuf buf) {
-        channel = readString(buf);
-        data = readByteArray(buf);
+    public void read(PacketByteBuf buf) {
+        channel = buf.readString();
+        data = buf.readByteArray();
         connection.getHandler().handle(this);
     }
 }

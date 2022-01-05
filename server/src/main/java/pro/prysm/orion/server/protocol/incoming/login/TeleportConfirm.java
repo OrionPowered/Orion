@@ -1,7 +1,7 @@
 package pro.prysm.orion.server.protocol.incoming.login;
 
-import io.netty.buffer.ByteBuf;
 import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 public class TeleportConfirm extends IncomingPacket {
@@ -16,8 +16,8 @@ public class TeleportConfirm extends IncomingPacket {
     }
 
     @Override
-    public void read(ByteBuf buf) {
-        teleportId = readVarInt(buf);
+    public void read(PacketByteBuf buf) {
+        teleportId = buf.readVarInt();
         connection.getHandler().handle(this);
     }
 }

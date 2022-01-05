@@ -1,7 +1,7 @@
 package pro.prysm.orion.server.protocol.incoming.play;
 
-import io.netty.buffer.ByteBuf;
 import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 public class PlayerPosition extends IncomingPacket {
@@ -30,7 +30,7 @@ public class PlayerPosition extends IncomingPacket {
     }
 
     @Override
-    public void read(ByteBuf buf) {
+    public void read(PacketByteBuf buf) {
         x = buf.readDouble();
         y = buf.readDouble();
         z = buf.readDouble();

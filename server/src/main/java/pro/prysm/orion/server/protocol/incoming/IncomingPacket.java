@@ -1,7 +1,7 @@
 package pro.prysm.orion.server.protocol.incoming;
 
-import io.netty.buffer.ByteBuf;
 import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.Packet;
 
 public abstract class IncomingPacket extends Packet implements pro.prysm.orion.api.protocol.incoming.IncomingPacket {
@@ -10,5 +10,5 @@ public abstract class IncomingPacket extends Packet implements pro.prysm.orion.a
         this.connection = connection;
     }
 
-    public abstract void read(ByteBuf buf);
+    public abstract void read(PacketByteBuf buf);
 }

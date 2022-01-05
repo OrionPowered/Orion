@@ -1,9 +1,9 @@
 package pro.prysm.orion.server.protocol.outgoing.play;
 
-import io.netty.buffer.ByteBuf;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.api.data.GameMode;
+import pro.prysm.orion.server.net.PacketByteBuf;
 
 /**
  * @author 254n_m
@@ -97,20 +97,20 @@ public class JoinGame extends pro.prysm.orion.server.protocol.outgoing.OutgoingP
     }
 
     @Override
-    public void write(ByteBuf buf) {
+    public void write(PacketByteBuf buf) {
         buf.writeInt(entityId);
         buf.writeBoolean(hardcore);
         buf.writeByte(gamemode.getId());
         buf.writeByte(previousGamemode.getId());
-        writeVarInt(worlds.length, buf);
-        for (String w : worlds) writeString(w, buf);
-        writeNBT(dimensionCodec, buf);
-        writeNBT(dimension, buf);
-        writeString(worldName, buf);
+        buf.writeVarInt(worlds.length);
+        for (String w : worlds) buf.writeString(w);
+        buf.writeNBT(dimensionCodec);
+        buf.writeNBT(dimension);
+        buf.writeString(worldName);
         buf.writeLong(hashedSeed);
-        writeVarInt(maxPlayers, buf);
-        writeVarInt(viewDistance, buf);
-        writeVarInt(simulationDistance, buf);
+        buf.writeVarInt(maxPlayers);
+        buf.writeVarInt(viewDistance);
+        buf.writeVarInt(simulationDistance);
         buf.writeBoolean(reducedDebugInfo);
         buf.writeBoolean(respawnScreen);
         buf.writeBoolean(debug);

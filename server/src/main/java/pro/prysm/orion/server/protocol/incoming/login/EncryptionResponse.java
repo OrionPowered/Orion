@@ -1,7 +1,7 @@
 package pro.prysm.orion.server.protocol.incoming.login;
 
-import io.netty.buffer.ByteBuf;
 import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 public class EncryptionResponse extends IncomingPacket implements pro.prysm.orion.api.protocol.incoming.login.EncryptionResponse {
@@ -22,9 +22,9 @@ public class EncryptionResponse extends IncomingPacket implements pro.prysm.orio
     }
 
     @Override
-    public void read(ByteBuf buf) {
-        sharedSecret = readByteArray(buf);
-        verifyToken = readByteArray(buf);
+    public void read(PacketByteBuf buf) {
+        sharedSecret = buf.readByteArray();
+        verifyToken = buf.readByteArray();
         connection.getHandler().handle(this);
     }
 }

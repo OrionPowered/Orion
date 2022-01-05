@@ -1,7 +1,7 @@
 package pro.prysm.orion.server.protocol.outgoing.play;
 
-import io.netty.buffer.ByteBuf;
 import pro.prysm.orion.api.data.Location;
+import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
 import java.util.Random;
@@ -17,10 +17,10 @@ public class PlayerPositionAndLook extends OutgoingPacket {
     }
 
     @Override
-    public void write(ByteBuf buf) {
-        writeLocation(loc, buf);
+    public void write(PacketByteBuf buf) {
+        buf.writeLocation(loc);
         buf.writeByte(0x0); // TODO: Implement bit field
-        writeVarInt(teleportId, buf);
+        buf.writeVarInt(teleportId);
         buf.writeBoolean(true);
     }
 }

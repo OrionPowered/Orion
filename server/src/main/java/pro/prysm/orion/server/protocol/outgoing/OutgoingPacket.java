@@ -1,11 +1,11 @@
 package pro.prysm.orion.server.protocol.outgoing;
 
-import io.netty.buffer.ByteBuf;
+import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.Packet;
 
 public abstract class OutgoingPacket extends Packet implements pro.prysm.orion.api.protocol.outgoing.OutgoingPacket {
-    public void writeId(ByteBuf buf) {
-        writeVarInt(getId(), buf);
+    public void writeId(PacketByteBuf buf) {
+        buf.writeVarInt(getId());
     }
-    public abstract void write(ByteBuf buf);
+    public abstract void write(PacketByteBuf buf);
 }

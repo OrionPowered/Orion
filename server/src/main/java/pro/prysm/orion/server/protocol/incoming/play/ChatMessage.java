@@ -1,7 +1,7 @@
 package pro.prysm.orion.server.protocol.incoming.play;
 
-import io.netty.buffer.ByteBuf;
 import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 public class ChatMessage extends IncomingPacket implements pro.prysm.orion.api.protocol.incoming.play.ChatMessage {
@@ -18,7 +18,7 @@ public class ChatMessage extends IncomingPacket implements pro.prysm.orion.api.p
     }
 
     @Override
-    public void read(ByteBuf buf) {
-        message = readString(buf);
+    public void read(PacketByteBuf buf) {
+        message = buf.readString();
     }
 }

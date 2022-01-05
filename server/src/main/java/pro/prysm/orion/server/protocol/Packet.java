@@ -3,7 +3,7 @@ package pro.prysm.orion.server.protocol;
 import pro.prysm.orion.api.protocol.PacketDirection;
 import pro.prysm.orion.api.protocol.PacketState;
 
-public abstract class Packet extends PacketWriter implements pro.prysm.orion.api.protocol.Packet {
+public abstract class Packet implements pro.prysm.orion.api.protocol.Packet {
     protected PacketDirection direction;
     protected PacketState state;
     protected int id;

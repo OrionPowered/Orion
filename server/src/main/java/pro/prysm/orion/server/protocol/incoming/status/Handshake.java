@@ -1,8 +1,8 @@
 package pro.prysm.orion.server.protocol.incoming.status;
 
-import io.netty.buffer.ByteBuf;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 public class Handshake extends IncomingPacket implements pro.prysm.orion.api.protocol.incoming.status.Handshake {
@@ -38,11 +38,11 @@ public class Handshake extends IncomingPacket implements pro.prysm.orion.api.pro
     }
 
     @Override
-    public void read(ByteBuf buf) {
-        protocolVersion = readVarInt(buf);
-        hostname = readString(buf);
+    public void read(PacketByteBuf buf) {
+        protocolVersion = buf.readVarInt();
+        hostname = buf.readString();
         port = buf.readShort();
-        nextState = (readVarInt(buf) == 2) ? PacketState.LOGIN : PacketState.STATUS;
+        nextState = (buf.readVarInt() == 2) ? PacketState.LOGIN : PacketState.STATUS;
         connection.getHandler().handle(this);
     }
 }

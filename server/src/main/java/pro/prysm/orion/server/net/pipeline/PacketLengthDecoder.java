@@ -3,6 +3,7 @@ package pro.prysm.orion.server.net.pipeline;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.Packet;
 
 import java.util.List;
@@ -10,9 +11,10 @@ import java.util.List;
 public class PacketLengthDecoder extends ByteToMessageDecoder {
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) {
+        PacketByteBuf in = new PacketByteBuf(byteBuf);
         in.markReaderIndex();
-        int length = Packet.readVarInt(in);
+        int length = in.readVarInt();
         if (in.readableBytes() < length) in.resetReaderIndex();
         else out.add(in.readBytes(length));
     }

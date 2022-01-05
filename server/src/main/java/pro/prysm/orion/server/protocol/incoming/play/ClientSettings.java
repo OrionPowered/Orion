@@ -1,7 +1,7 @@
 package pro.prysm.orion.server.protocol.incoming.play;
 
-import io.netty.buffer.ByteBuf;
 import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 public class ClientSettings extends IncomingPacket {
@@ -52,13 +52,13 @@ public class ClientSettings extends IncomingPacket {
     }
 
     @Override
-    public void read(ByteBuf buf) {
-        locale = readString(buf);
+    public void read(PacketByteBuf buf) {
+        locale = buf.readString();
         viewDistance = buf.readByte();
         chatMode = buf.readByte();
         coloredChat = buf.readBoolean();
         skinParts = buf.readUnsignedByte();
-        mainHand = readVarInt(buf);
+        mainHand = buf.readVarInt();
         textFiltering = buf.readBoolean();
         showInList = buf.readBoolean();
         connection.getHandler().handle(this);
