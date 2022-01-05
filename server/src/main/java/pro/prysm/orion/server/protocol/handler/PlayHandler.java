@@ -44,7 +44,7 @@ public class PlayHandler extends ProtocolHandler {
         packet.setSimulationDistance(10); // TODO: Implement simulation distance
         packet.setReducedDebugInfo(false);
         packet.setRespawnScreen(true);
-        packet.setDebug(true);
+        packet.setDebug(false);
         packet.setFlat(false);
         connection.sendPacket(packet);
 
