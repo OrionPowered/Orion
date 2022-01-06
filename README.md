@@ -20,13 +20,9 @@ Orion is a 1.18 (757) Minecraft server implementation written with the goal of b
 - [ ] Player data containers
 - [ ] Velocity Support
 
-## Setting up
-To build dependencies, you must have Rust and Cargo installed as we depend on Rust libraries. Additionally, GNU make is used for building.
-
-### Building Dependencies
-```sh
-make setup
-```
+## Development Requirements
+- JDK 17
+- Rust & Cargo
 
 ## Modules & Plugins
 ### Modules
