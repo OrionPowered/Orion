@@ -12,7 +12,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("net.prysmatic.orion.Orion")
+    mainClass.set("pro.prysm.orion.server.Orion")
 }
 
 tasks.withType<Jar> {
