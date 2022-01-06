@@ -28,6 +28,10 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
     // STATIC - Logger and EventBus are the only objects that should be here.
     private static final Logger logger = new Logger("Orion", Level.INFO);
     private static final EventBus EVENT_BUS = new pro.prysm.orion.server.event.EventBus();
+
+    public static void main(String[] args)  {
+        new Orion(); // Escape Static
+    }
     // END STATIC
 
     private final long startupTime = System.currentTimeMillis();
