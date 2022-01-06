@@ -1,5 +1,6 @@
 package pro.prysm.orion.server.plugin;
 
+import pro.prysm.orion.api.exception.InvalidPluginException;
 import pro.prysm.orion.api.plugin.JavaPlugin;
 import pro.prysm.orion.api.plugin.PluginDescription;
 import pro.prysm.orion.server.Orion;
@@ -57,7 +58,7 @@ public class PluginClassLoader extends URLClassLoader {
                 eventBusF.set(plugin, Orion.getEventBus());
                 loader.plugins.add(plugin);
                 plugin.onEnable();
-            } catch (IOException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            } catch (IOException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | InvalidPluginException e) {
                 e.printStackTrace();
             }
         }

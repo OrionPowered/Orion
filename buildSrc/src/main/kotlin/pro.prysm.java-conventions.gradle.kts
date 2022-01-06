@@ -1,5 +1,5 @@
 plugins {
-    java
+    `java-library`
     `maven-publish`
     id("com.github.johnrengelman.shadow")
 }

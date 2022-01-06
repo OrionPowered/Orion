@@ -72,8 +72,7 @@ public class Location {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        else if (o instanceof Location) {
-            Location loc = (Location) o;
+        else if (o instanceof Location loc) {
             return (loc.getX() == x) &&
                     (loc.getY() == y) &&
                     (loc.getZ() == z) &&
@@ -84,14 +83,13 @@ public class Location {
     }
 
     public String toString() {
-        StringBuilder builder = new StringBuilder("Location{");
-        builder.append("x=").append(x).append(", ");
-        builder.append("y=").append(y).append(", ");
-        builder.append("z=").append(z).append(", ");
-        builder.append("yaw=").append(yaw).append(", ");
-        builder.append("pitch=").append(pitch).append(", ");
-        builder.append("onGround=").append(onGround);
-        builder.append("}");
-        return builder.toString();
+        String builder = "Location{" + "x=" + x + ", " +
+                "y=" + y + ", " +
+                "z=" + z + ", " +
+                "yaw=" + yaw + ", " +
+                "pitch=" + pitch + ", " +
+                "onGround=" + onGround +
+                "}";
+        return builder;
     }
 }

@@ -30,13 +30,16 @@ public abstract class JavaPlugin {
     public void generateConfig() {
         try {
             if (!dataFolder.exists()) dataFolder.mkdir();
-            InputStream is = getClass().getClassLoader().getResourceAsStream("config.json");
-            if (is == null)
-                throw new ResourceNotFoundException("Could not find resource config.json in plugin " + description.getName());
-            File configFile = new File(dataFolder, "config.json");
-            if (configFile.exists()) return;
-            Files.copy(is, configFile.toPath());
-            config = new Config(configFile);
+
+            try (InputStream is = getClass().getClassLoader().getResourceAsStream("config.json")) {
+                if (is == null)
+                    throw new ResourceNotFoundException("Could not find resource config.json in plugin " + description.getName());
+
+                File configFile = new File(dataFolder, "config.json");
+                if (configFile.exists()) return;
+                Files.copy(is, configFile.toPath());
+                config = new Config(configFile);
+            }
         } catch (Throwable e) {
             e.printStackTrace();
         }

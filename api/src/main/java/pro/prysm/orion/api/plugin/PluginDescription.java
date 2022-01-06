@@ -15,27 +15,27 @@ import java.util.jar.JarFile;
  * This file was created as a part of Orion
  */
 public class PluginDescription {
-    private String name;
-    private String mainClass;
-    private String author;
+    private final String name;
+    private final String mainClass;
+    private final String author;
 
-    public PluginDescription(JarFile file) {
-        try {
-            InputStream desc = file.getInputStream(file.getEntry("plugin.json"));
+    public PluginDescription(JarFile file) throws InvalidPluginException {
+        try (InputStream desc = file.getInputStream(file.getEntry("plugin.json"))) {
             if (desc == null) throw new InvalidPluginException("Missing plugin.json");
-            InputStreamReader isr = new InputStreamReader(desc);
-            BufferedReader reader = new BufferedReader(isr);
-            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
 
-            desc.close();
-            isr.close();
-            reader.close();
+            try (InputStreamReader isr = new InputStreamReader(desc);) {
+                try (BufferedReader reader = new BufferedReader(isr);) {
+                    JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
 
-            name = jsonObject.get("name").getAsString();
-            mainClass = jsonObject.get("main").getAsString();
-            author = jsonObject.get("author").getAsString();
-        } catch (Throwable t) {
-            t.printStackTrace();
+                    name = jsonObject.get("name").getAsString();
+                    mainClass = jsonObject.get("main").getAsString();
+                    author = jsonObject.get("author").getAsString();
+                }
+            }
+        } catch (InvalidPluginException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new InvalidPluginException(e.getMessage());
         }
     }
 

@@ -4,8 +4,8 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":orion-api", configuration = "shadow"))
-    implementation(project(":anvil-java"))
+    implementation(projects.anvilJava)
+    implementation(projects.orionApi)
 
     implementation("com.velocitypowered:velocity-native:3.0.1-SNAPSHOT")
     implementation("net.kyori:adventure-nbt:4.9.3")

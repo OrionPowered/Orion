@@ -7,7 +7,7 @@ public enum GameMode {
     SPECTATOR(3),
     UNKNOWN(-1);
 
-    private int id;
+    private final int id;
 
     GameMode(int id) {
         this.id = id;
