@@ -1,6 +1,6 @@
-.gradle
-build
-target
+.gradle/
+build/
+target/
 
 # IntelliJ
 .idea/
@@ -8,5 +8,3 @@ target
 
 # Project
 run/
-settings.json
-!/server/src/main/resources/settings.json

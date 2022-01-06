@@ -15,6 +15,12 @@ application {
     mainClass.set("pro.prysm.orion.server.Orion")
 }
 
+tasks.runShadow {
+    val file = file(rootDir.path + "/run")
+    file.mkdirs()
+    workingDir = file
+}
+
 tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "pro.prysm.orion.server.Orion"
