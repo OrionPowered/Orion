@@ -31,7 +31,7 @@ public class ChunkData extends OutgoingPacket {
         buf.writeInt(z);
         buf.writeNBT(heightmaps);
 
-        ByteBuf columnBuf = Unpooled.buffer();
+        PacketByteBuf columnBuf = new PacketByteBuf(Unpooled.buffer());
 
         // Write temporary ocean biome data
         for (int i = 0; i < (Chunk.SECTION_HEIGHT * Chunk.SECTION_WIDTH); i++) {
