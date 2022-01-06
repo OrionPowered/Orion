@@ -3,12 +3,17 @@ package pro.prysm.orion.server.util;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.*;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 public class Logger extends java.util.logging.Logger {
     private final ConsoleHandler handler;
+
     /**
      * Creates a new Logger instance
+     *
      * @param name Logger name
      */
     public Logger(String name, Level level) {
@@ -42,6 +47,7 @@ class ConsoleFormat extends Formatter {
 
     /**
      * Creates format
+     *
      * @param record LogRecord
      * @return String
      */

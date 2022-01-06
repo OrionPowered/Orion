@@ -11,6 +11,7 @@ public class LoginDisconnected extends OutgoingPacket implements pro.prysm.orion
         id = 0x00;
         this.message = new Message(message);
     }
+
     @Override
     public Message getMessage() {
         return message;

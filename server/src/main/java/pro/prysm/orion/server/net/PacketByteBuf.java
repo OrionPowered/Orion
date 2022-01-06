@@ -48,6 +48,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
     /**
      * Writes a VarInt to the Byte Buffer.
      * See more: <a href="https://wiki.vg/Data_types">wiki.vg/Data_types</a>
+     *
      * @param value Integer to write
      */
     public void writeVarInt(int value) {
@@ -65,6 +66,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
     /**
      * Reads a VarInt from the Byte Buffer.
      * See more: <a href="https://wiki.vg/Data_types">wiki.vg/Data_types</a>
+     *
      * @return Integer
      */
     public int readVarInt() {
@@ -85,6 +87,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
     /**
      * Writes a long to the Byte Buffer.
      * See more: <a href="https://wiki.vg/Data_types">wiki.vg/Data_types</a>
+     *
      * @param value Long to write
      */
     public void writeVarLong(long value) {
@@ -102,6 +105,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
     /**
      * Reads a VarLong from the Byte Buffer.
      * See more: <a href="https://wiki.vg/Data_types">wiki.vg/Data_types</a>
+     *
      * @return Long
      */
     public long readVarLong() {
@@ -123,6 +127,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
 
     /**
      * Writes a String to the Byte Buffer
+     *
      * @param string String to write
      */
     public void writeString(String string) {
@@ -133,6 +138,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
 
     /**
      * Reads a String from the Byte Buffer
+     *
      * @return String
      */
     public String readString() {
@@ -143,6 +149,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
 
     /**
      * Writes a byte array to the Byte Buffer
+     *
      * @param array Byte array to write
      */
     public void writeByteArray(byte[] array) {
@@ -152,6 +159,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
 
     /**
      * Reads a byte array from the Byte Buffer
+     *
      * @return byte[]
      */
     public byte[] readByteArray() {
@@ -162,6 +170,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
 
     /**
      * Writes an int array to the Byte Buffer
+     *
      * @param array Int array to write
      */
     public void writeIntArray(int[] array) {
@@ -171,6 +180,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
 
     /**
      * Reads an int array from the Byte Buffer
+     *
      * @return int[]
      */
     public int[] readIntArray() {
@@ -181,6 +191,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
 
     /**
      * Writes a long array to the Byte Buffer
+     *
      * @param array Long array to write
      */
     public void writeLongArray(long[] array) {
@@ -190,6 +201,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
 
     /**
      * Reads a long array from the Byte Buffer
+     *
      * @return long[]
      */
     protected long[] readLongArray() {
@@ -201,6 +213,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
     /**
      * Writes a UUID to the Byte Buffer
      * See more: <a href="https://wiki.vg/Data_types">wiki.vg/Data_types</a>
+     *
      * @param uuid UUID to write
      */
     public void writeUuidIntArray(UUID uuid) {
@@ -212,6 +225,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
 
     /**
      * Writes a CompoundTag (NBT) to the Byte Buffer
+     *
      * @param tag NBT to write
      */
     public void writeNBT(CompoundBinaryTag tag) {
@@ -227,6 +241,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
 
     /**
      * Writes a Location object to the Byte Buffer
+     *
      * @param location Location to deserialize and write
      */
     public void writeLocation(Location location) {

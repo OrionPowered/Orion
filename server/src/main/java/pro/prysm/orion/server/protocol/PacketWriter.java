@@ -5,7 +5,10 @@ import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import pro.prysm.orion.api.data.Location;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
@@ -41,8 +44,9 @@ public abstract class PacketWriter {
     /**
      * Writes a VarInt to the Byte Buffer.
      * See more: <a href="https://wiki.vg/Data_types">wiki.vg/Data_types</a>
+     *
      * @param value Integer to write
-     * @param buf Buffer to write to
+     * @param buf   Buffer to write to
      */
     public static void writeVarInt(int value, ByteBuf buf) {
         do {
@@ -59,6 +63,7 @@ public abstract class PacketWriter {
     /**
      * Reads a VarInt from the Byte Buffer.
      * See more: <a href="https://wiki.vg/Data_types">wiki.vg/Data_types</a>
+     *
      * @param buf Buffer to read from
      * @return Integer
      */
@@ -78,10 +83,53 @@ public abstract class PacketWriter {
     }
 
     /**
+     * Writes a long array to the Byte Buffer
+     *
+     * @param array Long array to write
+     * @param buf   Buffer to write to
+     */
+    public static void writeLongArray(long[] array, ByteBuf buf) {
+        writeVarInt(array.length, buf);
+        for (long i : array) buf.writeLong(i);
+    }
+
+    /**
+     * Writes a UUID to the Byte Buffer
+     * See more: <a href="https://wiki.vg/Data_types">wiki.vg/Data_types</a>
+     *
+     * @param uuid UUID to write
+     * @param buf  Buffer to write to
+     */
+    public static void writeUuidIntArray(UUID uuid, ByteBuf buf) {
+        buf.writeInt((int) (uuid.getMostSignificantBits() >> 32));
+        buf.writeInt((int) uuid.getMostSignificantBits());
+        buf.writeInt((int) (uuid.getLeastSignificantBits() >> 32));
+        buf.writeInt((int) uuid.getLeastSignificantBits());
+    }
+
+    /**
+     * Writes a CompoundTag (NBT) to the Byte Buffer
+     *
+     * @param tag NBT to write
+     * @param buf Buffer to write to
+     */
+    public static void writeNBT(CompoundBinaryTag tag, ByteBuf buf) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        OutputStream out = new DataOutputStream(stream);
+        try {
+            BinaryTagIO.writer().write(tag, out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        buf.writeBytes(stream.toByteArray());
+    }
+
+    /**
      * Writes a long to the Byte Buffer.
      * See more: <a href="https://wiki.vg/Data_types">wiki.vg/Data_types</a>
+     *
      * @param value Long to write
-     * @param buf Buffer to write to
+     * @param buf   Buffer to write to
      */
     protected void writeVarLong(long value, ByteBuf buf) {
         do {
@@ -98,6 +146,7 @@ public abstract class PacketWriter {
     /**
      * Reads a VarLong from the Byte Buffer.
      * See more: <a href="https://wiki.vg/Data_types">wiki.vg/Data_types</a>
+     *
      * @param buf Buffer to read from
      * @return Long
      */
@@ -121,8 +170,9 @@ public abstract class PacketWriter {
 
     /**
      * Writes a String to the Byte Buffer
+     *
      * @param string String to write
-     * @param buf Buffer to write to
+     * @param buf    Buffer to write to
      */
     protected void writeString(String string, ByteBuf buf) {
         byte[] bytes = string.getBytes(StandardCharsets.UTF_8);
@@ -132,6 +182,7 @@ public abstract class PacketWriter {
 
     /**
      * Reads a String from the Byte Buffer
+     *
      * @param buf Buffer to read from
      * @return String
      */
@@ -143,8 +194,9 @@ public abstract class PacketWriter {
 
     /**
      * Writes a byte array to the Byte Buffer
+     *
      * @param array Byte array to write
-     * @param buf Buffer to write to
+     * @param buf   Buffer to write to
      */
     protected void writeByteArray(byte[] array, ByteBuf buf) {
         writeVarInt(array.length, buf);
@@ -153,6 +205,7 @@ public abstract class PacketWriter {
 
     /**
      * Reads a byte array from the Byte Buffer
+     *
      * @param buf Buffer to read from
      * @return byte[]
      */
@@ -164,8 +217,9 @@ public abstract class PacketWriter {
 
     /**
      * Writes an int array to the Byte Buffer
+     *
      * @param array Int array to write
-     * @param buf Buffer to write to
+     * @param buf   Buffer to write to
      */
     protected void writeIntArray(int[] array, ByteBuf buf) {
         writeVarInt(array.length, buf);
@@ -174,6 +228,7 @@ public abstract class PacketWriter {
 
     /**
      * Reads an int array from the Byte Buffer
+     *
      * @param buf Buffer to read from
      * @return int[]
      */
@@ -184,17 +239,8 @@ public abstract class PacketWriter {
     }
 
     /**
-     * Writes a long array to the Byte Buffer
-     * @param array Long array to write
-     * @param buf Buffer to write to
-     */
-    public static void writeLongArray(long[] array, ByteBuf buf) {
-        writeVarInt(array.length, buf);
-        for (long i : array) buf.writeLong(i);
-    }
-
-    /**
      * Reads a long array from the Byte Buffer
+     *
      * @param buf Buffer to read from
      * @return long[]
      */
@@ -202,35 +248,6 @@ public abstract class PacketWriter {
         long[] array = new long[readVarInt(buf)];
         for (int i = 0; i < array.length; i++) array[i] = buf.readLong();
         return array;
-    }
-
-    /**
-     * Writes a UUID to the Byte Buffer
-     * See more: <a href="https://wiki.vg/Data_types">wiki.vg/Data_types</a>
-     * @param uuid UUID to write
-     * @param buf Buffer to write to
-     */
-    public static void writeUuidIntArray(UUID uuid, ByteBuf buf) {
-        buf.writeInt((int) (uuid.getMostSignificantBits() >> 32));
-        buf.writeInt((int) uuid.getMostSignificantBits());
-        buf.writeInt((int) (uuid.getLeastSignificantBits() >> 32));
-        buf.writeInt((int) uuid.getLeastSignificantBits());
-    }
-
-    /**
-     * Writes a CompoundTag (NBT) to the Byte Buffer
-     * @param tag NBT to write
-     * @param buf Buffer to write to
-     */
-    public static void writeNBT(CompoundBinaryTag tag, ByteBuf buf) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        OutputStream out = new DataOutputStream(stream);
-        try {
-            BinaryTagIO.writer().write(tag, out);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        buf.writeBytes(stream.toByteArray());
     }
 
     protected void writeLocation(Location location, ByteBuf buf) {

@@ -9,6 +9,7 @@ import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
  * This file was created as a part of Orion
  */
 public interface SLPResponse extends OutgoingPacket {
-    void setResponse(ServerListResponse response);
     ServerListResponse getResponse();
+
+    void setResponse(ServerListResponse response);
 }

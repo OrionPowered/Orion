@@ -39,12 +39,12 @@ public class ClientSettings {
         return chatMode;
     }
 
-    public short getDisplayedSkinParts() {
-        return displayedSkinParts;
-    }
-
     public void setChatMode(ChatMode chatMode) {
         this.chatMode = chatMode;
+    }
+
+    public short getDisplayedSkinParts() {
+        return displayedSkinParts;
     }
 
     public boolean isColoredChat() {

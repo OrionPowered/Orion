@@ -20,11 +20,12 @@ import java.util.logging.Level;
  * This file was created as a part of Orion
  */
 public class PluginClassLoader extends URLClassLoader {
+    private final PluginLoader loader;
     private Field dataFolderF;
     private Field loggerF;
     private Field descriptionF;
     private Field eventBusF;
-    private final PluginLoader loader;
+
     public PluginClassLoader(URL[] urls, ClassLoader parent, PluginLoader loader) {
         super(urls, parent);
         this.loader = loader;
@@ -49,7 +50,7 @@ public class PluginClassLoader extends URLClassLoader {
                 JarFile jarFile = new JarFile(file);
                 loadClasses(jarFile);
                 PluginDescription description = new PluginDescription(jarFile);
-                JavaPlugin plugin = (JavaPlugin)  Class.forName(description.getMainClass(), false, this).getConstructors()[0].newInstance();
+                JavaPlugin plugin = (JavaPlugin) Class.forName(description.getMainClass(), false, this).getConstructors()[0].newInstance();
                 dataFolderF.set(plugin, new File("./plugins", description.getName()));
                 loggerF.set(plugin, new Logger(description.getName(), Level.ALL));
                 descriptionF.set(plugin, description);

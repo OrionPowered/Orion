@@ -11,11 +11,11 @@ import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.TitlePart;
 import org.jetbrains.annotations.NotNull;
-import pro.prysm.orion.api.entity.Player;
 import pro.prysm.orion.api.data.ClientSettings;
-import pro.prysm.orion.api.data.Location;
-import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.api.data.GameProfile;
+import pro.prysm.orion.api.data.Location;
+import pro.prysm.orion.api.entity.Player;
+import pro.prysm.orion.server.net.Connection;
 
 // TODO: Fully implement methods from Audience
 // TODO: Write JavaDoc comments

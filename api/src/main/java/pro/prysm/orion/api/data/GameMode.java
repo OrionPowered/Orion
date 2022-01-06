@@ -8,9 +8,11 @@ public enum GameMode {
     UNKNOWN(-1);
 
     private int id;
+
     GameMode(int id) {
         this.id = id;
     }
+
     public int getId() {
         return id;
     }

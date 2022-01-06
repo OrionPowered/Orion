@@ -1,6 +1,5 @@
 package pro.prysm.orion.api.plugin;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import pro.prysm.orion.api.exception.InvalidPluginException;
@@ -9,7 +8,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.jar.JarFile;
-import java.util.stream.Collectors;
+
 /**
  * @author 254n_m
  * @since 12/20/21 / 10:48 PM

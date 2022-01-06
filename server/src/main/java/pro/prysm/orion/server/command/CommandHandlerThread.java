@@ -11,10 +11,12 @@ import java.util.Scanner;
 public class CommandHandlerThread extends Thread {
     private final Scanner scanner;
     private final CommandHandler commandHandler;
+
     public CommandHandlerThread(CommandHandler commandHandler) {
         this.commandHandler = commandHandler;
         scanner = new Scanner(System.in);
     }
+
     @Override
     public void run() {
         while (scanner.hasNextLine()) {

@@ -6,5 +6,6 @@ import java.util.UUID;
 
 public interface LoginSuccess extends OutgoingPacket {
     String getUsername();
+
     UUID getUniqueId();
 }

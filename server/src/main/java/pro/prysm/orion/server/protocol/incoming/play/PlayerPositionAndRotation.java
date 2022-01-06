@@ -8,6 +8,7 @@ public class PlayerPositionAndRotation extends IncomingPacket {
     private double x, y, z;
     private float yaw, pitch;
     private boolean onGround;
+
     public PlayerPositionAndRotation(Connection connection) {
         super(connection);
         id = 0x12;

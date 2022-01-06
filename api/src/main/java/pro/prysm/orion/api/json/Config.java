@@ -1,8 +1,8 @@
 package pro.prysm.orion.api.json;
 
+import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import pro.prysm.orion.api.exception.ResourceNotFoundException;
-import com.google.gson.JsonParser;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -28,7 +28,7 @@ public class Config extends JSONParser {
 
     private File getFile(Class<?> _class) {
         File configFile = new File(directory, fileName);
-        if(!configFile.exists()) {
+        if (!configFile.exists()) {
             try {
                 InputStream is = _class.getClassLoader().getResourceAsStream(fileName);
                 if (is == null) throw new ResourceNotFoundException("Could not find resource " + fileName + " in jar");

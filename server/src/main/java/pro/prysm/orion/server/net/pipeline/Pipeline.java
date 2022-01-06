@@ -8,6 +8,7 @@ import pro.prysm.orion.server.protocol.Protocol;
 
 public class Pipeline extends ChannelInitializer<SocketChannel> {
     private final ChannelHandler channelHandler;
+
     public Pipeline(Protocol protocol) {
         channelHandler = new ChannelHandler(protocol);
     }

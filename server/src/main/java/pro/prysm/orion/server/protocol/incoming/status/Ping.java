@@ -6,6 +6,7 @@ import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 public class Ping extends IncomingPacket implements pro.prysm.orion.api.protocol.incoming.status.Ping {
     private long value;
+
     public Ping(Connection connection) {
         super(connection);
         id = 0x01;

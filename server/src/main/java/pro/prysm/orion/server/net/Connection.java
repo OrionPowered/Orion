@@ -5,10 +5,10 @@ import com.velocitypowered.natives.encryption.VelocityCipherFactory;
 import com.velocitypowered.natives.util.Natives;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
-import pro.prysm.orion.server.event.events.OutgoingPacketEvent;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.event.events.OutgoingPacketEvent;
 import pro.prysm.orion.server.net.pipeline.CipherDecoder;
 import pro.prysm.orion.server.net.pipeline.CipherEncoder;
 import pro.prysm.orion.server.protocol.Protocol;
@@ -23,8 +23,8 @@ import java.security.GeneralSecurityException;
 
 public class Connection implements pro.prysm.orion.api.net.Connection {
     private final ChannelHandlerContext ctx;
-    private ProtocolHandler handler;
     private final Protocol protocol;
+    private ProtocolHandler handler;
     private PacketState state;
     private byte[] sharedSecret;
     private byte[] verifyToken;
@@ -55,17 +55,17 @@ public class Connection implements pro.prysm.orion.api.net.Connection {
         return protocol;
     }
 
+    public PacketState getState() {
+        return state;
+    }
+
     public void setState(PacketState state) {
         this.state = state;
-        switch(state) {
+        switch (state) {
             case STATUS -> handler = new StatusHandler(this);
             case LOGIN -> handler = new LoginHandler(this);
             case PLAY -> handler = new PlayHandler(((LoginHandler) handler).getPlayer());
         }
-    }
-
-    public PacketState getState() {
-        return state;
     }
 
     public byte[] getSharedSecret() {
@@ -100,6 +100,7 @@ public class Connection implements pro.prysm.orion.api.net.Connection {
 
     /**
      * Forcibly disconnects the connection and attempts to send a disconnect packet
+     *
      * @param reason Reason for disconnect
      */
     public void disconnect(String reason) {

@@ -7,5 +7,6 @@ public abstract class OutgoingPacket extends Packet implements pro.prysm.orion.a
     public void writeId(PacketByteBuf buf) {
         buf.writeVarInt(getId());
     }
+
     public abstract void write(PacketByteBuf buf);
 }

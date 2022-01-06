@@ -18,7 +18,8 @@ public class Location {
         this(position[0], position[1], position[2], rotation[0], rotation[1], onGround);
     }
 
-    public Location() { }
+    public Location() {
+    }
 
     public double getX() {
         return x;

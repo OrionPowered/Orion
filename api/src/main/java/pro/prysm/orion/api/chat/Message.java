@@ -10,6 +10,7 @@ public class Message {
     public Message(Component component) {
         this.component = component;
     }
+
     public Message(String msg) {
         this(MiniMessage.get().parse(msg));
     }

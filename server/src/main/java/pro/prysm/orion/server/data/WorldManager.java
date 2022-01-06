@@ -46,7 +46,7 @@ public class WorldManager {
     }
 
     public Chunk getChunk(int x, int z) {
-        Orion.getLogger().debug(String.format("Getting chunk for level %s at %d, %d",level.getName() , x, z));
+        Orion.getLogger().debug(String.format("Getting chunk for level %s at %d, %d", level.getName(), x, z));
         int[] pos = new int[]{x, z};
         if (chunks.containsKey(pos)) return chunks.get(pos);
         else {

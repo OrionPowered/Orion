@@ -13,10 +13,12 @@ import java.util.HashMap;
 public class ChannelHandler extends ChannelInboundHandlerAdapter {
     private final HashMap<Integer, Connection> connections;
     private final Protocol protocol;
+
     public ChannelHandler(Protocol protocol) {
         connections = new HashMap<>();
         this.protocol = protocol;
     }
+
     public HashMap<Integer, Connection> getConnections() {
         return connections;
     }

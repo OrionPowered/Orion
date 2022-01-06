@@ -12,7 +12,8 @@ public class JSONParser {
         this.json = json;
     }
 
-    public JSONParser() { }
+    public JSONParser() {
+    }
 
     public void setJson(JsonObject json) {
         this.json = json;
@@ -42,7 +43,7 @@ public class JSONParser {
                 ? null
                 : UUID.fromString(getString(key).replaceFirst(
                 "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
-                    ));
+        ));
     }
 
     public boolean getBoolean(String key) {

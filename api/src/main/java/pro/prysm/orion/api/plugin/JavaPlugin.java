@@ -1,8 +1,8 @@
 package pro.prysm.orion.api.plugin;
 
 import pro.prysm.orion.api.event.EventBus;
-import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.exception.ResourceNotFoundException;
+import pro.prysm.orion.api.json.Config;
 
 import java.io.File;
 import java.io.InputStream;

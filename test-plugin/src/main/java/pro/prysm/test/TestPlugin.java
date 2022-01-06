@@ -1,6 +1,5 @@
 package pro.prysm.test;
 
-import pro.prysm.orion.api.Orion;
 import pro.prysm.orion.api.plugin.JavaPlugin;
 import pro.prysm.test.listener.ServerReadyListener;
 

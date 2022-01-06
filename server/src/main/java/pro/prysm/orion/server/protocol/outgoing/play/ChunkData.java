@@ -9,10 +9,10 @@ import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
 public class ChunkData extends OutgoingPacket {
-    private int x, z;
-    private boolean full;
     private final CompoundBinaryTag heightmaps;
     private final ChunkSection[] sections;
+    private int x, z;
+    private boolean full;
 
     public ChunkData(Chunk chunk) {
         id = 0x22;
@@ -21,7 +21,8 @@ public class ChunkData extends OutgoingPacket {
         this.full = chunk.isFull();
         this.heightmaps = chunk.getHeightmaps().remove("MOTION_BLOCKING_NO_LEAVES").remove("OCEAN_FLOOR");
         this.sections = new ChunkSection[Chunk.SECTION_TOTAL];
-        for (int i = 0; i < Chunk.SECTION_TOTAL; i++) sections[i] = new ChunkSection(chunk.getSections().getCompound(i));
+        for (int i = 0; i < Chunk.SECTION_TOTAL; i++)
+            sections[i] = new ChunkSection(chunk.getSections().getCompound(i));
     }
 
     @Override
@@ -33,7 +34,7 @@ public class ChunkData extends OutgoingPacket {
         ByteBuf columnBuf = Unpooled.buffer();
 
         // Write temporary ocean biome data
-        for (int i = 0; i < (Chunk.SECTION_HEIGHT*Chunk.SECTION_WIDTH); i++) {
+        for (int i = 0; i < (Chunk.SECTION_HEIGHT * Chunk.SECTION_WIDTH); i++) {
             columnBuf.writeInt(0);
         }
 

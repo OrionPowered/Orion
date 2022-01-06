@@ -15,10 +15,10 @@ import java.util.logging.Level;
  * This file was created as a part of Orion
  */
 public class PluginLoader {
+    protected final List<JavaPlugin> plugins = new ArrayList<>();
     private final File pluginFolder = new File("./plugins");
     private final File moduleFolder = new File("./modules");
     private PluginClassLoader pluginClassLoader;
-    protected final List<JavaPlugin> plugins = new ArrayList<>();
 
     public PluginLoader() {
         loadPlugins();

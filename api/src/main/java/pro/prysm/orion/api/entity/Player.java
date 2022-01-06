@@ -9,7 +9,10 @@ import pro.prysm.orion.api.net.Connection;
 
 public interface Player extends Identity, Audience {
     Connection getConnection();
+
     GameProfile getProfile();
+
     Location getLocation();
+
     ClientSettings getSettings();
 }

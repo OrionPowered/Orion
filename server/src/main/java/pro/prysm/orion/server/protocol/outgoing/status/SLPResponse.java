@@ -17,15 +17,14 @@ public class SLPResponse extends OutgoingPacket implements pro.prysm.orion.api.p
     }
 
     @Override
-    public void setResponse(ServerListResponse response) {
-        this.response = response;
-    }
-
-    @Override
     public ServerListResponse getResponse() {
         return response;
     }
 
+    @Override
+    public void setResponse(ServerListResponse response) {
+        this.response = response;
+    }
 
     @Override
     public void write(PacketByteBuf buf) {

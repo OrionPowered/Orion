@@ -16,6 +16,7 @@ import java.nio.charset.Charset;
 
 public class AbstractPacketByteBuf extends ByteBuf {
     protected ByteBuf buf;
+
     public AbstractPacketByteBuf(ByteBuf buf) {
         this.buf = buf;
     }

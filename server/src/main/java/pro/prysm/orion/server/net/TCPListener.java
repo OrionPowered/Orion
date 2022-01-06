@@ -6,8 +6,8 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.api.event.event.ServerReadyEvent;
+import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.net.pipeline.Pipeline;
 import pro.prysm.orion.server.protocol.Protocol;
 
@@ -17,6 +17,7 @@ public class TCPListener {
     private final Pipeline pipeline;
     private final InetSocketAddress address;
     private final int threads;
+
     public TCPListener(Protocol protocol, InetSocketAddress address, int threads) {
         this.address = address;
         this.threads = threads;

@@ -1,8 +1,8 @@
 package pro.prysm.orion.server.protocol.outgoing.play;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.api.data.GameMode;
+import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.server.net.PacketByteBuf;
 
 /**

@@ -2,8 +2,8 @@ package pro.prysm.orion.server.event;
 
 import pro.prysm.orion.api.event.Event;
 import pro.prysm.orion.api.event.Listener;
-import pro.prysm.orion.server.event.events.PacketEvent;
 import pro.prysm.orion.api.protocol.Packet;
+import pro.prysm.orion.server.event.events.PacketEvent;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;

@@ -1,10 +1,10 @@
 package pro.prysm.orion.server.protocol.handler;
 
+import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.entity.ImplPlayer;
 import pro.prysm.orion.server.net.Connection;
-import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.server.protocol.incoming.login.EncryptionResponse;
 import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
 import pro.prysm.orion.server.protocol.outgoing.login.LoginSuccess;
@@ -16,6 +16,7 @@ import java.util.UUID;
 public class LoginHandler extends ProtocolHandler {
     private String username;
     private ImplPlayer player;
+
     public LoginHandler(Connection connection) {
         super(connection);
     }
@@ -27,7 +28,7 @@ public class LoginHandler extends ProtocolHandler {
     @Override
     public void handle(LoginStart packet) {
         username = packet.getUsername();
-        if(protocol.isOnlineMode()) connection.sendPacket(protocol.newEncryptionRequest());
+        if (protocol.isOnlineMode()) connection.sendPacket(protocol.newEncryptionRequest());
         else {
             // Offline mode, sends a LoginSuccess packet with a UUID following "OfflinePlayer:<username>"
             // TODO: Check if this implementation is correct
@@ -42,7 +43,7 @@ public class LoginHandler extends ProtocolHandler {
     @Override
     public void handle(EncryptionResponse packet) {
         // If server isn't in online mode disconnect the player and stop from handling further
-        if(!protocol.isOnlineMode()) {
+        if (!protocol.isOnlineMode()) {
             // Finer instead of warning?
             Orion.getLogger().warning(String.format("%s sent an encryption response when no request was sent!", username));
             player.getConnection().disconnect("Invalid encryption packet");

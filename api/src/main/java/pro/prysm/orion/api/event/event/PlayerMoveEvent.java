@@ -6,9 +6,9 @@ import pro.prysm.orion.api.event.Cancellable;
 import pro.prysm.orion.api.event.Event;
 
 public class PlayerMoveEvent extends Event implements Cancellable {
-    private boolean cancelled;
     private final Player player;
     private final Location from;
+    private boolean cancelled;
     private Location to;
 
     public PlayerMoveEvent(Player player, Location to, Location from) {

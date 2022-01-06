@@ -1,11 +1,11 @@
 package pro.prysm.orion.server.protocol;
 
 import com.google.gson.JsonParser;
-import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.chat.Message;
+import pro.prysm.orion.api.data.GameProfile;
+import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.protocol.ServerListResponse;
 import pro.prysm.orion.server.Orion;
-import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.server.data.WorldManager;
 import pro.prysm.orion.server.protocol.outgoing.login.EncryptionRequest;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
@@ -30,12 +30,12 @@ public class Protocol {
     public static final String CIPHER_DECODER = "cipherDecoder";
 
     private final PacketRegistry packetRegistry;
+    private final KeyPair keyPair;
+    private final WorldManager worldManager;
     private String sessionServer;
     private ServerListResponse defaultSLPResponse;
-    private final KeyPair keyPair;
     private boolean onlineMode;
     private int maxPlayers;
-    private final WorldManager worldManager;
 
     public Protocol(WorldManager worldManager, Config config) {
         packetRegistry = new PacketRegistry();
@@ -95,7 +95,7 @@ public class Protocol {
     }
 
     public void setDefaultMOTD(ServerListResponse response) {
-        this.defaultSLPResponse =  response;
+        this.defaultSLPResponse = response;
     }
 
     public SLPResponse getDefaultSLP() {
@@ -121,11 +121,11 @@ public class Protocol {
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder(
                     URI.create(String.format("%s/session/minecraft/hasJoined?username=%s&serverId=%s", sessionServer, username, serverId)
-                )).header("accept", "application/json").GET().build();
+                    )).header("accept", "application/json").GET().build();
             CompletableFuture<HttpResponse<String>> future = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
             HttpResponse<String> response = future.get();
             profile = new GameProfile(JsonParser.parseString(response.body()).getAsJsonObject());
-        } catch(InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             Orion.getLogger().severe("Got error when attempting to authenticate session");
             e.printStackTrace();
         }

@@ -13,6 +13,7 @@ import java.util.logging.Level;
  */
 public class SendPacketCommand extends Command {
     private final ChannelHandler channelHandler;
+
     public SendPacketCommand(ChannelHandler channelHandler) {
         super("sendpacket", "Sends a packet");
         this.channelHandler = channelHandler;
