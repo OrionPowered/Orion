@@ -25,9 +25,11 @@ import java.util.logging.Level;
 
 public class Orion implements Listener, pro.prysm.orion.api.Orion {
 
-    // Logger and EventBus are the only objects that should be static.
+    // STATIC - Logger and EventBus are the only objects that should be here.
     private static final Logger logger = new Logger("Orion", Level.INFO);
     private static final EventBus EVENT_BUS = new pro.prysm.orion.server.event.EventBus();
+    // END STATIC
+
     private final long startupTime = System.currentTimeMillis();
     private final TCPListener listener;
     private final Protocol protocol;
@@ -61,15 +63,6 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         listener.listen(); // Start listening, any code below this will NOT execute (blocking)
     }
 
-    /**
-     * Main Entry Point
-     *
-     * @param args Startup arguments
-     */
-    public static void main(String[] args) {
-        new Orion(); // Escape static
-    }
-
     public static Logger getLogger() {
         return logger;
     }
@@ -94,10 +87,6 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         getLogger().info(String.format("Done (%dms)", difference));
     }
 
-    // ================================================================================================================
-    // Getters
-    // ================================================================================================================
-
     // All main reload handling should be done from here
     @EventHandler
     public void onReload(ReloadEvent event) {
@@ -105,10 +94,9 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         protocol.reload(config);
     }
 
-    @EventHandler
-    public void onPacket(OutgoingPacketEvent event, SLPResponse packet) {
-        // System.out.println(packet.getResponse().toJsonString());
-    }
+    // ================================================================================================================
+    // Getters
+    // ================================================================================================================
 
     public Config getConfig() {
         return config;

@@ -29,7 +29,6 @@ public class ImplPlayer implements Player {
     public ImplPlayer(Connection connection, GameProfile profile) {
         this.connection = connection;
         this.profile = profile;
-        this.location = new Location();
     }
 
     public void readPlayerData(CompoundBinaryTag nbt) {

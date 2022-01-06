@@ -8,14 +8,10 @@ import java.util.UUID;
 public class JSONParser {
     protected JsonObject json;
 
+    protected JSONParser() {
+    }
+
     public JSONParser(JsonObject json) {
-        this.json = json;
-    }
-
-    public JSONParser() {
-    }
-
-    public void setJson(JsonObject json) {
         this.json = json;
     }
 

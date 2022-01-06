@@ -31,17 +31,17 @@ public class PlayHandler extends ProtocolHandler {
 
         Dimension dimension = new Dimension();
         JoinGame packet = new JoinGame();
-        packet.setEntityId(-1); // TODO: Implement entity ids
-        packet.setGamemode(GameMode.SPECTATOR); // TODO: Implement Gamemode
+        packet.setEntityId(-1);                             // TODO: Implement entity ids
+        packet.setGamemode(GameMode.SPECTATOR);             // TODO: Implement Gamemode
         packet.setPreviousGamemode(GameMode.SPECTATOR);
-        packet.setWorlds(new String[]{"world"}); // TODO: Implement worlds
+        packet.setWorlds(new String[]{"world"});            // TODO: Implement worlds
         packet.setDimensionCodec(dimension.getCodec());
         packet.setDimension(dimension.getType());
-        packet.setWorldName("world"); // TODO: Implement worlds
+        packet.setWorldName("world");                       // TODO: Implement worlds
         packet.setHashedSeed(12345678);
         packet.setMaxPlayers(protocol.getMaxPlayers());
-        packet.setViewDistance(10); // TODO: Implement view distance
-        packet.setSimulationDistance(10); // TODO: Implement simulation distance
+        packet.setViewDistance(10);                         // TODO: Implement view distance
+        packet.setSimulationDistance(10);                   // TODO: Implement simulation distance
         packet.setReducedDebugInfo(false);
         packet.setRespawnScreen(true);
         packet.setDebug(false);
@@ -56,15 +56,14 @@ public class PlayHandler extends ProtocolHandler {
 
     @Override
     public void handle(pro.prysm.orion.server.protocol.incoming.play.ClientSettings packet) {
-        ClientSettings settings = new ClientSettings(
+        player.setSettings(new ClientSettings(
                 packet.getLocale(),
                 packet.getViewDistance(),
                 (packet.getChatMode() == 0) ? ChatMode.ENABLED : (packet.getChatMode() == 1 ? ChatMode.COMMANDS_ONLY : ChatMode.HIDDEN),
                 packet.isColoredChat(),
                 packet.getSkinParts(),
                 (packet.getMainHand() == 0) ? Hand.LEFT : Hand.RIGHT
-        );
-        player.setSettings(settings);
+        ));
     }
 
     @Override

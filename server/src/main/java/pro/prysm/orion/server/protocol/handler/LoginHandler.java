@@ -31,7 +31,6 @@ public class LoginHandler extends ProtocolHandler {
         if (protocol.isOnlineMode()) connection.sendPacket(protocol.newEncryptionRequest());
         else {
             // Offline mode, sends a LoginSuccess packet with a UUID following "OfflinePlayer:<username>"
-            // TODO: Check if this implementation is correct
             GameProfile profile = new GameProfile(username, UUID.nameUUIDFromBytes(String.format("OfflinePlayer:%s", username).getBytes(StandardCharsets.UTF_8)));
             connection.sendPacket(new LoginSuccess(profile.getUniqueId(), username));
             player = new ImplPlayer(connection, profile);

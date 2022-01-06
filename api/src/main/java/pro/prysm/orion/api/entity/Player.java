@@ -15,4 +15,6 @@ public interface Player extends Identity, Audience {
     Location getLocation();
 
     ClientSettings getSettings();
+
+    String getBrand();
 }

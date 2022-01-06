@@ -18,5 +18,4 @@ public class HandshakeHandler extends ProtocolHandler {
         }
         connection.setState(packet.getNextState());
     }
-
 }

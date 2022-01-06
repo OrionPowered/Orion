@@ -127,6 +127,7 @@ public class Protocol {
             profile = new GameProfile(JsonParser.parseString(response.body()).getAsJsonObject());
         } catch (InterruptedException | ExecutionException e) {
             Orion.getLogger().severe("Got error when attempting to authenticate session");
+            // TODO: Kick player
             e.printStackTrace();
         }
         return profile;

@@ -16,6 +16,7 @@ public class GameProfile {
     public GameProfile(JsonObject joinServerResponse) {
         JSONParser parser = new JSONParser(joinServerResponse);
         construct(parser.getString("name"), parser.getUUID("id"));
+        // TODO: skin parts
     }
 
     private void construct(String username, UUID uniqueId) {
