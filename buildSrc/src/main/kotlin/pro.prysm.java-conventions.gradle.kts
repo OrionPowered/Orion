@@ -16,7 +16,7 @@ tasks {
     }
 
     shadowJar {
-        // minimize()
+        minimize()
         archiveClassifier.set("shaded")
     }
 

@@ -1,2 +1,0 @@
-setup:
-	mkdir -p run

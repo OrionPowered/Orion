@@ -15,6 +15,12 @@ application {
     mainClass.set("pro.prysm.orion.server.Orion")
 }
 
+tasks.named<JavaExec>("run") {
+    val file = file(rootDir.path + "/run")
+    file.mkdirs()
+    workingDir = file
+}
+
 tasks.runShadow {
     val file = file(rootDir.path + "/run")
     file.mkdirs()
