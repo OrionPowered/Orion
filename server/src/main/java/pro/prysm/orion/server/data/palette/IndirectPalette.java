@@ -1,7 +1,7 @@
 package pro.prysm.orion.server.data.palette;
 
 import io.netty.buffer.ByteBuf;
-import pro.prysm.orion.server.protocol.PacketWriter;
+import pro.prysm.orion.server.net.PacketByteBuf;
 
 public class IndirectPalette extends Palette {
     public IndirectPalette(byte bitsPerEntry) {
@@ -9,8 +9,7 @@ public class IndirectPalette extends Palette {
     }
 
     @Override
-    public void write(ByteBuf buf) {
-        PacketWriter.writeVarInt(bitsPerEntry, buf);
-
+    public void write(PacketByteBuf buf) {
+        buf.writeVarInt(bitsPerEntry);
     }
 }

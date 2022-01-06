@@ -1,6 +1,6 @@
 package pro.prysm.orion.server.data.palette;
 
-import io.netty.buffer.ByteBuf;
+import pro.prysm.orion.server.net.PacketByteBuf;
 
 public class DirectPalette extends Palette {
     public DirectPalette() {
@@ -8,7 +8,7 @@ public class DirectPalette extends Palette {
     }
 
     @Override
-    public void write(ByteBuf buf) {
+    public void write(PacketByteBuf buf) {
         // No data to write.
     }
 }

@@ -1,6 +1,6 @@
 package pro.prysm.orion.server.data.palette;
 
-import io.netty.buffer.ByteBuf;
+import pro.prysm.orion.server.net.PacketByteBuf;
 
 public abstract class Palette {
     protected byte bitsPerEntry;
@@ -11,5 +11,5 @@ public abstract class Palette {
         else return new DirectPalette();
     }
 
-    public abstract void write(ByteBuf buf);
+    public abstract void write(PacketByteBuf buf);
 }
