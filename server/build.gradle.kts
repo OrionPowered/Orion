@@ -4,11 +4,11 @@ plugins {
 }
 
 dependencies {
-    api("com.velocitypowered:velocity-native:3.0.1-SNAPSHOT")
-    api("net.kyori:adventure-nbt:4.9.3")
+    implementation(project(":orion-api", configuration = "shadow"))
+    implementation(project(":anvil-java"))
 
-    implementation(projects.orionApi)
-    implementation(projects.anvilJava)
+    implementation("com.velocitypowered:velocity-native:3.0.1-SNAPSHOT")
+    implementation("net.kyori:adventure-nbt:4.9.3")
 }
 
 application {

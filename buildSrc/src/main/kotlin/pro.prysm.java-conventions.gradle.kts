@@ -1,5 +1,5 @@
 plugins {
-    `java-library`
+    java
     `maven-publish`
     id("com.github.johnrengelman.shadow")
 }
@@ -16,7 +16,8 @@ tasks {
     }
 
     shadowJar {
-        minimize()
+        // minimize()
+        archiveClassifier.set("shaded")
     }
 
     build {
@@ -25,7 +26,10 @@ tasks {
 }
 
 publishing {
-    publications.create<MavenPublication>("maven") {
-        from(components["java"])
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+            artifact(tasks["shadowJar"])
+        }
     }
 }
