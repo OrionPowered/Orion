@@ -9,7 +9,7 @@ import pro.prysm.orion.api.event.event.PlayerMoveEvent;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.data.Dimension;
 import pro.prysm.orion.server.entity.ImplPlayer;
-import pro.prysm.orion.server.protocol.incoming.login.TeleportConfirm;
+import pro.prysm.orion.server.protocol.incoming.play.TeleportConfirm;
 import pro.prysm.orion.server.protocol.incoming.play.*;
 import pro.prysm.orion.server.protocol.outgoing.play.ChunkData;
 import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;

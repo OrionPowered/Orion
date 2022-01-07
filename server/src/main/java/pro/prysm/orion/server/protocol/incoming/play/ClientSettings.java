@@ -18,8 +18,7 @@ public class ClientSettings extends IncomingPacket implements ClientSettingsPack
     private boolean showInList;
 
     public ClientSettings(Connection connection) {
-        super(connection);
-        id = 0x05;
+        super(0x05, connection);
     }
 
     @Override

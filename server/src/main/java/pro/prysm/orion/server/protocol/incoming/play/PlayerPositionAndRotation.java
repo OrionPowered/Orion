@@ -13,8 +13,7 @@ public class PlayerPositionAndRotation extends IncomingPacket implements PlayerP
     private boolean onGround;
 
     public PlayerPositionAndRotation(Connection connection) {
-        super(connection);
-        id = 0x12;
+        super(0x12, connection);
     }
 
     @Override

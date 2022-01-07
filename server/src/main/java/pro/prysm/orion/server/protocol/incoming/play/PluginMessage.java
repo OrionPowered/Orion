@@ -11,8 +11,7 @@ public class PluginMessage extends IncomingPacket implements pro.prysm.orion.api
     private byte[] data;
 
     public PluginMessage(Connection connection) {
-        super(connection);
-        id = 0x0A;
+        super(0x0A, connection);
     }
 
     @Override

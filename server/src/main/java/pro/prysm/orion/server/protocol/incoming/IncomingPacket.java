@@ -7,7 +7,8 @@ import pro.prysm.orion.server.protocol.Packet;
 public abstract class IncomingPacket extends Packet implements pro.prysm.orion.api.protocol.incoming.IncomingPacket {
     protected Connection connection;
 
-    public IncomingPacket(Connection connection) {
+    public IncomingPacket(int id, Connection connection) {
+        super(id);
         this.connection = connection;
     }
 

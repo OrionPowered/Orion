@@ -11,7 +11,7 @@ public class LoginStart extends IncomingPacket implements LoginStartPacket {
     private String username;
 
     public LoginStart(Connection connection) {
-        super(connection);
+        super(0x00, connection);
     }
 
     @Override

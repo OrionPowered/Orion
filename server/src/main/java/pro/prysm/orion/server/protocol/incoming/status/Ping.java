@@ -11,8 +11,7 @@ public class Ping extends IncomingPacket implements PingPacket {
     private long value;
 
     public Ping(Connection connection) {
-        super(connection);
-        id = 0x01;
+        super(0x01, connection);
     }
 
     @Override

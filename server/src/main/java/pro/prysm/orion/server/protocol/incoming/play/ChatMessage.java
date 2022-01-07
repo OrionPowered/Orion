@@ -11,8 +11,7 @@ public class ChatMessage extends IncomingPacket implements ChatMessagePacket {
     private String message;
 
     public ChatMessage(Connection connection) {
-        super(connection);
-        id = 0x03;
+        super(0x03, connection);
     }
 
     @Override

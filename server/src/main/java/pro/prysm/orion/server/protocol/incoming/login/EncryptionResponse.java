@@ -12,8 +12,7 @@ public class EncryptionResponse extends IncomingPacket implements EncryptionResp
     private byte[] verifyToken;
 
     public EncryptionResponse(Connection connection) {
-        super(connection);
-        id = 0x01;
+        super(0x01, connection);
     }
 
     @Override

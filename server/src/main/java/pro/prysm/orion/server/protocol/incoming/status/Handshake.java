@@ -15,8 +15,7 @@ public class Handshake extends IncomingPacket implements HandshakePacket {
     private PacketState nextState;
 
     public Handshake(Connection connection) {
-        super(connection);
-        id = 0x00;
+        super(0x00, connection);
         state = PacketState.HANDSHAKE;
     }
 

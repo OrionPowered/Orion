@@ -12,8 +12,7 @@ public class PlayerPosition extends IncomingPacket implements PlayerPositionPack
     private boolean onGround;
 
     public PlayerPosition(Connection connection) {
-        super(connection);
-        id = 0x11;
+        super(0x11, connection);
     }
 
     @Override

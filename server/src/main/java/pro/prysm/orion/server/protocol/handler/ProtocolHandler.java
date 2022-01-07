@@ -4,7 +4,7 @@ import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.incoming.login.EncryptionResponse;
 import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
-import pro.prysm.orion.server.protocol.incoming.login.TeleportConfirm;
+import pro.prysm.orion.server.protocol.incoming.play.TeleportConfirm;
 import pro.prysm.orion.server.protocol.incoming.play.*;
 import pro.prysm.orion.server.protocol.incoming.status.Handshake;
 import pro.prysm.orion.server.protocol.incoming.status.Ping;

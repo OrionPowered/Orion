@@ -1,7 +1,7 @@
-package pro.prysm.orion.server.protocol.incoming.login;
+package pro.prysm.orion.server.protocol.incoming.play;
 
 import lombok.Getter;
-import pro.prysm.orion.api.protocol.incoming.login.TeleportConfirmPacket;
+import pro.prysm.orion.api.protocol.incoming.play.TeleportConfirmPacket;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
@@ -11,7 +11,7 @@ public class TeleportConfirm extends IncomingPacket implements TeleportConfirmPa
     private int teleportId;
 
     public TeleportConfirm(Connection connection) {
-        super(connection);
+        super(0x00, connection);
     }
 
     @Override
