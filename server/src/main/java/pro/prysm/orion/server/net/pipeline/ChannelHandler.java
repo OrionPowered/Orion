@@ -9,7 +9,6 @@ import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.protocol.Protocol;
 
 import java.net.SocketAddress;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

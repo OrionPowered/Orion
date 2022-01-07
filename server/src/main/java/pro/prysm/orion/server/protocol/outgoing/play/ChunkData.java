@@ -11,10 +11,10 @@ import java.util.List;
 
 public class ChunkData extends OutgoingPacket {
     private final Chunk chunk;
-    private int x, z;
     private final CompoundBinaryTag heightmaps;
     List<byte[]> skyLight;
     List<byte[]> blockLight;
+    private int x, z;
 
     public ChunkData(Chunk chunk) {
         id = 0x22;

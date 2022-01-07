@@ -29,20 +29,14 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
     // STATIC - Logger and EventBus are the only objects that should be here.
     private static final Logger logger = (Logger) LoggerFactory.getLogger("Orion");
     private static final EventBus EVENT_BUS = new pro.prysm.orion.server.event.EventBus();
-
-    public static void main(String[] args) {
-        new Orion(); // Escape Static
-    }
-    // END STATIC
-
     private final long startupTime = System.currentTimeMillis();
+    // END STATIC
     private final TCPListener listener;
     private final Protocol protocol;
     private final WorldManager worldManager;
     private final CommandHandler commandHandler;
     private final PluginLoader pluginLoader;
     private Config config;
-
     public Orion() {
         logger.info("Starting Orion...");
         loadConfig();
@@ -67,7 +61,16 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         commandHandler.registerCommand(new ReloadCommand());
         commandHandler.registerCommand(new SendPacketCommand(listener.getPipeline().getChannelHandler()));
 
-        listener.listen(); // Start listening, any code below this will NOT execute (blocking)
+        try {
+            listener.listen(); // Start listening, any code below this will NOT execute (blocking)
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            // TODO: Shutdown here
+        }
+    }
+
+    public static void main(String[] args) {
+        new Orion(); // Escape Static
     }
 
     public static Logger getLogger() {

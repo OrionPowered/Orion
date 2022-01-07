@@ -26,14 +26,9 @@ public class TCPListener {
         pipeline = new Pipeline(protocol);
     }
 
-    public void listen() {
-        try {
-            Orion.getLogger().info(String.format("Starting listener on %s", address));
-            listen(address, threads);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            // TODO: shutdown here
-        }
+    public void listen() throws InterruptedException {
+        Orion.getLogger().info(String.format("Starting listener on %s", address));
+        listen(address, threads);
     }
 
     private void listen(InetSocketAddress address, int threads) throws InterruptedException {
@@ -47,7 +42,10 @@ public class TCPListener {
             ChannelFuture channelFuture = bootstrap.bind().sync();
             channelFuture.addListener((ChannelFutureListener) future -> {
                 if (channelFuture.isSuccess()) Orion.getEventBus().post(new ServerReadyEvent());
-                else Orion.getLogger().error(String.format("Failed to listen on %s", address)); // TODO: shutdown here
+                else {
+                    Orion.getLogger().error(String.format("Failed to listen on %s", address));
+                    throw new InterruptedException("Failed to listen on " + address);
+                }
             });
             channelFuture.channel().closeFuture().sync();
         } catch (Exception e) {

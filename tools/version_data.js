@@ -19,6 +19,7 @@ module.exports = class {
     _particles;
     _tints;
     _mapIcons;
+
     constructor(version) {
         this._loadPaths(version);
     }
@@ -53,7 +54,7 @@ module.exports = class {
 
     _loadPaths(version) {
         this._request("dataPaths.json", (error, data) => {
-           if (error) throw error;
+            if (error) throw error;
             data = JSON.parse(data)["pc"][version];
             if (data) {
                 this._attributes = data["attributes"] + "/attributes.json";

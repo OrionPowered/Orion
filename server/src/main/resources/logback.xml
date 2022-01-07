@@ -1,7 +1,7 @@
 <configuration>
     <property name="HOME_LOG" value="logs/orion.log"/>
-    <conversionRule conversionWord="color" converterClass="pro.prysm.orion.server.util.ColorLoggerConverter" />
-    <conversionRule conversionWord="reset" converterClass="pro.prysm.orion.server.util.ResetLoggerConverter" />
+    <conversionRule conversionWord="color" converterClass="pro.prysm.orion.server.util.ColorLoggerConverter"/>
+    <conversionRule conversionWord="reset" converterClass="pro.prysm.orion.server.util.ResetLoggerConverter"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender" withJansi="true">
         <!-- encoders are assigned the type
@@ -30,7 +30,7 @@
     </appender>
 
     <root>
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE-ROLLING"/>
     </root>
 </configuration>

@@ -16,7 +16,8 @@ public class Config extends JSONParser {
         if (!Files.exists(configFile)) {
             try {
                 try (InputStream is = classLoader.getResourceAsStream(resourcePath)) {
-                    if (is == null) throw new ResourceNotFoundException("Could not find resource " + resourcePath + " in jar");
+                    if (is == null)
+                        throw new ResourceNotFoundException("Could not find resource " + resourcePath + " in jar");
                     Files.copy(is, configFile);
                 }
             } catch (IOException | ResourceNotFoundException e) {

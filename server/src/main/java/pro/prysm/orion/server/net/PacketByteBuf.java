@@ -116,7 +116,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
         do {
             read = buf.readByte();
             int value = (read & 0b01111111);
-            result |= ((long)value << (7 * numRead));
+            result |= ((long) value << (7 * numRead));
 
             numRead++;
             if (numRead > 10) {
@@ -226,6 +226,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
 
     /**
      * Writes a BitSet to the Byte Buffer
+     *
      * @param bitSet BitSet to write
      */
     public void writeBitSet(BitSet bitSet) {
