@@ -4,6 +4,7 @@ import pro.prysm.orion.api.plugin.JavaPlugin;
 import pro.prysm.orion.server.Orion;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,34 +25,31 @@ public class PluginLoader {
     }
 
     private void loadPlugins() {
-        Orion.getLogger().info( "Loading plugins!");
-        if (!pluginFolder.exists()) pluginFolder.mkdir();
-        if (!moduleFolder.exists()) moduleFolder.mkdir();
+        Orion.getLogger().info("Loading plugins!");
+
+        if (!pluginFolder.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            pluginFolder.mkdirs();
+        }
+
+        if (!moduleFolder.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            moduleFolder.mkdirs();
+        }
+
+        File[] pluginFiles = pluginFolder.listFiles();
+        if (pluginFiles == null) return;
+
+        FilenameFilter filter = (dir, name) -> name.endsWith(".jar");
         List<File> jars = new ArrayList<>();
-        for (File file : pluginFolder.listFiles()) {
+        for (File file : pluginFiles) {
             if (file.isDirectory()) continue;
-            if (getFileExtension(file).equalsIgnoreCase(".jar")) {
+
+            if (filter.accept(file.getParentFile(), file.getName())) {
                 jars.add(file);
-            } else Orion.getLogger().warn("File " + file.getName() + " in the plugins folder is not a JarFile");
+            }
         }
-        pluginClassLoader.loadPlugin(jars.toArray(File[]::new));
-    }
 
-    public String getFileExtension(File file) {
-        String name = file.getName();
-        int index = name.lastIndexOf(".");
-        if (index == -1) {
-            return "";
-        }
-        return name.substring(index);
-    }
-
-    private URL toURL(File file) {
-        try {
-            return file.toURI().toURL();
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-            return null;
-        }
+        pluginClassLoader.loadPlugins(jars.toArray(File[]::new));
     }
 }

@@ -1,6 +1,8 @@
 package pro.prysm.orion.server.protocol;
 
 import com.google.gson.JsonParser;
+import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 import pro.prysm.orion.api.chat.Message;
 import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.api.json.Config;
@@ -21,6 +23,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 
+@Getter
 public class Protocol {
     public static final String ENCODER = "packetEncoder";
     public static final String DECODER = "packetDecoder";
@@ -28,30 +31,31 @@ public class Protocol {
     public static final String LENGTH_DECODER = "lengthDecoder";
     public static final String CIPHER_ENCODER = "cipherEncoder";
     public static final String CIPHER_DECODER = "cipherDecoder";
+    public static final int PROTOCOL_NUMBER = 757; // 1.18.1
 
-    private final PacketRegistry packetRegistry;
-    private final KeyPair keyPair;
+    private final PacketRegistry packetRegistry = new PacketRegistry();
+    private final ServerListResponse slpData = new ServerListResponse();
+    private final KeyPair keyPair = genKeyPair();
     private final WorldManager worldManager;
     private String sessionServer;
-    private ServerListResponse defaultSLPResponse;
+
     private boolean onlineMode;
     private int maxPlayers;
 
     public Protocol(WorldManager worldManager, Config config) {
-        packetRegistry = new PacketRegistry();
-        defaultSLPResponse = new ServerListResponse();
-        keyPair = genKeyPair();
         this.worldManager = worldManager;
         reload(config);
     }
 
-    public void reload(Config config) {
+    public void reload(@NotNull Config config) {
         onlineMode = config.getBoolean("online-mode");
         maxPlayers = config.getInt("max-players");
-        defaultSLPResponse.setProtocolVersion(757); // 1.18.1
-        defaultSLPResponse.setDescription(new Message(config.getString("motd")).toComponent());
-        defaultSLPResponse.setServerName(config.getString("serverName"));
-        defaultSLPResponse.setMaxPlayers(maxPlayers);
+
+        slpData.setProtocolVersion(PROTOCOL_NUMBER);
+        slpData.setDescription(new Message(config.getString("motd")).toComponent());
+        slpData.setServerName(config.getString("serverName"));
+        slpData.setMaxPlayers(maxPlayers);
+
         sessionServer = config.getStringOrDefault("session-server", "https://sessionserver.mojang.com");
         Orion.getLogger().debug(String.format("Using session server %s", sessionServer));
     }
@@ -83,40 +87,26 @@ public class Protocol {
             md.update(keyPair.getPublic().getEncoded());
             id = new BigInteger(md.digest()).toString(16);
         } catch (NoSuchAlgorithmException e) {
-            Orion.getLogger().error("Failed to create server ID:");
+            Orion.getLogger().error("Failed to create server ID. Is your java unsupported?");
             e.printStackTrace();
             // TODO: shutdown here
         }
         return id;
     }
 
-    public PacketRegistry getPacketRegistry() {
-        return packetRegistry;
-    }
+    public SLPResponse generateSLP() {
+        ServerListResponse slp = new ServerListResponse();
 
-    public void setDefaultMOTD(ServerListResponse response) {
-        this.defaultSLPResponse = response;
-    }
+        slp.setProtocolVersion(slpData.getProtocolVersion());
+        slp.setServerName(slpData.getServerName());
+        slp.setMaxPlayers(slpData.getMaxPlayers());
+        slpData.setOnlinePlayers(0); // TODO: implement online players
+        slp.setDescription(slpData.getDescription());
 
-    public SLPResponse getDefaultSLP() {
-        defaultSLPResponse.setOnlinePlayers(0); // TODO: implement online players
-        return new SLPResponse(defaultSLPResponse);
-    }
-
-    public boolean isOnlineMode() {
-        return onlineMode;
-    }
-
-    public int getMaxPlayers() {
-        return maxPlayers;
-    }
-
-    public KeyPair getKeyPair() {
-        return keyPair;
+        return new SLPResponse(slpData);
     }
 
     public GameProfile join(String serverId, String username) {
-        GameProfile profile = null;
         try {
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder(
@@ -124,13 +114,12 @@ public class Protocol {
                     )).header("accept", "application/json").GET().build();
             CompletableFuture<HttpResponse<String>> future = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
             HttpResponse<String> response = future.get();
-            profile = new GameProfile(JsonParser.parseString(response.body()).getAsJsonObject());
+            return new GameProfile(JsonParser.parseString(response.body()).getAsJsonObject());
         } catch (InterruptedException | ExecutionException e) {
             Orion.getLogger().error("Got error when attempting to authenticate session");
-            // TODO: Kick player
             e.printStackTrace();
+            return null;
         }
-        return profile;
     }
 
     public EncryptionRequest newEncryptionRequest() {

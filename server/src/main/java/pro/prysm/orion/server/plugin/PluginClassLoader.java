@@ -43,14 +43,19 @@ public class PluginClassLoader extends URLClassLoader {
         }
     }
 
-    public void loadPlugin(File... files) {
+    public void loadPlugins(File... files) {
         for (File file : files) {
             try {
                 addURL(file.toURI().toURL());
+
                 JarFile jarFile = new JarFile(file);
+
                 loadClasses(jarFile);
+
                 PluginDescription description = new PluginDescription(jarFile);
-                JavaPlugin plugin = (JavaPlugin) Class.forName(description.getMainClass(), false, this).getConstructors()[0].newInstance();
+                JavaPlugin plugin = (JavaPlugin) Class.forName(description.getMainClass(), false, this)
+                        .getConstructors()[0].newInstance();
+
                 dataFolderF.set(plugin, new File("./plugins", description.getName()));
                 loggerF.set(plugin, LoggerFactory.getLogger(description.getName()));
                 descriptionF.set(plugin, description);

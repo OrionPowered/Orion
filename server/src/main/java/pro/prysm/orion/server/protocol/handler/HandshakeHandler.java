@@ -14,8 +14,9 @@ public class HandshakeHandler extends ProtocolHandler {
     public void handle(Handshake packet) {
         if (packet.getNextState() == PacketState.STATUS) {
             Orion.getLogger().debug(String.format("%s has pinged", connection.getAddress()));
-            connection.sendPacket(protocol.getDefaultSLP());
+            connection.sendPacket(protocol.generateSLP());
+        } else {
+            connection.setState(packet.getNextState());
         }
-        connection.setState(packet.getNextState());
     }
 }

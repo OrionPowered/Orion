@@ -2,6 +2,7 @@ package pro.prysm.orion.server;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import lombok.Getter;
 import org.slf4j.LoggerFactory;
 import pro.prysm.orion.api.event.EventHandler;
 import pro.prysm.orion.api.event.Listener;
@@ -18,17 +19,18 @@ import pro.prysm.orion.server.net.TCPListener;
 import pro.prysm.orion.server.plugin.PluginLoader;
 import pro.prysm.orion.server.protocol.Protocol;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.file.Path;
 
+@Getter
 public class Orion implements Listener, pro.prysm.orion.api.Orion {
 
     // STATIC - Logger and EventBus are the only objects that should be here.
     private static final Logger logger = (Logger) LoggerFactory.getLogger("Orion");
     private static final EventBus EVENT_BUS = new pro.prysm.orion.server.event.EventBus();
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
         new Orion(); // Escape Static
     }
     // END STATIC
@@ -45,7 +47,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         logger.info("Starting Orion...");
         loadConfig();
 
-        Logger root = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+        Logger root = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
         root.setLevel(Level.valueOf(config.getString("log-level")));
 
         worldManager = new WorldManager(config.getString("world"));
@@ -78,7 +80,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
 
     private void loadConfig() {
         try {
-            config = new Config(getClass(), new File("settings.json"));
+            config = new Config(getClass().getClassLoader(), Path.of("settings.json"), "settings.json");
         } catch (IOException e) {
             logger.warn("Failed to load settings.json!");
             e.printStackTrace();
@@ -96,33 +98,5 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
     public void onReload(ReloadEvent event) {
         loadConfig();
         protocol.reload(config);
-    }
-
-    // ================================================================================================================
-    // Getters
-    // ================================================================================================================
-
-    public Config getConfig() {
-        return config;
-    }
-
-    public Protocol getProtocol() {
-        return protocol;
-    }
-
-    public WorldManager getWorldManager() {
-        return worldManager;
-    }
-
-    public TCPListener getListener() {
-        return listener;
-    }
-
-    public CommandHandler getCommandHandler() {
-        return commandHandler;
-    }
-
-    public PluginLoader getPluginLoader() {
-        return pluginLoader;
     }
 }
