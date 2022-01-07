@@ -116,7 +116,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
         do {
             read = buf.readByte();
             int value = (read & 0b01111111);
-            result |= (value << (7 * numRead));
+            result |= ((long)value << (7 * numRead));
 
             numRead++;
             if (numRead > 10) {
