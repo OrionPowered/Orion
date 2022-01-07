@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.BitSet;
 import java.util.UUID;
 
 /*
@@ -221,6 +222,15 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
         buf.writeInt((int) uuid.getMostSignificantBits());
         buf.writeInt((int) (uuid.getLeastSignificantBits() >> 32));
         buf.writeInt((int) uuid.getLeastSignificantBits());
+    }
+
+    /**
+     * Writes a BitSet to the Byte Buffer
+     * @param bitSet BitSet to write
+     */
+    public void writeBitSet(BitSet bitSet) {
+        long[] data = bitSet.toLongArray();
+        writeLongArray(data);
     }
 
     /**
