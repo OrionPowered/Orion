@@ -1,6 +1,5 @@
 package pro.prysm.orion.server.data.palette;
 
-import io.netty.buffer.ByteBuf;
 import pro.prysm.orion.server.net.PacketByteBuf;
 
 public class IndirectPalette extends Palette {

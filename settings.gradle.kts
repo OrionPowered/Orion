@@ -7,6 +7,7 @@ pluginManagement {
     }
     plugins {
         id("com.github.johnrengelman.shadow") version "7.1.2"
+        id("com.github.monosoul.yadegrap") version "1.0.0"
     }
 }
 

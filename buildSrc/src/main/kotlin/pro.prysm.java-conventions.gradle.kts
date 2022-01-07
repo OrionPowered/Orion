@@ -1,7 +1,10 @@
+import com.github.monosoul.yadegrap.DelombokTask
+
 plugins {
     `java-library`
     `maven-publish`
     id("com.github.johnrengelman.shadow")
+    id("com.github.monosoul.yadegrap")
 }
 
 group = "pro.prysm"
@@ -25,6 +28,13 @@ tasks {
 
     build {
         dependsOn(shadowJar)
+    }
+
+    val delombok = "delombok"(DelombokTask::class)
+
+    "javadoc"(Javadoc::class) {
+        dependsOn(delombok)
+        setSource(delombok)
     }
 }
 
