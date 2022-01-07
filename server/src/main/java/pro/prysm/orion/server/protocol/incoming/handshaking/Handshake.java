@@ -1,4 +1,4 @@
-package pro.prysm.orion.server.protocol.incoming.status;
+package pro.prysm.orion.server.protocol.incoming.handshaking;
 
 import lombok.Getter;
 import pro.prysm.orion.api.protocol.PacketState;

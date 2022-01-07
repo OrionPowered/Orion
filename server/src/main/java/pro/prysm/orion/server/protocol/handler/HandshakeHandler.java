@@ -3,7 +3,7 @@ package pro.prysm.orion.server.protocol.handler;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.net.Connection;
-import pro.prysm.orion.server.protocol.incoming.status.Handshake;
+import pro.prysm.orion.server.protocol.incoming.handshaking.Handshake;
 
 public class HandshakeHandler extends ProtocolHandler {
     public HandshakeHandler(Connection connection) {
@@ -12,11 +12,6 @@ public class HandshakeHandler extends ProtocolHandler {
 
     @Override
     public void handle(Handshake packet) {
-        if (packet.getNextState() == PacketState.STATUS) {
-            Orion.getLogger().debug(String.format("%s has pinged", connection.getAddress()));
-            connection.sendPacket(protocol.generateSLP());
-        } else {
-            connection.setState(packet.getNextState());
-        }
+        connection.setState(packet.getNextState());
     }
 }

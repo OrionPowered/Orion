@@ -26,7 +26,7 @@ public class PlayHandler extends ProtocolHandler {
     }
 
     private void joinGame() {
-        Level level = protocol.getWorldManager().getLevel();
+        Level level = connection.getProtocol().getWorldManager().getLevel();
         player.readPlayerData(level.getPlayerData(player.getProfile().getUniqueId()));
 
         Dimension dimension = new Dimension();
@@ -39,7 +39,7 @@ public class PlayHandler extends ProtocolHandler {
         packet.setDimension(dimension.getType());
         packet.setWorldName("world");                       // TODO: Implement worlds
         packet.setHashedSeed(12345678);
-        packet.setMaxPlayers(protocol.getMaxPlayers());
+        packet.setMaxPlayers(connection.getProtocol().getMaxPlayers());
         packet.setViewDistance(10);                         // TODO: Implement view distance
         packet.setSimulationDistance(10);                   // TODO: Implement simulation distance
         packet.setReducedDebugInfo(false);
@@ -51,7 +51,7 @@ public class PlayHandler extends ProtocolHandler {
         connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
 
         // Player has joined, send first chunk
-        connection.sendPacket(new ChunkData(protocol.getWorldManager().getChunk(player.getLocation())));
+        connection.sendPacket(new ChunkData(connection.getProtocol().getWorldManager().getChunk(player.getLocation())));
     }
 
     @Override
