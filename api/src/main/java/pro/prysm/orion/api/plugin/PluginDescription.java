@@ -23,8 +23,8 @@ public class PluginDescription {
         try (InputStream desc = file.getInputStream(file.getEntry("plugin.json"))) {
             if (desc == null) throw new InvalidPluginException("Missing plugin.json");
 
-            try (InputStreamReader isr = new InputStreamReader(desc);) {
-                try (BufferedReader reader = new BufferedReader(isr);) {
+            try (InputStreamReader isr = new InputStreamReader(desc)) {
+                try (BufferedReader reader = new BufferedReader(isr)) {
                     JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
 
                     name = jsonObject.get("name").getAsString();

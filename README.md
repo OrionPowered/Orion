@@ -2,7 +2,7 @@
 Orion is a 1.18 (757) Minecraft server implementation written with the goal of being the absolute bare-bones to run a lobby, minigames, or any other server that doesn't require advanced vanilla mechanics.
 
 ## Progress
-- [x] Multi-threaded TCP pipeline
+- [x] Multithreaded TCP pipeline
 - [x] Packet structure
 - [x] Packet handlers
 - [x] MOTD/Server Status
