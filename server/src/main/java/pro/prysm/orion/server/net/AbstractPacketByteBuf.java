@@ -42,11 +42,13 @@ public class AbstractPacketByteBuf extends ByteBuf {
     }
 
     @Override
+    @Deprecated
     public ByteOrder order() {
         return this.buf.order();
     }
 
     @Override
+    @Deprecated
     public ByteBuf order(ByteOrder byteOrder) {
         return this.buf.order(byteOrder);
     }
@@ -887,8 +889,8 @@ public class AbstractPacketByteBuf extends ByteBuf {
     }
 
     @Override
-    public boolean equals(Object o) {
-        return this.buf.equals(o);
+    public boolean equals(Object obj) {
+        return this.buf.equals(obj);
     }
 
     @Override
