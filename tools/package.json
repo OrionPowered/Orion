@@ -4,8 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "generate-materials": "node generate_materials.js"
+    "generate-materials": "ts-node generate_materials.ts"
   },
   "author": "",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "minecraft-data": "^2.104.0",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  }
 }
