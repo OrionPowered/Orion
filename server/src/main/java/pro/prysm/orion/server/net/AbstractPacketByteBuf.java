@@ -3,6 +3,7 @@ package pro.prysm.orion.server.net;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.util.ByteProcessor;
+import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,12 +15,9 @@ import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
 
+@RequiredArgsConstructor
 public class AbstractPacketByteBuf extends ByteBuf {
-    protected ByteBuf buf;
-
-    public AbstractPacketByteBuf(ByteBuf buf) {
-        this.buf = buf;
-    }
+    protected final ByteBuf buf;
 
     @Override
     public int capacity() {
@@ -888,6 +886,7 @@ public class AbstractPacketByteBuf extends ByteBuf {
         return this.buf.hashCode();
     }
 
+    // FIXME
     @Override
     public boolean equals(Object obj) {
         return this.buf.equals(obj);
