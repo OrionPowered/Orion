@@ -38,6 +38,7 @@ public class Protocol {
     private final ServerListResponse slpData = new ServerListResponse();
     private final KeyPair keyPair = genKeyPair();
     private final Orion orion;
+    @Getter
     private final WorldManager worldManager;
     private String sessionServer;
 
@@ -132,9 +133,5 @@ public class Protocol {
         byte[] verifyToken = new byte[4];
         ThreadLocalRandom.current().nextBytes(verifyToken);
         return new EncryptionRequest(keyPair.getPublic().getEncoded(), verifyToken);
-    }
-
-    public WorldManager getWorldManager() {
-        return worldManager;
     }
 }

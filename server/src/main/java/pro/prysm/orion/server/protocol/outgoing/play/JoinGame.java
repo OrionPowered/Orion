@@ -1,5 +1,6 @@
 package pro.prysm.orion.server.protocol.outgoing.play;
 
+import lombok.Setter;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import pro.prysm.orion.api.data.GameMode;
 import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
@@ -10,6 +11,7 @@ import pro.prysm.orion.server.net.PacketByteBuf;
  * @since 12/21/21 / 9:52 PM
  * This file was created as a part of Orion
  */
+@Setter
 public class JoinGame extends pro.prysm.orion.server.protocol.outgoing.OutgoingPacket implements OutgoingPacket {
     private int entityId;
     private boolean hardcore;
@@ -29,71 +31,7 @@ public class JoinGame extends pro.prysm.orion.server.protocol.outgoing.OutgoingP
     private boolean flat;
 
     public JoinGame() {
-        id = 0x26;
-    }
-
-    public void setEntityId(int entityId) {
-        this.entityId = entityId;
-    }
-
-    public void setHardcore(boolean hardcore) {
-        this.hardcore = hardcore;
-    }
-
-    public void setGamemode(GameMode gamemode) {
-        this.gamemode = gamemode;
-    }
-
-    public void setPreviousGamemode(GameMode previousGamemode) {
-        this.previousGamemode = previousGamemode;
-    }
-
-    public void setWorlds(String[] worlds) {
-        this.worlds = worlds;
-    }
-
-    public void setDimensionCodec(CompoundBinaryTag dimensionCodec) {
-        this.dimensionCodec = dimensionCodec;
-    }
-
-    public void setDimension(CompoundBinaryTag dimension) {
-        this.dimension = dimension;
-    }
-
-    public void setWorldName(String worldName) {
-        this.worldName = worldName;
-    }
-
-    public void setHashedSeed(long hashedSeed) {
-        this.hashedSeed = hashedSeed;
-    }
-
-    public void setMaxPlayers(int maxPlayers) {
-        this.maxPlayers = maxPlayers;
-    }
-
-    public void setViewDistance(int viewDistance) {
-        this.viewDistance = viewDistance;
-    }
-
-    public void setSimulationDistance(int simulationDistance) {
-        this.simulationDistance = simulationDistance;
-    }
-
-    public void setReducedDebugInfo(boolean reducedDebugInfo) {
-        this.reducedDebugInfo = reducedDebugInfo;
-    }
-
-    public void setRespawnScreen(boolean respawnScreen) {
-        this.respawnScreen = respawnScreen;
-    }
-
-    public void setDebug(boolean debug) {
-        this.debug = debug;
-    }
-
-    public void setFlat(boolean flat) {
-        this.flat = flat;
+        super(0x26);
     }
 
     @Override

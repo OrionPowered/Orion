@@ -17,7 +17,7 @@ public class ChunkData extends OutgoingPacket {
     private int x, z;
 
     public ChunkData(Chunk chunk) {
-        id = 0x22;
+        super(0x22);
         this.chunk = chunk;
         x = chunk.getX();
         z = chunk.getZ();

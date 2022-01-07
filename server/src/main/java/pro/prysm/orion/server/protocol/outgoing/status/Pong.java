@@ -1,6 +1,5 @@
 package pro.prysm.orion.server.protocol.outgoing.status;
 
-
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
@@ -8,8 +7,8 @@ public class Pong extends OutgoingPacket implements pro.prysm.orion.api.protocol
     private final long value;
 
     public Pong(long value) {
+        super(0x01);
         this.value = value;
-        id = 0x01;
     }
 
     @Override

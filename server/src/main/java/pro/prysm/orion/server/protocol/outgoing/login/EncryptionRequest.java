@@ -8,7 +8,7 @@ public class EncryptionRequest extends OutgoingPacket implements pro.prysm.orion
     private final byte[] verifyToken;
 
     public EncryptionRequest(byte[] publicKey, byte[] verifyToken) {
-        id = 0x01;
+        super(0x01);
         this.publicKey = publicKey;
         this.verifyToken = verifyToken;
     }

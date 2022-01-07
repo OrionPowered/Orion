@@ -37,6 +37,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
     private final CommandHandler commandHandler;
     private final PluginLoader pluginLoader;
     private Config config;
+
     public Orion() {
         logger.info("Starting Orion...");
         loadConfig();

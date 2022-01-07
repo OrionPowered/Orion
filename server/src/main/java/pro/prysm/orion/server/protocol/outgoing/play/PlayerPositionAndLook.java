@@ -11,7 +11,7 @@ public class PlayerPositionAndLook extends OutgoingPacket {
     private final int teleportId;
 
     public PlayerPositionAndLook(Location location) {
-        id = 0x38;
+        super(0x38);
         this.loc = location;
         this.teleportId = new Random().nextInt(9999);
     }
