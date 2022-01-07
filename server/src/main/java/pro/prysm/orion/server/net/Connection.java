@@ -37,6 +37,7 @@ public class Connection implements pro.prysm.orion.api.net.Connection {
     // We start off with a Handshake Handler since the first connection will be in the Handshake state.
     private ProtocolHandler handler = new HandshakeHandler(this);
     private PacketState state = PacketState.HANDSHAKE;
+    @Setter
     private boolean active = true;
 
     public SocketAddress getAddress() {

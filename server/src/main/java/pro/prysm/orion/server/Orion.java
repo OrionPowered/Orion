@@ -51,7 +51,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         root.setLevel(Level.valueOf(config.getString("log-level")));
 
         worldManager = new WorldManager(config.getString("world"));
-        protocol = new Protocol(worldManager, config);
+        protocol = new Protocol(this, worldManager, config);
         commandHandler = new CommandHandler();
         pluginLoader = new PluginLoader();
 

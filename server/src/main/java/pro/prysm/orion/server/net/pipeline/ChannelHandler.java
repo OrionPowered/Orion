@@ -10,12 +10,14 @@ import pro.prysm.orion.server.protocol.Protocol;
 
 import java.net.SocketAddress;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RequiredArgsConstructor
 @ChannelHandler.Sharable
 public class ChannelHandler extends ChannelInboundHandlerAdapter {
     @Getter
-    private final HashMap<Integer, Connection> connections = new HashMap<>();
+    private final Map<Integer, Connection> connections = new ConcurrentHashMap<>();
     private final Protocol protocol;
 
     @Override
@@ -26,7 +28,7 @@ public class ChannelHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
-        connections.remove(ctx.channel().remoteAddress().hashCode());
+        connections.remove(ctx.channel().remoteAddress().hashCode()).setActive(false);
     }
 
     public Connection getConnection(SocketAddress remoteAddress) {

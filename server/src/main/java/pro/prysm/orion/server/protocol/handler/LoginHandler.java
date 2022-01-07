@@ -41,8 +41,7 @@ public class LoginHandler extends ProtocolHandler {
     public void handle(EncryptionResponse packet) {
         // If server isn't in online mode disconnect the player and stop from handling further
         if (!protocol.isOnlineMode()) {
-            // Finer instead of warning?
-            Orion.getLogger().warn(String.format("%s sent an encryption response when no request was sent!", username));
+            Orion.getLogger().debug(String.format("%s sent an encryption response when no request was sent!", username));
             player.getConnection().disconnect("Invalid encryption packet");
             return;
         }
@@ -63,6 +62,7 @@ public class LoginHandler extends ProtocolHandler {
         // If the above executes properly, we can now authenticate the user with the Mojang Session service
         GameProfile profile = protocol.join(protocol.generateServerId(connection.getSharedSecret()), username);
         if (profile == null) connection.disconnect("Bad login.");
+
         else {
             connection.sendPacket(new LoginSuccess(profile.getUniqueId(), profile.getUsername()));
             player = new ImplPlayer(connection, profile);

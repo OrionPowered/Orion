@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import pro.prysm.orion.api.chat.Message;
 import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.api.json.Config;
+import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.api.protocol.ServerListResponse;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.data.WorldManager;
@@ -36,13 +37,15 @@ public class Protocol {
     private final PacketRegistry packetRegistry = new PacketRegistry();
     private final ServerListResponse slpData = new ServerListResponse();
     private final KeyPair keyPair = genKeyPair();
+    private final Orion orion;
     private final WorldManager worldManager;
     private String sessionServer;
 
     private boolean onlineMode;
     private int maxPlayers;
 
-    public Protocol(WorldManager worldManager, Config config) {
+    public Protocol(Orion orion, WorldManager worldManager, Config config) {
+        this.orion = orion;
         this.worldManager = worldManager;
         reload(config);
     }
@@ -100,7 +103,10 @@ public class Protocol {
         slp.setProtocolVersion(slpData.getProtocolVersion());
         slp.setServerName(slpData.getServerName());
         slp.setMaxPlayers(slpData.getMaxPlayers());
-        slpData.setOnlinePlayers(0); // TODO: implement online players
+        slpData.setOnlinePlayers(
+                (int) orion.getListener().getPipeline().getChannelHandler()
+                        .getConnections().values().stream().filter(
+                                (c) -> c.getState() == PacketState.PLAY).count());
         slp.setDescription(slpData.getDescription());
 
         return new SLPResponse(slpData);
