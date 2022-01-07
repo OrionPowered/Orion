@@ -13,7 +13,7 @@ version = "1.0-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
 
-dependencies.implementation("org.projectlombok:lombok:1.18.22")
+dependencies.compileOnly("org.projectlombok:lombok:1.18.22")
 dependencies.annotationProcessor("org.projectlombok:lombok:1.18.22")
 
 tasks {
