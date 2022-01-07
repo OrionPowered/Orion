@@ -1,0 +1,11 @@
+{
+  "name": "orion-tools",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "generate-materials": "node generate_materials.js"
+  },
+  "author": "",
+  "license": "UNLICENSED"
+}
