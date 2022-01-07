@@ -12,7 +12,6 @@ import pro.prysm.orion.server.protocol.incoming.status.Ping;
 import java.util.HashMap;
 
 public class PacketRegistry {
-
     HashMap<Integer, Class<? extends IncomingPacket>> incomingHandshake = new HashMap<>() {{
         put(0x00, Handshake.class);
     }};
@@ -49,5 +48,4 @@ public class PacketRegistry {
         }
         return packet;
     }
-
 }

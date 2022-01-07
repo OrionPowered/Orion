@@ -1,14 +1,16 @@
 package pro.prysm.orion.server.protocol.handler;
 
 import com.alexsobiek.anvil.Level;
-import pro.prysm.orion.api.data.*;
+import pro.prysm.orion.api.data.ChatMode;
+import pro.prysm.orion.api.data.GameMode;
+import pro.prysm.orion.api.data.Hand;
+import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.event.event.PlayerMoveEvent;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.data.Dimension;
 import pro.prysm.orion.server.entity.ImplPlayer;
 import pro.prysm.orion.server.protocol.incoming.login.TeleportConfirm;
 import pro.prysm.orion.server.protocol.incoming.play.*;
-import pro.prysm.orion.server.protocol.incoming.play.ClientSettings;
 import pro.prysm.orion.server.protocol.outgoing.play.ChunkData;
 import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;
 import pro.prysm.orion.server.protocol.outgoing.play.PlayerPositionAndLook;

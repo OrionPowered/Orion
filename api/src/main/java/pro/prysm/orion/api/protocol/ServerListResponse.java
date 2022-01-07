@@ -3,7 +3,6 @@ package pro.prysm.orion.api.protocol;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import lombok.Data;
-import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 

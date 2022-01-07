@@ -5,7 +5,6 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import pro.prysm.orion.server.protocol.Protocol;
 
 @Getter
