@@ -5,6 +5,9 @@ import com.velocitypowered.natives.encryption.VelocityCipherFactory;
 import com.velocitypowered.natives.util.Natives;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.server.Orion;
@@ -21,42 +24,23 @@ import javax.crypto.spec.SecretKeySpec;
 import java.net.SocketAddress;
 import java.security.GeneralSecurityException;
 
+@Getter
+@RequiredArgsConstructor
 public class Connection implements pro.prysm.orion.api.net.Connection {
     private final ChannelHandlerContext ctx;
     private final Protocol protocol;
-    private ProtocolHandler handler;
-    private PacketState state;
+    @Setter
     private byte[] sharedSecret;
+    @Setter
     private byte[] verifyToken;
-    private boolean active;
 
-    public Connection(ChannelHandlerContext ctx, Protocol protocol) {
-        this.ctx = ctx;
-        this.protocol = protocol;
-        // We start off with a Handshake Handler since the first connection will be in the Handshake state.
-        handler = new HandshakeHandler(this);
-        state = PacketState.HANDSHAKE;
-        active = true;
-    }
-
-    public ChannelHandlerContext getCtx() {
-        return ctx;
-    }
+    // We start off with a Handshake Handler since the first connection will be in the Handshake state.
+    private ProtocolHandler handler = new HandshakeHandler(this);
+    private PacketState state = PacketState.HANDSHAKE;
+    private boolean active = true;
 
     public SocketAddress getAddress() {
         return ctx.channel().remoteAddress();
-    }
-
-    public ProtocolHandler getHandler() {
-        return handler;
-    }
-
-    public Protocol getProtocol() {
-        return protocol;
-    }
-
-    public PacketState getState() {
-        return state;
     }
 
     public void setState(PacketState state) {
@@ -66,26 +50,6 @@ public class Connection implements pro.prysm.orion.api.net.Connection {
             case LOGIN -> handler = new LoginHandler(this);
             case PLAY -> handler = new PlayHandler(((LoginHandler) handler).getPlayer());
         }
-    }
-
-    public byte[] getSharedSecret() {
-        return sharedSecret;
-    }
-
-    public void setSharedSecret(byte[] sharedSecret) {
-        this.sharedSecret = sharedSecret;
-    }
-
-    public byte[] getVerifyToken() {
-        return verifyToken;
-    }
-
-    public void setVerifyToken(byte[] verifyToken) {
-        this.verifyToken = verifyToken;
-    }
-
-    public boolean isActive() {
-        return active;
     }
 
     public void enableEncryption(byte[] secret) throws GeneralSecurityException {

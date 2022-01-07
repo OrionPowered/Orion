@@ -8,7 +8,6 @@ import pro.prysm.orion.server.net.PacketByteBuf;
 import java.util.List;
 
 public class PacketLengthDecoder extends ByteToMessageDecoder {
-
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) {
         PacketByteBuf in = new PacketByteBuf(byteBuf);

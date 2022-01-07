@@ -1,32 +1,19 @@
 package pro.prysm.orion.server.protocol.incoming.play;
 
+import lombok.Getter;
+import pro.prysm.orion.api.protocol.incoming.play.PlayerPositionPacket;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
-public class PlayerPosition extends IncomingPacket {
+@Getter
+public class PlayerPosition extends IncomingPacket implements PlayerPositionPacket {
     private double x, y, z;
     private boolean onGround;
 
     public PlayerPosition(Connection connection) {
         super(connection);
         id = 0x11;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public double getZ() {
-        return z;
-    }
-
-    public boolean isOnGround() {
-        return onGround;
     }
 
     @Override

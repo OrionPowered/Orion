@@ -7,6 +7,6 @@ import pro.prysm.orion.api.protocol.incoming.IncomingPacket;
  * @since 12/21/21 / 1:14 AM
  * This file was created as a part of Orion
  */
-public interface LoginStart extends IncomingPacket {
+public interface LoginStartPacket extends IncomingPacket {
     String getUsername();
 }

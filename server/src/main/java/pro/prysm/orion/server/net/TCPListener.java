@@ -6,6 +6,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import lombok.Getter;
 import pro.prysm.orion.api.event.event.ServerReadyEvent;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.net.pipeline.Pipeline;
@@ -13,6 +14,7 @@ import pro.prysm.orion.server.protocol.Protocol;
 
 import java.net.InetSocketAddress;
 
+@Getter
 public class TCPListener {
     private final Pipeline pipeline;
     private final InetSocketAddress address;
@@ -53,17 +55,5 @@ public class TCPListener {
         } finally {
             group.shutdownGracefully().sync();
         }
-    }
-
-    public InetSocketAddress getAddress() {
-        return address;
-    }
-
-    public int getThreads() {
-        return threads;
-    }
-
-    public Pipeline getPipeline() {
-        return pipeline;
     }
 }

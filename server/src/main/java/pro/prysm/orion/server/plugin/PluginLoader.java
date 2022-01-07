@@ -18,7 +18,7 @@ public class PluginLoader {
     protected final List<JavaPlugin> plugins = new ArrayList<>();
     private final File pluginFolder = new File("./plugins");
     private final File moduleFolder = new File("./modules");
-    private PluginClassLoader pluginClassLoader;
+    private final PluginClassLoader pluginClassLoader = new PluginClassLoader(new URL[]{}, this.getClass().getClassLoader(), this);
 
     public PluginLoader() {
         loadPlugins();
@@ -26,7 +26,6 @@ public class PluginLoader {
 
     private void loadPlugins() {
         Orion.getLogger().log(Level.INFO, "Loading plugins!");
-        pluginClassLoader = new PluginClassLoader(new URL[]{}, this.getClass().getClassLoader(), this);
         if (!pluginFolder.exists()) pluginFolder.mkdir();
         if (!moduleFolder.exists()) moduleFolder.mkdir();
         List<File> jars = new ArrayList<>();

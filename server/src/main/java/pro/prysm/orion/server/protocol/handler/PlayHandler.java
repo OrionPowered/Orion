@@ -7,10 +7,8 @@ import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.data.Dimension;
 import pro.prysm.orion.server.entity.ImplPlayer;
 import pro.prysm.orion.server.protocol.incoming.login.TeleportConfirm;
-import pro.prysm.orion.server.protocol.incoming.play.PlayerPosition;
-import pro.prysm.orion.server.protocol.incoming.play.PlayerPositionAndRotation;
-import pro.prysm.orion.server.protocol.incoming.play.PlayerRotation;
-import pro.prysm.orion.server.protocol.incoming.play.PluginMessage;
+import pro.prysm.orion.server.protocol.incoming.play.*;
+import pro.prysm.orion.server.protocol.incoming.play.ClientSettings;
 import pro.prysm.orion.server.protocol.outgoing.play.ChunkData;
 import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;
 import pro.prysm.orion.server.protocol.outgoing.play.PlayerPositionAndLook;
@@ -55,8 +53,8 @@ public class PlayHandler extends ProtocolHandler {
     }
 
     @Override
-    public void handle(pro.prysm.orion.server.protocol.incoming.play.ClientSettings packet) {
-        player.setSettings(new ClientSettings(
+    public void handle(ClientSettings packet) {
+        player.setSettings(new pro.prysm.orion.api.data.ClientSettings(
                 packet.getLocale(),
                 packet.getViewDistance(),
                 (packet.getChatMode() == 0) ? ChatMode.ENABLED : (packet.getChatMode() == 1 ? ChatMode.COMMANDS_ONLY : ChatMode.HIDDEN),

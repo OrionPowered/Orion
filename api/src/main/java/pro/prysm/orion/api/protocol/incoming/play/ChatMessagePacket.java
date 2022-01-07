@@ -5,6 +5,6 @@ package pro.prysm.orion.api.protocol.incoming.play;
  * @since 1/3/22
  * A basic chat message from the client
  */
-public interface ChatMessage {
+public interface ChatMessagePacket {
     String getMessage();
 }

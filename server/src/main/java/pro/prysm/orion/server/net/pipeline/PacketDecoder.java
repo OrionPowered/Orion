@@ -3,6 +3,7 @@ package pro.prysm.orion.server.net.pipeline;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import lombok.RequiredArgsConstructor;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.event.events.IncomingPacketEvent;
@@ -12,12 +13,9 @@ import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class PacketDecoder extends ByteToMessageDecoder {
     private final ChannelHandler channelHandler;
-
-    public PacketDecoder(ChannelHandler channelHandler) {
-        this.channelHandler = channelHandler;
-    }
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> list) throws Exception {

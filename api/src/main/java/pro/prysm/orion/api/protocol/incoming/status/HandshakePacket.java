@@ -8,7 +8,7 @@ import pro.prysm.orion.api.protocol.incoming.IncomingPacket;
  * @since 12/21/21 / 1:12 AM
  * This file was created as a part of Orion
  */
-public interface Handshake extends IncomingPacket {
+public interface HandshakePacket extends IncomingPacket {
     int getProtocolVersion();
 
     String getHostname();

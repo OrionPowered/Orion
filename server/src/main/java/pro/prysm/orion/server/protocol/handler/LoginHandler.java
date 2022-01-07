@@ -1,5 +1,7 @@
 package pro.prysm.orion.server.protocol.handler;
 
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
@@ -13,16 +15,13 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.UUID;
 
+@Getter
 public class LoginHandler extends ProtocolHandler {
     private String username;
     private ImplPlayer player;
 
     public LoginHandler(Connection connection) {
         super(connection);
-    }
-
-    public ImplPlayer getPlayer() {
-        return player;
     }
 
     @Override

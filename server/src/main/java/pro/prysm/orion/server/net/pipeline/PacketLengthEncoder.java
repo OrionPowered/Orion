@@ -6,7 +6,6 @@ import io.netty.handler.codec.MessageToByteEncoder;
 import pro.prysm.orion.server.net.PacketByteBuf;
 
 public class PacketLengthEncoder extends MessageToByteEncoder<ByteBuf> {
-
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf in, ByteBuf out) {
         PacketByteBuf buf = new PacketByteBuf(out);

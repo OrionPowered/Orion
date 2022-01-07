@@ -24,15 +24,13 @@ import com.velocitypowered.natives.util.MoreByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class CipherEncoder extends MessageToMessageEncoder<ByteBuf> {
     private final VelocityCipher cipher;
-
-    public CipherEncoder(VelocityCipher cipher) {
-        this.cipher = cipher;
-    }
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> list) {

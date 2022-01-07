@@ -1,24 +1,18 @@
 package pro.prysm.orion.server.protocol.incoming.play;
 
+import lombok.Getter;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
-public class PluginMessage extends IncomingPacket {
+@Getter
+public class PluginMessage extends IncomingPacket implements pro.prysm.orion.api.protocol.incoming.play.PluginMessagePacket {
     private String channel;
     private byte[] data;
 
     public PluginMessage(Connection connection) {
         super(connection);
         id = 0x0A;
-    }
-
-    public String getChannel() {
-        return channel;
-    }
-
-    public byte[] getData() {
-        return data;
     }
 
     @Override

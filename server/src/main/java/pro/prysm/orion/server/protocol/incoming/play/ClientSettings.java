@@ -1,10 +1,13 @@
 package pro.prysm.orion.server.protocol.incoming.play;
 
+import lombok.Getter;
+import pro.prysm.orion.api.protocol.incoming.play.ClientSettingsPacket;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
-public class ClientSettings extends IncomingPacket {
+@Getter
+public class ClientSettings extends IncomingPacket implements ClientSettingsPacket {
     private String locale;
     private int viewDistance;
     private byte chatMode;
@@ -17,38 +20,6 @@ public class ClientSettings extends IncomingPacket {
     public ClientSettings(Connection connection) {
         super(connection);
         id = 0x05;
-    }
-
-    public String getLocale() {
-        return locale;
-    }
-
-    public int getViewDistance() {
-        return viewDistance;
-    }
-
-    public byte getChatMode() {
-        return chatMode;
-    }
-
-    public boolean isColoredChat() {
-        return coloredChat;
-    }
-
-    public short getSkinParts() {
-        return skinParts;
-    }
-
-    public int getMainHand() {
-        return mainHand;
-    }
-
-    public boolean isTextFiltering() {
-        return textFiltering;
-    }
-
-    public boolean isShowInList() {
-        return showInList;
     }
 
     @Override
