@@ -1,0 +1,81 @@
+package pro.prysm.orion.api.data;
+
+import lombok.Getter;
+
+@Getter
+public class Block {
+    private final int id;
+    private final String displayName;
+    private final String name;
+    private final double hardness;
+    private final double resistance;
+    private final long minStateId;
+    private final long maxStateId;
+    private final long defaultState;
+    // TODO: States Array
+    private final boolean diggable;
+    private final int emitLight;
+    private final String material;
+    private final int[] harvestTools;
+
+    // Begin auto generated code
+    %statics%
+    // End auto generated code
+
+    private Block(
+            int id,
+            String displayName,
+            String name,
+            double hardness,
+            double resistance,
+            long minStateId,
+            long maxStateId,
+            long defaultState,
+            boolean diggable,
+            int emitLight,
+            String material,
+            int[] harvestTools
+    ) {
+        this.id = id;
+        this.displayName = displayName;
+        this.name = name;
+        this.hardness = hardness;
+        this.resistance = resistance;
+        this.minStateId = minStateId;
+        this.maxStateId = maxStateId;
+        this.defaultState = defaultState;
+        this.diggable = diggable;
+        this.emitLight = emitLight;
+        this.material = material;
+        this.harvestTools = harvestTools;
+    }
+
+    private Block(
+                int id,
+                String displayName,
+                String name,
+                double hardness,
+                double resistance,
+                long minStateId,
+                long maxStateId,
+                long defaultState,
+                boolean diggable,
+                int emitLight,
+                String material
+        ) {
+            this(
+                id,
+                displayName,
+                name,
+                hardness,
+                resistance,
+                minStateId,
+                maxStateId,
+                defaultState,
+                diggable,
+                emitLight,
+                material,
+                new int[0]
+            );
+        }
+}

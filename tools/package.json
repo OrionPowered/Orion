@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "generate-materials": "ts-node generate_materials.ts"
+    "generate-blocks": "ts-node blocks/blocks.ts"
   },
   "author": "",
   "license": "UNLICENSED",
