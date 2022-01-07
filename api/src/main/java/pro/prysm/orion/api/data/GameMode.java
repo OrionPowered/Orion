@@ -1,5 +1,10 @@
 package pro.prysm.orion.api.data;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum GameMode {
     SURVIVAL(0),
     CREATIVE(1),
@@ -8,12 +13,4 @@ public enum GameMode {
     UNKNOWN(-1);
 
     private final int id;
-
-    GameMode(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
 }

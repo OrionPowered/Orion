@@ -1,10 +1,10 @@
 package pro.prysm.orion.server.plugin;
 
+import org.slf4j.LoggerFactory;
 import pro.prysm.orion.api.exception.InvalidPluginException;
 import pro.prysm.orion.api.plugin.JavaPlugin;
 import pro.prysm.orion.api.plugin.PluginDescription;
 import pro.prysm.orion.server.Orion;
-import pro.prysm.orion.server.util.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.jar.JarFile;
-import java.util.logging.Level;
 
 /**
  * @author 254n_m
@@ -53,7 +52,7 @@ public class PluginClassLoader extends URLClassLoader {
                 PluginDescription description = new PluginDescription(jarFile);
                 JavaPlugin plugin = (JavaPlugin) Class.forName(description.getMainClass(), false, this).getConstructors()[0].newInstance();
                 dataFolderF.set(plugin, new File("./plugins", description.getName()));
-                loggerF.set(plugin, new Logger(description.getName(), Level.ALL));
+                loggerF.set(plugin, LoggerFactory.getLogger(description.getName()));
                 descriptionF.set(plugin, description);
                 eventBusF.set(plugin, Orion.getEventBus());
                 loader.plugins.add(plugin);

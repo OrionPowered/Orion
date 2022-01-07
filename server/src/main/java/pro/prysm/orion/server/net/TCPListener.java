@@ -47,7 +47,7 @@ public class TCPListener {
             ChannelFuture channelFuture = bootstrap.bind().sync();
             channelFuture.addListener((ChannelFutureListener) future -> {
                 if (channelFuture.isSuccess()) Orion.getEventBus().post(new ServerReadyEvent());
-                else Orion.getLogger().severe(String.format("Failed to listen on %s", address)); // TODO: shutdown here
+                else Orion.getLogger().error(String.format("Failed to listen on %s", address)); // TODO: shutdown here
             });
             channelFuture.channel().closeFuture().sync();
         } catch (Exception e) {

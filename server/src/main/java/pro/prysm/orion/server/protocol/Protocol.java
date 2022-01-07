@@ -53,7 +53,7 @@ public class Protocol {
         defaultSLPResponse.setServerName(config.getString("serverName"));
         defaultSLPResponse.setMaxPlayers(maxPlayers);
         sessionServer = config.getStringOrDefault("session-server", "https://sessionserver.mojang.com");
-        Orion.getLogger().finer(String.format("Using session server %s", sessionServer));
+        Orion.getLogger().debug(String.format("Using session server %s", sessionServer));
     }
 
     private KeyPair genKeyPair() {
@@ -63,7 +63,7 @@ public class Protocol {
             gen.initialize(1024);
             keyPair = gen.generateKeyPair();
         } catch (NoSuchAlgorithmException e) {
-            Orion.getLogger().warning("Error generating key pair for encryption:");
+            Orion.getLogger().warn("Error generating key pair for encryption:");
             e.printStackTrace();
         }
         return keyPair;
@@ -83,7 +83,7 @@ public class Protocol {
             md.update(keyPair.getPublic().getEncoded());
             id = new BigInteger(md.digest()).toString(16);
         } catch (NoSuchAlgorithmException e) {
-            Orion.getLogger().severe("Failed to create server ID:");
+            Orion.getLogger().error("Failed to create server ID:");
             e.printStackTrace();
             // TODO: shutdown here
         }
@@ -126,7 +126,7 @@ public class Protocol {
             HttpResponse<String> response = future.get();
             profile = new GameProfile(JsonParser.parseString(response.body()).getAsJsonObject());
         } catch (InterruptedException | ExecutionException e) {
-            Orion.getLogger().severe("Got error when attempting to authenticate session");
+            Orion.getLogger().error("Got error when attempting to authenticate session");
             // TODO: Kick player
             e.printStackTrace();
         }

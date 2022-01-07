@@ -1,5 +1,8 @@
 package pro.prysm.orion.server;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import org.slf4j.LoggerFactory;
 import pro.prysm.orion.api.event.EventHandler;
 import pro.prysm.orion.api.event.Listener;
 import pro.prysm.orion.api.event.event.ReloadEvent;
@@ -11,22 +14,18 @@ import pro.prysm.orion.server.command.commands.ReloadCommand;
 import pro.prysm.orion.server.command.commands.SendPacketCommand;
 import pro.prysm.orion.server.data.WorldManager;
 import pro.prysm.orion.server.event.EventBus;
-import pro.prysm.orion.server.event.events.OutgoingPacketEvent;
 import pro.prysm.orion.server.net.TCPListener;
 import pro.prysm.orion.server.plugin.PluginLoader;
 import pro.prysm.orion.server.protocol.Protocol;
-import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
-import pro.prysm.orion.server.util.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.logging.Level;
 
 public class Orion implements Listener, pro.prysm.orion.api.Orion {
 
     // STATIC - Logger and EventBus are the only objects that should be here.
-    private static final Logger logger = new Logger("Orion", Level.INFO);
+    private static final Logger logger = (Logger) LoggerFactory.getLogger("Orion");
     private static final EventBus EVENT_BUS = new pro.prysm.orion.server.event.EventBus();
 
     public static void main(String[] args)  {
@@ -46,7 +45,9 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         logger.info("Starting Orion...");
         loadConfig();
 
-        logger.setLevel(Level.parse(config.getString("log-level")));
+        Logger root = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+        root.setLevel(Level.valueOf(config.getString("log-level")));
+
         worldManager = new WorldManager(config.getString("world"));
         protocol = new Protocol(worldManager, config);
         commandHandler = new CommandHandler();
@@ -79,9 +80,8 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         try {
             config = new Config(getClass(), new File("settings.json"));
         } catch (IOException e) {
-            logger.warning("Failed to load settings.json!");
+            logger.warn("Failed to load settings.json!");
             e.printStackTrace();
-
         }
     }
 

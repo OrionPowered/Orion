@@ -43,7 +43,7 @@ public class LoginHandler extends ProtocolHandler {
         // If server isn't in online mode disconnect the player and stop from handling further
         if (!protocol.isOnlineMode()) {
             // Finer instead of warning?
-            Orion.getLogger().warning(String.format("%s sent an encryption response when no request was sent!", username));
+            Orion.getLogger().warn(String.format("%s sent an encryption response when no request was sent!", username));
             player.getConnection().disconnect("Invalid encryption packet");
             return;
         }
@@ -54,10 +54,10 @@ public class LoginHandler extends ProtocolHandler {
             sharedSecret = protocol.decryptRSA(packet.getSharedSecret());
             connection.setSharedSecret(sharedSecret);
             connection.enableEncryption(sharedSecret);
-            Orion.getLogger().finer(String.format("Started encryption for %s", connection.getAddress()));
+            Orion.getLogger().debug(String.format("Started encryption for %s", connection.getAddress()));
         } catch (GeneralSecurityException e) {
             connection.disconnect("Failed to load encryption.");
-            Orion.getLogger().warning(String.format("Failed to enable encryption for %s", connection.getAddress()));
+            Orion.getLogger().warn(String.format("Failed to enable encryption for %s", connection.getAddress()));
             e.printStackTrace();
         }
 

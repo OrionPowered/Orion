@@ -1,5 +1,8 @@
 package pro.prysm.orion.server.util;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public enum LogColor {
     RESET("\033[0m"),
     BLACK("\033[0;30m"),
@@ -62,10 +65,6 @@ public enum LogColor {
     WHITE_BACKGROUND_BRIGHT("\033[0;107m");
 
     private final String code;
-
-    LogColor(String code) {
-        this.code = code;
-    }
 
     public static String translateAltCodes(char altColorChar, String textToTranslate) {
         char[] b = textToTranslate.toCharArray();

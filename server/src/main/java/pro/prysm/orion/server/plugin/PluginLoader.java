@@ -25,7 +25,7 @@ public class PluginLoader {
     }
 
     private void loadPlugins() {
-        Orion.getLogger().log(Level.INFO, "Loading plugins!");
+        Orion.getLogger().info( "Loading plugins!");
         if (!pluginFolder.exists()) pluginFolder.mkdir();
         if (!moduleFolder.exists()) moduleFolder.mkdir();
         List<File> jars = new ArrayList<>();
@@ -33,7 +33,7 @@ public class PluginLoader {
             if (file.isDirectory()) continue;
             if (getFileExtension(file).equalsIgnoreCase(".jar")) {
                 jars.add(file);
-            } else Orion.getLogger().warning("File " + file.getName() + " in the plugins folder is not a JarFile");
+            } else Orion.getLogger().warn("File " + file.getName() + " in the plugins folder is not a JarFile");
         }
         pluginClassLoader.loadPlugin(jars.toArray(File[]::new));
     }

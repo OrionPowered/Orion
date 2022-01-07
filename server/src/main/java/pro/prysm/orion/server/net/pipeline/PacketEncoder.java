@@ -10,7 +10,7 @@ import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 public class PacketEncoder extends MessageToByteEncoder<OutgoingPacket> {
     @Override
     protected void encode(ChannelHandlerContext ctx, OutgoingPacket packet, ByteBuf byteBuf) {
-        Orion.getLogger().finer(String.format("Sending packet %s to %s", packet.getClass().getSimpleName(), ctx.channel().remoteAddress()));
+        Orion.getLogger().debug(String.format("Sending packet %s to %s", packet.getClass().getSimpleName(), ctx.channel().remoteAddress()));
         PacketByteBuf buf = new PacketByteBuf(byteBuf);
         packet.writeId(buf);
         packet.write(buf);

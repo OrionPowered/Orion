@@ -30,7 +30,7 @@ public class CommandHandler {
                 Command command = commands.get(name);
                 command.execute(args, name);
             } else {
-                Orion.getLogger().log(Level.WARNING, "Unknown command. Type \"/help\" for help.");
+                Orion.getLogger().warn("Unknown command. Type \"/help\" for help.");
             }
         }
     }

@@ -1,5 +1,7 @@
 package pro.prysm.orion.api.plugin;
 
+import lombok.Getter;
+import org.slf4j.Logger;
 import pro.prysm.orion.api.event.EventBus;
 import pro.prysm.orion.api.exception.ResourceNotFoundException;
 import pro.prysm.orion.api.json.Config;
@@ -7,13 +9,13 @@ import pro.prysm.orion.api.json.Config;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.logging.Logger;
 
 /**
  * @author 254n_m
  * @since 12/20/21 / 9:25 PM
  * This file was created as a part of Orion
  */
+@Getter
 public abstract class JavaPlugin {
     private Config config;
     private File dataFolder;
@@ -43,25 +45,5 @@ public abstract class JavaPlugin {
         } catch (Throwable e) {
             e.printStackTrace();
         }
-    }
-
-    public PluginDescription getDescription() {
-        return description;
-    }
-
-    public File getDataFolder() {
-        return dataFolder;
-    }
-
-    public Config getConfig() {
-        return config;
-    }
-
-    public Logger getLogger() {
-        return logger;
-    }
-
-    public EventBus getEventBus() {
-        return eventBus;
     }
 }
