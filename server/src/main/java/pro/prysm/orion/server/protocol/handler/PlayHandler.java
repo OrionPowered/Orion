@@ -13,11 +13,16 @@ import pro.prysm.orion.server.protocol.incoming.play.TeleportConfirm;
 import pro.prysm.orion.server.protocol.incoming.play.*;
 import pro.prysm.orion.server.protocol.outgoing.play.ChunkData;
 import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;
+import pro.prysm.orion.server.protocol.outgoing.play.KeepAliveOut;
 import pro.prysm.orion.server.protocol.outgoing.play.PlayerPositionAndLook;
+import pro.prysm.orion.server.scheduler.OrionScheduler;
+import pro.prysm.orion.server.scheduler.OrionTask;
 
 public class PlayHandler extends ProtocolHandler {
     private final ImplPlayer player;
     private final int teleportId = 0; // TODO: Implement checking of teleport ids
+    private OrionTask keepAliveTask;
+    private long keepAliveId;
 
     public PlayHandler(ImplPlayer player) {
         super(player.getConnection());
@@ -52,6 +57,29 @@ public class PlayHandler extends ProtocolHandler {
 
         // Player has joined, send first chunk
         connection.sendPacket(new ChunkData(connection.getProtocol().getWorldManager().getChunk(player.getLocation())));
+        startKeepAlive();
+    }
+
+    private void startKeepAlive() {
+        keepAliveTask = Orion.getScheduler().scheduleAtFixedRate(new OrionTask() {
+            @Override
+            public void run() {
+                KeepAliveOut keepAlive = new KeepAliveOut();
+                connection.sendPacket(keepAlive);
+                keepAliveId = keepAlive.getId();
+                Orion.getLogger().debug("Send keepalive to {} ({})", connection.getAddress(), player.getProfile().getUsername());
+            }
+        }, 0, (30 * OrionScheduler.TPS)); // Every 30 seconds
+    }
+
+    @Override
+    public void onDisconnect() {
+        keepAliveTask.cancel();
+    }
+
+    @Override
+    public void handle(KeepAliveIn packet) {
+        if (keepAliveId != packet.getKeepAliveId()) connection.disconnect("<red>Invalid Keep Alive ID</red>");
     }
 
     @Override

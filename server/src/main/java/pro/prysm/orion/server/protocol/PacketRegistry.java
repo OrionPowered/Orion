@@ -34,6 +34,7 @@ public class PacketRegistry {
         put(0x11, PlayerPosition.class);
         put(0x12, PlayerPositionAndRotation.class);
         put(0x13, PlayerRotation.class);
+        put(0x0F, KeepAliveIn.class);
     }};
 
     public PacketRegistry() {
