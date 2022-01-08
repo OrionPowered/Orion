@@ -58,9 +58,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
                 config.getInt("threads")
         );
 
-        commandHandler.registerCommand(new HelpCommand());
-        commandHandler.registerCommand(new ReloadCommand());
-        commandHandler.registerCommand(new SendPacketCommand(listener.getPipeline().getChannelHandler()));
+        registerCommands();
 
         try {
             listener.listen(); // Start listening, any code below this will NOT execute (blocking)
@@ -89,6 +87,12 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
             logger.warn("Failed to load settings.json!");
             e.printStackTrace();
         }
+    }
+
+    private void registerCommands() {
+        commandHandler.registerCommand(new HelpCommand());
+        commandHandler.registerCommand(new ReloadCommand());
+        commandHandler.registerCommand(new SendPacketCommand(listener.getPipeline().getChannelHandler()));
     }
 
     @EventHandler
