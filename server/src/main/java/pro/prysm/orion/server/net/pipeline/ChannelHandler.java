@@ -22,7 +22,6 @@ public class ChannelHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) {
         ctx.channel().config().setOption(ChannelOption.TCP_NODELAY, true);
-        System.out.println(protocol);
         connections.put(ctx.channel().remoteAddress().hashCode(), new Connection(ctx, protocol));
     }
 
