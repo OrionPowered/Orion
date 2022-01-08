@@ -2,7 +2,6 @@ package pro.prysm.orion.api.net;
 
 import io.netty.channel.ChannelHandlerContext;
 import pro.prysm.orion.api.protocol.PacketState;
-import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
 
 import java.net.SocketAddress;
 
@@ -21,6 +20,4 @@ public interface Connection {
     boolean isActive();
 
     void disconnect(String reason);
-
-    void sendPacket(OutgoingPacket packet);
 }

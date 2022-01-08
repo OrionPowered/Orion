@@ -6,7 +6,7 @@ import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 @Getter
-public class PluginMessage extends IncomingPacket implements pro.prysm.orion.api.protocol.incoming.play.PluginMessagePacket {
+public class PluginMessage extends IncomingPacket {
     private String channel;
     private byte[] data;
 

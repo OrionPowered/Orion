@@ -1,13 +1,12 @@
 package pro.prysm.orion.server.protocol.incoming.play;
 
 import lombok.Getter;
-import pro.prysm.orion.api.protocol.incoming.play.ClientSettingsPacket;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 @Getter
-public class ClientSettings extends IncomingPacket implements ClientSettingsPacket {
+public class ClientSettings extends IncomingPacket {
     private String locale;
     private int viewDistance;
     private byte chatMode;

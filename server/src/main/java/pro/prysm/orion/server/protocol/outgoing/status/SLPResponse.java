@@ -8,7 +8,7 @@ import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
 @Getter
 @Setter
-public class SLPResponse extends OutgoingPacket implements pro.prysm.orion.api.protocol.outgoing.status.SLPResponse {
+public class SLPResponse extends OutgoingPacket {
     private ServerListResponse response;
 
     public SLPResponse() {

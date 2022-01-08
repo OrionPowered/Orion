@@ -1,13 +1,12 @@
 package pro.prysm.orion.server.protocol.incoming.login;
 
 import lombok.Getter;
-import pro.prysm.orion.api.protocol.incoming.login.LoginStartPacket;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 @Getter
-public class LoginStart extends IncomingPacket implements LoginStartPacket {
+public class LoginStart extends IncomingPacket {
     private String username;
 
     public LoginStart(Connection connection) {

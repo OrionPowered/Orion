@@ -3,7 +3,7 @@ package pro.prysm.orion.server.protocol.outgoing.login;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
-public class EncryptionRequest extends OutgoingPacket implements pro.prysm.orion.api.protocol.outgoing.login.EncryptionRequest {
+public class EncryptionRequest extends OutgoingPacket {
     private final byte[] publicKey;
     private final byte[] verifyToken;
 

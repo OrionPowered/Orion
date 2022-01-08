@@ -7,7 +7,7 @@ import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 import java.util.UUID;
 
 @Getter
-public class LoginSuccess extends OutgoingPacket implements pro.prysm.orion.api.protocol.outgoing.login.LoginSuccess {
+public class LoginSuccess extends OutgoingPacket {
     private final String username;
     private final UUID uniqueId;
 
