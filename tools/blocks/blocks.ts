@@ -22,7 +22,7 @@ data.blocksArray.forEach(block => {
         return `, new int[]{${tools}}`
     }
 
-    let listItem = `new Block(${block.id}, "${block.displayName}", "${block.name}", ${block.hardness ? block.hardness.toString() : '0.0'}, ${block.resistance ? block.resistance.toString() : '0.0'}, ${block.minStateId}, ${block.maxStateId}, ${block.defaultState}, ${block.diggable}, ${block.emitLight}, "${block.material}", ${harvestTools})\n\t\t`
+    let listItem = `new Block(${block.id}, "${block.displayName}", "${block.name}", ${block.hardness ? block.hardness.toString() : '0.0'}, ${block.resistance ? block.resistance.toString() : '0.0'}, ${block.minStateId}, ${block.maxStateId}, ${block.defaultState}, ${block.diggable}, ${block.emitLight}, "${block.material}", ${harvestTools}),\n\t\t`
 
     listItems += listItem
     staticVars += staticVar
