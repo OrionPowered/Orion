@@ -1,6 +1,6 @@
 package pro.prysm.orion.api.protocol.outgoing.status;
 
-import pro.prysm.orion.api.protocol.ServerListResponse;
+import pro.prysm.orion.api.protocol.status.ServerListResponse;
 import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
 
 /**

@@ -2,7 +2,7 @@ package pro.prysm.orion.server.protocol.outgoing.status;
 
 import lombok.Getter;
 import lombok.Setter;
-import pro.prysm.orion.api.protocol.ServerListResponse;
+import pro.prysm.orion.api.protocol.status.ServerListResponse;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 

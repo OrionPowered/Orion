@@ -7,7 +7,7 @@ import pro.prysm.orion.api.chat.Message;
 import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.protocol.PacketState;
-import pro.prysm.orion.api.protocol.ServerListResponse;
+import pro.prysm.orion.api.protocol.status.ServerListResponse;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.data.LevelManager;
 import pro.prysm.orion.server.protocol.outgoing.login.EncryptionRequest;
@@ -55,10 +55,10 @@ public class Protocol {
         onlineMode = config.getBoolean("online-mode");
         maxPlayers = config.getInt("max-players");
 
-        slpData.setProtocolVersion(PROTOCOL_NUMBER);
+        slpData.getVersion().setProtocol(PROTOCOL_NUMBER);
+        slpData.getVersion().setName(config.getString("serverName"));
         slpData.setDescription(new Message(config.getString("motd")).toComponent());
-        slpData.setServerName(config.getString("serverName"));
-        slpData.setMaxPlayers(maxPlayers);
+        slpData.getPlayers().setMax(maxPlayers);
 
         sessionServer = config.getStringOrDefault("session-server", "https://sessionserver.mojang.com");
         Orion.getLogger().debug("Using session server {}", sessionServer);
@@ -101,10 +101,10 @@ public class Protocol {
     public SLPResponse generateSLP() {
         ServerListResponse slp = new ServerListResponse();
 
-        slp.setProtocolVersion(slpData.getProtocolVersion());
-        slp.setServerName(slpData.getServerName());
-        slp.setMaxPlayers(slpData.getMaxPlayers());
-        slpData.setOnlinePlayers(
+        slp.getVersion().setProtocol(slpData.getVersion().getProtocol());
+        slp.getVersion().setName(slpData.getVersion().getName());
+        slp.getPlayers().setMax(slpData.getPlayers().getMax());
+        slpData.getPlayers().setOnline(
                 (int) orion.getListener().getPipeline().getChannelHandler()
                         .getConnections().values().stream().filter(
                                 (c) -> c.getState() == PacketState.PLAY).count());
