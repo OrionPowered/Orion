@@ -4,8 +4,8 @@ public interface Event {
     State getState();
 
     enum State {
-        Single,
-        Pre,
-        Post
+        SINGLE,
+        PRE,
+        POST
     }
 }

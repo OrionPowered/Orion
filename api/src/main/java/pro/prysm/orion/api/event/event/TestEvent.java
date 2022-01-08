@@ -16,6 +16,6 @@ public class TestEvent implements Event, Cancellable {
 
     @Override
     public State getState() {
-        return State.Single;
+        return State.SINGLE;
     }
 }
