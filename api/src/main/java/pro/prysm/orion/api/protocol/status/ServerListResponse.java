@@ -6,12 +6,20 @@ import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Base64;
+
 @Data
 public class ServerListResponse {
     private VersionResponse version = new VersionResponse();
     private PlayersResponse players = new PlayersResponse();
     private Component description;
     private String favicon;
+
+    public static String generateFavicon(InputStream favicon) throws IOException {
+        return "data:image/png;base64," + Base64.getEncoder().encodeToString(favicon.readAllBytes());
+    }
 
     public String toJsonString() {
         GsonBuilder gsonBuilder = new GsonBuilder();
