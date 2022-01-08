@@ -11,12 +11,10 @@ import pro.prysm.orion.server.data.Dimension;
 import pro.prysm.orion.server.entity.ImplPlayer;
 import pro.prysm.orion.server.protocol.incoming.play.TeleportConfirm;
 import pro.prysm.orion.server.protocol.incoming.play.*;
-import pro.prysm.orion.server.protocol.outgoing.play.ChunkData;
-import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;
-import pro.prysm.orion.server.protocol.outgoing.play.KeepAliveOut;
-import pro.prysm.orion.server.protocol.outgoing.play.PlayerPositionAndLook;
+import pro.prysm.orion.server.protocol.outgoing.play.*;
 import pro.prysm.orion.server.scheduler.OrionScheduler;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public class PlayHandler extends ProtocolHandler {
@@ -58,6 +56,9 @@ public class PlayHandler extends ProtocolHandler {
 
         connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
 
+        // Send server brand
+        connection.sendPacket(new PluginMessageOut("minecraft:brand", connection.getProtocol().getSlpData().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
+
         // Player has joined, send first chunk
         connection.sendPacket(new ChunkData(connection.getProtocol().getLevelManager().getChunk(player.getLocation())));
         startKeepAlive();
@@ -98,7 +99,7 @@ public class PlayHandler extends ProtocolHandler {
     }
 
     @Override
-    public void handle(PluginMessage packet) {
+    public void handle(PluginMessageIn packet) {
         if (packet.getChannel().equals("minecraft:brand")) player.setBrand(new String(packet.getData()));
         else System.out.println(packet.getChannel());
     }
