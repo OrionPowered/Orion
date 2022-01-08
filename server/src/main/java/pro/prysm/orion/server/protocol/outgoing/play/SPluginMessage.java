@@ -27,7 +27,7 @@ public class SPluginMessage extends OutgoingPacket {
     @Override
     public void write(PacketByteBuf buf) {
         buf.writeString(channel);
-        if(brand == null) buf.writeBytes(data);
+        if (brand == null) buf.writeBytes(data);
         else buf.writeString(brand);
     }
 }

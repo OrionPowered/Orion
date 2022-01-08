@@ -13,18 +13,21 @@ import java.net.SocketAddress;
 public interface Connection {
     /**
      * Retrieves the channel handler context.
+     *
      * @return The contet
      */
     ChannelHandlerContext getCtx();
 
     /**
      * Retrieves the address which this connection is linked to.
+     *
      * @return The address
      */
     SocketAddress getAddress();
 
     /**
      * Retrieves the state that this connection is in.
+     *
      * @return The state
      */
     PacketState getState();
@@ -33,6 +36,7 @@ public interface Connection {
 
     /**
      * Disconnects this connection from the server.
+     *
      * @param reason The reason for disconnecting
      */
     void disconnect(String reason);

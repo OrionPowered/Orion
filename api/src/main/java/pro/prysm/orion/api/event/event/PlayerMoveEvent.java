@@ -1,7 +1,6 @@
 package pro.prysm.orion.api.event.event;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.entity.Player;
@@ -24,6 +23,6 @@ public class PlayerMoveEvent implements Event, Cancellable {
 
     @Override
     public State getState() {
-        return State.Single;
+        return State.SINGLE;
     }
 }

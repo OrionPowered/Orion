@@ -154,6 +154,7 @@ public class Biome {
     private final String displayName;
     private final int color;
     private final double rainfall;
+
     public Biome(
             int id,
             String name,
