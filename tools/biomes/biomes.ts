@@ -10,22 +10,9 @@ let staticVars: string = ''
 let listItems: string = ''
 
 data.biomesArray.forEach(biome => {
-  let staticVar = 'public static final Biome '
-  staticVar += biome.name.toUpperCase()
-  staticVar += ' = getBiome(' + biome.id + ');\n\t'
+  let staticVar = `public static final Biome ${biome.name.toUpperCase()} = getBiome(${biome.id});\n\t`
 
-  let listItem = 'new Biome('
-  listItem += biome.id + ', '
-  listItem += '"' + biome.name + '", '
-  listItem += '"' + biome.category + '", '
-  listItem += biome.temperature + ', '
-  listItem += '"' + biome.precipitation + '", '
-  listItem += biome.depth + ', '
-  listItem += '"' + biome.dimension + '", '
-  listItem += '"' + biome.displayName + '", '
-  listItem += biome.color + ', '
-  listItem += biome.rainfall + '),'
-  listItem += '\n\t\t'
+  let listItem = `new Biome(${biome.id}, "${biome.name}", "${biome.category}", ${biome.temperature}, "${biome.precipitation}", ${biome.depth}, "${biome.dimension}", "${biome.displayName}", ${biome.color}, ${biome.rainfall}),\n\t\t`
 
   listItems += listItem
   staticVars += staticVar

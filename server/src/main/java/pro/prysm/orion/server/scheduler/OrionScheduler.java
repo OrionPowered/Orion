@@ -1,33 +1,39 @@
 package pro.prysm.orion.server.scheduler;
 
-import java.util.Timer;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.*;
 
 // This will probably be implemented much differently later. I needed something for now to start ticking
 // - Alex
-public class OrionScheduler extends Thread {
+public class OrionScheduler {
     public static final int TPS = 20;
-    private final Timer timer;
-
-    public OrionScheduler() {
-        this.timer = new Timer();
-    }
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private final Map<UUID, ScheduledFuture<?>> map = new ConcurrentHashMap<>();
 
     private long ticksToMs(long ticks) {
         return (long) (((double) ticks/TPS) * 1000);
     }
 
-    public OrionTask schedule(OrionTask task, long delay) {
-        timer.schedule(task, ticksToMs(delay));
-        return task;
+    public UUID schedule(Runnable task, long delay) {
+        UUID id = UUID.randomUUID();
+        map.put(id, scheduler.schedule(task, ticksToMs(delay), TimeUnit.MILLISECONDS));
+        return id;
     }
 
-    public OrionTask schedule(OrionTask task, long delay, long period) {
-        timer.schedule(task, ticksToMs(delay), ticksToMs(period));
-        return task;
+    public UUID schedule(Runnable task, long delay, long period) {
+        UUID id = UUID.randomUUID();
+        map.put(id, scheduler.scheduleWithFixedDelay(task, ticksToMs(delay), ticksToMs(period), TimeUnit.MILLISECONDS));
+        return id;
     }
 
-    public OrionTask scheduleAtFixedRate(OrionTask task, long delay, long period) {
-        timer.scheduleAtFixedRate(task, ticksToMs(delay), ticksToMs(period));
-        return task;
+    public UUID scheduleAtFixedRate(Runnable task, long delay, long period) {
+        UUID id = UUID.randomUUID();
+        map.put(id, scheduler.scheduleAtFixedRate(task, ticksToMs(delay), ticksToMs(period), TimeUnit.MILLISECONDS));
+        return id;
+    }
+
+    public void cancel(UUID id) {
+        map.remove(id).cancel(true);
     }
 }
