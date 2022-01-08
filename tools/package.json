@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "generate-blocks": "ts-node blocks/blocks.ts"
+    "generate-blocks": "ts-node blocks/blocks.ts",
+    "generate-biomes": "ts-node biomes/biomes.ts"
   },
   "author": "",
   "license": "UNLICENSED",
