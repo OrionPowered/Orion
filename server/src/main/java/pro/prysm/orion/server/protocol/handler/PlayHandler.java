@@ -13,6 +13,7 @@ import pro.prysm.orion.server.protocol.incoming.play.TeleportConfirm;
 import pro.prysm.orion.server.protocol.incoming.play.*;
 import pro.prysm.orion.server.protocol.outgoing.play.*;
 import pro.prysm.orion.server.scheduler.OrionScheduler;
+import pro.prysm.orion.server.util.ByteUtil;
 
 import java.util.UUID;
 
@@ -98,7 +99,7 @@ public class PlayHandler extends ProtocolHandler {
 
     @Override
     public void handle(CPluginMessage packet) {
-        if (packet.getChannel().equals("minecraft:brand")) player.setBrand(new String(packet.getData()));
+        if (packet.getChannel().equals("minecraft:brand")) player.setBrand(ByteUtil.readString(packet.getData()));
         else System.out.println(packet.getChannel());
     }
 
