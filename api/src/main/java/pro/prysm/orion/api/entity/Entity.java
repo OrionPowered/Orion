@@ -1,12 +1,13 @@
 package pro.prysm.orion.api.entity;
 
+import net.kyori.adventure.identity.Identity;
 import pro.prysm.orion.api.data.Location;
 
 /**
  * An interface to represent an entity.
  * @author Jay
  */
-public interface Entity {
+public interface Entity extends Identity {
     /**
      * Retrieves the entity id of this entity,
      * @return This entity's entity id

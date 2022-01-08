@@ -8,7 +8,7 @@ import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.event.event.PlayerMoveEvent;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.data.Dimension;
-import pro.prysm.orion.server.entity.ImplPlayer;
+import pro.prysm.orion.server.entity.player.ImplPlayer;
 import pro.prysm.orion.server.protocol.incoming.play.TeleportConfirm;
 import pro.prysm.orion.server.protocol.incoming.play.*;
 import pro.prysm.orion.server.protocol.outgoing.play.*;
@@ -35,11 +35,13 @@ public class PlayHandler extends ProtocolHandler {
         if(!level.hasSavedPlayerData(player.getProfile().getUniqueId())) player.savePlayerData(level);
         player.readPlayerData(level.getPlayerData(player.getProfile().getUniqueId()));
 
+        player.setGameMode(GameMode.SPECTATOR);
+
         Dimension dimension = new Dimension();
         JoinGame packet = new JoinGame();
-        packet.setEntityId(-1);                             // TODO: Implement entity ids
-        packet.setGamemode(GameMode.SPECTATOR);             // TODO: Implement Gamemode
-        packet.setPreviousGamemode(GameMode.SPECTATOR);
+        packet.setEntityId(player.getEntityId());
+        packet.setGamemode(player.getGameMode());             // TODO: Implement Gamemode
+        packet.setPreviousGamemode(player.getGameMode());
         packet.setWorlds(new String[]{"world"});            // TODO: Implement worlds
         packet.setDimensionCodec(dimension.getCodec());
         packet.setDimension(dimension.getType());

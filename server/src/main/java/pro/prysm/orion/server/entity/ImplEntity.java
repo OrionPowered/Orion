@@ -1,10 +1,14 @@
 package pro.prysm.orion.server.entity;
 
 import lombok.*;
+import org.jetbrains.annotations.NotNull;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.entity.Entity;
 
+import java.util.UUID;
+
 @Getter
+@RequiredArgsConstructor
 @ToString
 @EqualsAndHashCode
 public class ImplEntity implements Entity {
@@ -12,13 +16,16 @@ public class ImplEntity implements Entity {
     private static int nextEntityId = 0;
 
     /** The entity id of this entity */
-    private int entityId;
+    protected final int entityId;
+    /** The UUID of this entity */
+    private final UUID uuid;
     /** The {@link Location} of this entity */
     @Setter
-    private Location location;
+    protected Location location;
 
-    public ImplEntity() {
-        this.entityId = useEntityId();
+    @Override
+    public java.util.@NotNull UUID uuid() {
+        return uuid;
     }
 
     /**

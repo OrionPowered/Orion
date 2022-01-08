@@ -1,4 +1,4 @@
-package pro.prysm.orion.server.entity;
+package pro.prysm.orion.server.entity.player;
 
 import com.alexsobiek.anvil.Level;
 import lombok.Getter;
@@ -15,23 +15,33 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.TitlePart;
 import org.jetbrains.annotations.NotNull;
 import pro.prysm.orion.api.data.ClientSettings;
+import pro.prysm.orion.api.data.GameMode;
 import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.entity.Player;
+import pro.prysm.orion.server.entity.ImplEntity;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.util.TagUtil;
+
+import java.util.UUID;
 
 // TODO: Fully implement methods from Audience
 // TODO: Write JavaDoc comments
 @Getter
 @Setter
-@RequiredArgsConstructor
 public class ImplPlayer extends ImplEntity implements Player {
     private final Connection connection;
     private final GameProfile profile;
     private ClientSettings settings;
     private Location location;
+    private GameMode gameMode;
     private String brand;
+
+    public ImplPlayer(Connection connection, GameProfile profile, int entityId) {
+        super(entityId, profile.getUniqueId()); // Should I be using profile's uuid for this?
+        this.connection = connection;
+        this.profile = profile;
+    }
 
     public void readPlayerData(CompoundBinaryTag nbt) {
         // Parse Location
