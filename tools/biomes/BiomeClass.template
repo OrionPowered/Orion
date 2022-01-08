@@ -1,0 +1,89 @@
+package pro.prysm.orion.api.data;
+
+import lombok.Getter;
+import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+@Getter
+@ToString
+public class Biome {
+
+    private static final List<Biome> REGISTRY = new ArrayList<>(Arrays.asList(
+        // Begin auto generated code
+        %list_items%
+        // End auto generated code
+    ));
+
+    // Begin auto generated code
+    %statics%
+    // End auto generated code
+
+    /**
+     * Gets a biome by its name
+     * @param name Biome Name
+     * @return Biome
+     */
+    public static Biome getBiome(String name) {
+        return REGISTRY.stream().filter(biome -> biome.getName().equalsIgnoreCase(name)).collect(toSingleton());
+    }
+
+    /**
+     * Gets a biome by its ID
+     * @param id Biome ID
+     * @return Biome
+     */
+    public static Biome getBiome(int id) {
+        return REGISTRY.stream().filter(biome -> biome.getId() == id).collect(toSingleton());
+    }
+
+    public static <T> Collector<T, ?, T> toSingleton() {
+        return Collectors.collectingAndThen(
+                Collectors.toList(),
+                list -> {
+                    if (list.size() == 0) throw new NullPointerException();
+                    else if (list.size() > 1) throw new IllegalStateException();
+                    else return list.get(0);
+                }
+        );
+    }
+
+private final int id;
+    private final String name;
+    private final String category;
+    private final double temperature;
+    private final String precipitation;
+    private final double depth;
+    private final String dimension;
+    private final String displayName;
+    private final int color;
+    private final double rainfall;
+
+    public Biome(
+            int id,
+            String name,
+            String category,
+            double temperature,
+            String precipitation,
+            double depth,
+            String dimension,
+            String displayName,
+            int color,
+            double rainfall
+    ) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.temperature = temperature;
+        this.precipitation = precipitation;
+        this.depth = depth;
+        this.dimension = dimension;
+        this.displayName = displayName;
+        this.color = color;
+        this.rainfall = rainfall;
+    }
+}

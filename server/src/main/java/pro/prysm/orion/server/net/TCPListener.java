@@ -27,7 +27,7 @@ public class TCPListener {
     }
 
     public void listen() throws InterruptedException {
-        Orion.getLogger().info(String.format("Starting listener on %s", address));
+        Orion.getLogger().info("Starting listener on {}", address);
         listen(address, threads);
     }
 
@@ -43,7 +43,7 @@ public class TCPListener {
             channelFuture.addListener((ChannelFutureListener) future -> {
                 if (channelFuture.isSuccess()) Orion.getEventBus().post(new ServerReadyEvent());
                 else {
-                    Orion.getLogger().error(String.format("Failed to listen on %s", address));
+                    Orion.getLogger().error("Failed to listen on {}", address);
                     throw new InterruptedException("Failed to listen on " + address);
                 }
             });

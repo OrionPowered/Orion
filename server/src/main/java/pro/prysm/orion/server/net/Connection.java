@@ -74,7 +74,7 @@ public class Connection implements pro.prysm.orion.api.net.Connection {
             else if (state == PacketState.PLAY) sendPacket(new PlayDisconnect(reason));
             active = false;
             ctx.flush().close().addListener(ChannelFutureListener.CLOSE);
-            Orion.getLogger().debug(String.format("Forcibly closed connection %s", getAddress()));
+            Orion.getLogger().debug("Forcibly closed connection {}", getAddress());
             handler.onDisconnect();
         }
     }

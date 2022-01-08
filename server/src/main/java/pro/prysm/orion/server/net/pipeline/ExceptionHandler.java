@@ -9,7 +9,7 @@ public class ExceptionHandler extends ChannelDuplexHandler {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (cause instanceof ReadTimeoutException) {
-            Orion.getLogger().info(String.format("%s timed out", ctx.channel().remoteAddress()));
+            Orion.getLogger().info("{} timed out", ctx.channel().remoteAddress());
         } else if (cause != null) {
             Orion.getLogger().warn("Orion encountered an exception: ");
             cause.printStackTrace();

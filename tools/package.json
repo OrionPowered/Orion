@@ -4,13 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "generate-blocks": "ts-node blocks/blocks.ts"
+    "generate-blocks": "ts-node blocks/blocks.ts",
+    "generate-biomes": "ts-node biomes/biomes.ts",
+    "lint": "ts-standard",
+    "fix": "ts-standard --fix"
   },
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
     "minecraft-data": "^2.104.0",
     "ts-node": "^10.4.0",
+    "ts-standard": "^11.0.0",
     "typescript": "^4.5.4"
   }
 }
