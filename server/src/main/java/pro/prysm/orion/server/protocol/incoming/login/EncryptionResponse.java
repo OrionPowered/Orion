@@ -1,13 +1,12 @@
 package pro.prysm.orion.server.protocol.incoming.login;
 
 import lombok.Getter;
-import pro.prysm.orion.api.protocol.incoming.login.EncryptionResponsePacket;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 @Getter
-public class EncryptionResponse extends IncomingPacket implements EncryptionResponsePacket {
+public class EncryptionResponse extends IncomingPacket {
     private byte[] sharedSecret;
     private byte[] verifyToken;
 

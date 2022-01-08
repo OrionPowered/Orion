@@ -3,8 +3,8 @@ package pro.prysm.orion.server.protocol.outgoing.play;
 import lombok.Setter;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import pro.prysm.orion.api.data.GameMode;
-import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.server.net.PacketByteBuf;
+import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
 /**
  * @author 254n_m
@@ -12,7 +12,7 @@ import pro.prysm.orion.server.net.PacketByteBuf;
  * This file was created as a part of Orion
  */
 @Setter
-public class JoinGame extends pro.prysm.orion.server.protocol.outgoing.OutgoingPacket implements OutgoingPacket {
+public class JoinGame extends OutgoingPacket {
     private int entityId;
     private boolean hardcore;
     private GameMode gamemode;

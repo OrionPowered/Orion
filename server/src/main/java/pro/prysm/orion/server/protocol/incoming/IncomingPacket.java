@@ -4,7 +4,7 @@ import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.Packet;
 
-public abstract class IncomingPacket extends Packet implements pro.prysm.orion.api.protocol.incoming.IncomingPacket {
+public abstract class IncomingPacket extends Packet {
     protected Connection connection;
 
     public IncomingPacket(int id, Connection connection) {
