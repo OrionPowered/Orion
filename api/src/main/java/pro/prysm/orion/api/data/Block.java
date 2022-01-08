@@ -1831,6 +1831,7 @@ public class Block {
     private final int emitLight;
     private final String material;
     private final int[] harvestTools;
+
     private Block(
             int id,
             String displayName,
@@ -1858,6 +1859,7 @@ public class Block {
         this.material = material;
         this.harvestTools = harvestTools;
     }
+
     private Block(
             int id,
             String displayName,

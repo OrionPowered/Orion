@@ -9,7 +9,6 @@ import pro.prysm.orion.api.event.event.PlayerMoveEvent;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.data.Dimension;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
-import pro.prysm.orion.server.protocol.incoming.play.TeleportConfirm;
 import pro.prysm.orion.server.protocol.incoming.play.*;
 import pro.prysm.orion.server.protocol.outgoing.play.*;
 import pro.prysm.orion.server.scheduler.OrionScheduler;
@@ -32,7 +31,7 @@ public class PlayHandler extends ProtocolHandler {
     private void joinGame() {
         Level level = connection.getProtocol().getLevelManager().getLevel();
         player.setLocation(new Location(level.getSpawnX(), level.getSpawnY(), level.getSpawnZ(), 0F, 90F, false)); // TODO: This is a temp solution
-        if(!level.hasSavedPlayerData(player.getProfile().getUniqueId())) player.savePlayerData(level);
+        if (!level.hasSavedPlayerData(player.getProfile().getUniqueId())) player.savePlayerData(level);
         player.readPlayerData(level.getPlayerData(player.getProfile().getUniqueId()));
 
         player.setGameMode(GameMode.SPECTATOR);
@@ -101,7 +100,8 @@ public class PlayHandler extends ProtocolHandler {
 
     @Override
     public void handle(CPluginMessage packet) {
-        if (packet.getChannel().equals("minecraft:brand")) player.setBrand(new String(packet.getData(), StandardCharsets.UTF_8));
+        if (packet.getChannel().equals("minecraft:brand"))
+            player.setBrand(new String(packet.getData(), StandardCharsets.UTF_8));
         else System.out.println(packet.getChannel());
     }
 
