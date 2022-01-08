@@ -6,7 +6,8 @@ import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
-import net.kyori.adventure.nbt.*;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.ListBinaryTag;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
@@ -18,8 +19,6 @@ import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.entity.Player;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.util.TagUtil;
-
-import java.util.List;
 
 // TODO: Fully implement methods from Audience
 // TODO: Write JavaDoc comments

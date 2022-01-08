@@ -1,8 +1,8 @@
 package pro.prysm.orion.api.protocol.status;
 
-import com.google.gson.*;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSerializer;
 import lombok.Data;
-import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
