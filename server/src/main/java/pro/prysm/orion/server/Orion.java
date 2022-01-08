@@ -64,6 +64,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         registerCommands();
 
         try {
+            new TickService(); // Start ticking
             listener.listen(); // Start listening, any code below this will NOT execute (blocking)
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -81,6 +82,10 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
 
     public static EventBus getEventBus() {
         return EVENT_BUS;
+    }
+
+    public static OrionScheduler getScheduler() {
+        return SCHEDULER;
     }
 
     private void loadConfig() {
