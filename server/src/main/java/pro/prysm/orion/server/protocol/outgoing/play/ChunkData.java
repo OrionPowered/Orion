@@ -4,6 +4,8 @@ import com.alexsobiek.anvil.Chunk;
 import com.alexsobiek.anvil.ChunkSection;
 import io.netty.buffer.Unpooled;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.ListBinaryTag;
+import pro.prysm.orion.api.data.Block;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
@@ -57,16 +59,10 @@ public class ChunkData extends OutgoingPacket {
         buf.writeBitSet(chunk.getEmptyBlockLightMask());
 
         buf.writeVarInt(skyLight.size());
-        for (byte[] array : skyLight) {
-            buf.writeVarInt(array.length);
-            buf.writeBytes(array);
-        }
+        for (byte[] array : skyLight) buf.writeByteArray(array);
 
         buf.writeVarInt(blockLight.size());
-        for (byte[] array : blockLight) {
-            buf.writeVarInt(array.length);
-            buf.writeBytes(array);
-        }
+        for (byte[] array : blockLight) buf.writeByteArray(array);
     }
 
     public void writeSection(ChunkSection section, PacketByteBuf buf) {
@@ -75,10 +71,15 @@ public class ChunkData extends OutgoingPacket {
         // BLOCK STATES CONTAINER
         buf.writeByte(section.getBitsPerBlock());
 
+        ListBinaryTag palette = section.getPalette();
+
         // write block states palette
-        buf.writeVarInt(section.getPalette().size());
-        for (int i = 0; i < section.getPalette().size(); i++) {
-            buf.writeVarInt(1); // Stone
+        buf.writeVarInt(palette.size());
+
+        for (int i = 0; i < palette.size(); i++) {
+            // section.getPaletteEntry(i).getCompound("Properties");  TODO: use proper states
+            Block block  = Block.getBlock(section.getPaletteEntry(i).getString("Name").replace("minecraft:", ""));
+            buf.writeVarLong(block.getDefaultState());
         }
 
         // Write block states
