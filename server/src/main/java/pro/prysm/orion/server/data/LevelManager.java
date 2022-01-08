@@ -10,19 +10,16 @@ import pro.prysm.orion.server.Orion;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WorldManager {
-    private final AnvilLib anvil;
+public class LevelManager {
+    private final AnvilLib anvil = new AnvilLib();
     private final Level level;
 
     // Both region and chunk map keys are integer arrays with a length of 2 for x and z
     // TODO: Regions and chunks are added to these maps but never removed
-    private final Map<int[], Region> regions; // Region cache
-    private final Map<int[], Chunk> chunks; // Chunk cache
+    private final Map<int[], Region> regions = new HashMap<>(); // Region cache
+    private final Map<int[], Chunk> chunks = new HashMap<>(); // Chunk cache
 
-    public WorldManager(String world) {
-        anvil = new AnvilLib();
-        regions = new HashMap<>();
-        chunks = new HashMap<>();
+    public LevelManager(String world) {
         level = anvil.loadLevel(world);
     }
 
