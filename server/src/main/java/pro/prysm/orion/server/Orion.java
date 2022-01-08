@@ -27,9 +27,7 @@ import java.nio.file.Path;
 
 @Getter
 public class Orion implements Listener, pro.prysm.orion.api.Orion {
-    // STATIC - Brand, Logger, EventBus, and OrionScheduler are the only objects that should be here.
-    public static final String BRAND = "Orion";
-
+    // STATIC - Logger, EventBus, and OrionScheduler are the only objects that should be here.
     private static final Logger logger = (Logger) LoggerFactory.getLogger("Orion");
     private static final EventBus EVENT_BUS = new pro.prysm.orion.server.event.EventBus();
     private static final OrionScheduler SCHEDULER = new OrionScheduler();

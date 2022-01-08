@@ -56,7 +56,7 @@ public class PlayHandler extends ProtocolHandler {
         packet.setFlat(false);
         connection.sendPacket(packet);
 
-        connection.sendPacket(new SPluginMessage(Orion.BRAND));
+        connection.sendPacket(new SPluginMessage(connection.getProtocol().getSlpData().getVersion().getName()));
 
         connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
 
