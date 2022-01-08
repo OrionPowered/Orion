@@ -2,7 +2,6 @@ package pro.prysm.orion.api.net;
 
 import io.netty.channel.ChannelHandlerContext;
 import pro.prysm.orion.api.protocol.PacketState;
-import pro.prysm.orion.api.protocol.outgoing.OutgoingPacket;
 
 import java.net.SocketAddress;
 
@@ -37,10 +36,4 @@ public interface Connection {
      * @param reason The reason for disconnecting
      */
     void disconnect(String reason);
-
-    /**
-     * Sends a packet to the other end of this connection.
-     * @param packet The packet to send
-     */
-    void sendPacket(OutgoingPacket packet);
 }

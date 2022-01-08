@@ -2,13 +2,12 @@ package pro.prysm.orion.server.protocol.incoming.handshaking;
 
 import lombok.Getter;
 import pro.prysm.orion.api.protocol.PacketState;
-import pro.prysm.orion.api.protocol.incoming.status.HandshakePacket;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 @Getter
-public class Handshake extends IncomingPacket implements HandshakePacket {
+public class Handshake extends IncomingPacket {
     private int protocolVersion;
     private String hostname;
     private short port;

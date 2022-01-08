@@ -1,13 +1,12 @@
 package pro.prysm.orion.server.protocol.incoming.play;
 
 import lombok.Getter;
-import pro.prysm.orion.api.protocol.incoming.play.PlayerPositionAndRotationPacket;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 @Getter
-public class PlayerPositionAndRotation extends IncomingPacket implements PlayerPositionAndRotationPacket {
+public class PlayerPositionAndRotation extends IncomingPacket {
     private double x, y, z;
     private float yaw, pitch;
     private boolean onGround;

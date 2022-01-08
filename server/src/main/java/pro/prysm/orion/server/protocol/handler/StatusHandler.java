@@ -13,12 +13,12 @@ public class StatusHandler extends ProtocolHandler {
 
     @Override
     public void handle(Request packet) {
+        Orion.getLogger().debug("{} has pinged", connection.getAddress());
         connection.sendPacket(connection.getProtocol().generateSLP());
     }
 
     @Override
     public void handle(Ping packet) {
-        Orion.getLogger().debug("{} has pinged", connection.getAddress());
         connection.sendPacket(new Pong(packet.getValue()));
     }
 }

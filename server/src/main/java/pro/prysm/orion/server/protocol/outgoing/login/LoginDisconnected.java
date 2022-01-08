@@ -6,7 +6,7 @@ import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
 @Getter
-public class LoginDisconnected extends OutgoingPacket implements pro.prysm.orion.api.protocol.outgoing.login.Disconnect {
+public class LoginDisconnected extends OutgoingPacket {
     private final Message message;
 
     public LoginDisconnected(String message) {

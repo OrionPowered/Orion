@@ -1,13 +1,12 @@
 package pro.prysm.orion.server.protocol.incoming.status;
 
 import lombok.Getter;
-import pro.prysm.orion.api.protocol.incoming.status.PingPacket;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 @Getter
-public class Ping extends IncomingPacket implements PingPacket {
+public class Ping extends IncomingPacket {
     private long value;
 
     public Ping(Connection connection) {

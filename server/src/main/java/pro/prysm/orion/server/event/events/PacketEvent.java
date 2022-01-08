@@ -6,7 +6,8 @@ import pro.prysm.orion.api.event.Cancellable;
 import pro.prysm.orion.api.event.Event;
 
 @Getter
-@Setter
-public abstract class PacketEvent extends Event implements Cancellable {
+public abstract class PacketEvent implements Event, Cancellable {
+    private State state;
+    @Setter
     private boolean cancelled;
 }
