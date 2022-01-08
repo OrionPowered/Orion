@@ -100,8 +100,7 @@ public class PlayHandler extends ProtocolHandler {
 
     @Override
     public void handle(CPluginMessage packet) {
-        if (packet.getChannel().equals("minecraft:brand"))
-            player.setBrand(new String(packet.getData(), StandardCharsets.UTF_8));
+        if (packet.getChannel().equals("minecraft:brand")) player.setBrand(new String(packet.getData(), StandardCharsets.UTF_8));
         else System.out.println(packet.getChannel());
     }
 
