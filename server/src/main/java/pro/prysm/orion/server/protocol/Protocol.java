@@ -14,6 +14,8 @@ import pro.prysm.orion.server.protocol.outgoing.login.EncryptionRequest;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
 
 import javax.crypto.Cipher;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -59,6 +61,15 @@ public class Protocol {
         slpData.getVersion().setName(config.getString("serverName"));
         slpData.setDescription(new Message(config.getString("motd")).toComponent());
         slpData.getPlayers().setMax(maxPlayers);
+
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("prysm.png")) {
+            if (is == null)
+                return;
+
+            slpData.setFavicon(ServerListResponse.generateFavicon(is));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         sessionServer = config.getStringOrDefault("session-server", "https://sessionserver.mojang.com");
         Orion.getLogger().debug("Using session server {}", sessionServer);
