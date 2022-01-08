@@ -16,6 +16,9 @@ public abstract class ProtocolHandler {
         this.connection = connection;
     }
 
+    public void onDisconnect() {
+    }
+
     public void handle(Handshake packet) {
     }
 
@@ -47,5 +50,8 @@ public abstract class ProtocolHandler {
     }
 
     public void handle(TeleportConfirm packet) {
+    }
+
+    public void handle(KeepAliveIn packet) {
     }
 }
