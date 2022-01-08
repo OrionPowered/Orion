@@ -1,7 +1,9 @@
 package pro.prysm.orion.server.entity;
 
 import com.alexsobiek.anvil.Level;
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identity;
@@ -21,7 +23,9 @@ import pro.prysm.orion.server.util.TagUtil;
 
 // TODO: Fully implement methods from Audience
 // TODO: Write JavaDoc comments
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class ImplPlayer extends ImplEntity implements Player {
     private final Connection connection;
     private final GameProfile profile;
@@ -49,7 +53,6 @@ public class ImplPlayer extends ImplEntity implements Player {
         // TODO: Parse rest of player data file
     }
 
-    // Move level into player?
     public void savePlayerData(Level level) {
         CompoundBinaryTag.Builder tagBuilder = CompoundBinaryTag.builder();
 

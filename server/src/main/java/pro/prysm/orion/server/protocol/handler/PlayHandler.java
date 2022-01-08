@@ -11,10 +11,7 @@ import pro.prysm.orion.server.data.Dimension;
 import pro.prysm.orion.server.entity.ImplPlayer;
 import pro.prysm.orion.server.protocol.incoming.play.TeleportConfirm;
 import pro.prysm.orion.server.protocol.incoming.play.*;
-import pro.prysm.orion.server.protocol.outgoing.play.ChunkData;
-import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;
-import pro.prysm.orion.server.protocol.outgoing.play.KeepAliveOut;
-import pro.prysm.orion.server.protocol.outgoing.play.PlayerPositionAndLook;
+import pro.prysm.orion.server.protocol.outgoing.play.*;
 import pro.prysm.orion.server.scheduler.OrionScheduler;
 
 import java.util.UUID;
@@ -55,6 +52,8 @@ public class PlayHandler extends ProtocolHandler {
         packet.setDebug(false);
         packet.setFlat(false);
         connection.sendPacket(packet);
+
+        connection.sendPacket(new SPluginMessage(Orion.BRAND));
 
         connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
 
@@ -98,7 +97,7 @@ public class PlayHandler extends ProtocolHandler {
     }
 
     @Override
-    public void handle(PluginMessage packet) {
+    public void handle(CPluginMessage packet) {
         if (packet.getChannel().equals("minecraft:brand")) player.setBrand(new String(packet.getData()));
         else System.out.println(packet.getChannel());
     }
