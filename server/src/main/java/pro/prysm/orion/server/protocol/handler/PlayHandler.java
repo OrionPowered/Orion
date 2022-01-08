@@ -8,7 +8,7 @@ import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.event.event.PlayerMoveEvent;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.data.Dimension;
-import pro.prysm.orion.server.entity.ImplPlayer;
+import pro.prysm.orion.server.entity.player.ImplPlayer;
 import pro.prysm.orion.server.protocol.incoming.play.*;
 import pro.prysm.orion.server.protocol.outgoing.play.*;
 import pro.prysm.orion.server.scheduler.OrionScheduler;
@@ -34,11 +34,13 @@ public class PlayHandler extends ProtocolHandler {
         if (!level.hasSavedPlayerData(player.getProfile().getUniqueId())) player.savePlayerData(level);
         player.readPlayerData(level.getPlayerData(player.getProfile().getUniqueId()));
 
+        player.setGameMode(GameMode.SPECTATOR);
+
         Dimension dimension = new Dimension();
         JoinGame packet = new JoinGame();
-        packet.setEntityId(-1);                             // TODO: Implement entity ids
-        packet.setGamemode(GameMode.SPECTATOR);             // TODO: Implement Gamemode
-        packet.setPreviousGamemode(GameMode.SPECTATOR);
+        packet.setEntityId(player.getEntityId());
+        packet.setGamemode(player.getGameMode());             // TODO: Implement Gamemode
+        packet.setPreviousGamemode(player.getGameMode());
         packet.setWorlds(new String[]{"world"});            // TODO: Implement worlds
         packet.setDimensionCodec(dimension.getCodec());
         packet.setDimension(dimension.getType());
@@ -53,10 +55,9 @@ public class PlayHandler extends ProtocolHandler {
         packet.setFlat(false);
         connection.sendPacket(packet);
 
-        connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
+        connection.sendPacket(new SPluginMessage(connection.getProtocol().getSlpData().getVersion().getName()));
 
-        // Send server brand
-        connection.sendPacket(new PluginMessageOut("minecraft:brand", connection.getProtocol().getSlpData().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
+        connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
 
         // Player has joined, send first chunk
         connection.sendPacket(new ChunkData(connection.getProtocol().getLevelManager().getChunk(player.getLocation())));
@@ -98,8 +99,8 @@ public class PlayHandler extends ProtocolHandler {
     }
 
     @Override
-    public void handle(PluginMessageIn packet) {
-        if (packet.getChannel().equals("minecraft:brand")) player.setBrand(new String(packet.getData()));
+    public void handle(CPluginMessage packet) {
+        if (packet.getChannel().equals("minecraft:brand")) player.setBrand(new String(packet.getData(), StandardCharsets.UTF_8));
         else System.out.println(packet.getChannel());
     }
 

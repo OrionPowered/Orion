@@ -1,4 +1,11 @@
 package pro.prysm.orion.api.event;
 
-public abstract class Event {
+public interface Event {
+    State getState();
+
+    enum State {
+        SINGLE,
+        PRE,
+        POST
+    }
 }

@@ -18,7 +18,8 @@ public interface Listener {
                 if (method.getParameterCount() >= 1) {
                     Class<?> param = method.getParameters()[0].getType();
 
-                    if (param.getSuperclass().equals(Event.class) || param.getSuperclass().getSuperclass().equals(Event.class)) {
+                    List<Class<?>> interfaces = List.of(param.getInterfaces());
+                    if (interfaces.contains(Event.class)) {
                         methods.add(method);
                     }
                 }

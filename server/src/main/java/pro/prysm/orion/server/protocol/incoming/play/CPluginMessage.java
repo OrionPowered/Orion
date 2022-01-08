@@ -6,11 +6,11 @@ import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 @Getter
-public class PluginMessageIn extends IncomingPacket {
+public class CPluginMessage extends IncomingPacket {
     private String channel;
     private byte[] data;
 
-    public PluginMessageIn(Connection connection) {
+    public CPluginMessage(Connection connection) {
         super(0x0A, connection);
     }
 
