@@ -11,8 +11,6 @@ let staticVars = ''
 let listItems = ''
 
 data.blocksArray.forEach(block => {
-    console.log(block.id)
-
     let staticVar = `public static final Block ${block.name.toUpperCase()} = getBlock(${block.id});\n\t`
 
     let harvestTools = ""
