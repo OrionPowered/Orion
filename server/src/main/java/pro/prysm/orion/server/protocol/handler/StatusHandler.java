@@ -18,7 +18,7 @@ public class StatusHandler extends ProtocolHandler {
 
     @Override
     public void handle(Ping packet) {
-        Orion.getLogger().debug(String.format("%s has pinged", connection.getAddress()));
+        Orion.getLogger().debug("{} has pinged", connection.getAddress());
         connection.sendPacket(new Pong(packet.getValue()));
     }
 }

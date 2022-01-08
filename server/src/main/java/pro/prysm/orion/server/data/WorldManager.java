@@ -31,7 +31,7 @@ public class WorldManager {
     }
 
     public Region getRegion(int x, int z) {
-        Orion.getLogger().debug(String.format("Getting region for level %s at %d, %d", level.getName(), x, z));
+        Orion.getLogger().debug("Getting region for level {} at {}, {}", level.getName(), x, z);
         int[] pos = new int[]{x, z};
         if (regions.containsKey(pos)) return regions.get(pos);
         else {
@@ -46,7 +46,7 @@ public class WorldManager {
     }
 
     public Chunk getChunk(int x, int z) {
-        Orion.getLogger().debug(String.format("Getting chunk for level %s at %d, %d", level.getName(), x, z));
+        Orion.getLogger().debug("Getting chunk for level {} at {}, {}", level.getName(), x, z);
         int[] pos = new int[]{x, z};
         if (chunks.containsKey(pos)) return chunks.get(pos);
         else {

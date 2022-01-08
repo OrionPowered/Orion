@@ -106,7 +106,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
     @EventHandler
     public void onServerReady(ServerReadyEvent event) {
         long difference = System.currentTimeMillis() - startupTime;
-        getLogger().info(String.format("Done (%dms)", difference));
+        getLogger().info("Done ({}ms)", difference);
     }
 
     // All main reload handling should be done from here

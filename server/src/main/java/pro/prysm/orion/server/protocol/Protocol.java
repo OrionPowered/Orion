@@ -61,7 +61,7 @@ public class Protocol {
         slpData.setMaxPlayers(maxPlayers);
 
         sessionServer = config.getStringOrDefault("session-server", "https://sessionserver.mojang.com");
-        Orion.getLogger().debug(String.format("Using session server %s", sessionServer));
+        Orion.getLogger().debug("Using session server {}", sessionServer);
     }
 
     private KeyPair genKeyPair() {

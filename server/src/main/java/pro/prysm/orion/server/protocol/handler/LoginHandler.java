@@ -33,7 +33,7 @@ public class LoginHandler extends ProtocolHandler {
             connection.sendPacket(new LoginSuccess(profile.getUniqueId(), username));
             player = new ImplPlayer(connection, profile);
             connection.setState(PacketState.PLAY);
-            Orion.getLogger().info(String.format("%s joining...", username));
+            Orion.getLogger().info("{} joining...", username);
         }
     }
 
@@ -41,7 +41,7 @@ public class LoginHandler extends ProtocolHandler {
     public void handle(EncryptionResponse packet) {
         // If server isn't in online mode disconnect the player and stop from handling further
         if (!connection.getProtocol().isOnlineMode()) {
-            Orion.getLogger().debug(String.format("%s sent an encryption response when no request was sent!", username));
+            Orion.getLogger().debug("{} sent an encryption response when no request was sent!", username);
             player.getConnection().disconnect("Invalid encryption packet");
             return;
         }
@@ -52,10 +52,10 @@ public class LoginHandler extends ProtocolHandler {
             sharedSecret = connection.getProtocol().decryptRSA(packet.getSharedSecret());
             connection.setSharedSecret(sharedSecret);
             connection.enableEncryption(sharedSecret);
-            Orion.getLogger().debug(String.format("Started encryption for %s", connection.getAddress()));
+            Orion.getLogger().debug("Started encryption for {}", connection.getAddress());
         } catch (GeneralSecurityException e) {
             connection.disconnect("Failed to load encryption.");
-            Orion.getLogger().warn(String.format("Failed to enable encryption for %s", connection.getAddress()));
+            Orion.getLogger().warn("Failed to enable encryption for {}", connection.getAddress());
             e.printStackTrace();
         }
 
@@ -67,7 +67,7 @@ public class LoginHandler extends ProtocolHandler {
             connection.sendPacket(new LoginSuccess(profile.getUniqueId(), profile.getUsername()));
             player = new ImplPlayer(connection, profile);
             connection.setState(PacketState.PLAY);
-            Orion.getLogger().info(String.format("%s/%s joining...", profile.getUsername(), profile.getUniqueId()));
+            Orion.getLogger().info("{}/{} joining...", profile.getUsername(), profile.getUniqueId());
         }
     }
 }
