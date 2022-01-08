@@ -1,6 +1,7 @@
 package pro.prysm.orion.api.data;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,16 +10,18 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Getter
+@ToString
 public class Block {
-    // Begin auto generated code
-    %statics%
-    // End auto generated code
 
 	private static final List<Block> REGISTRY = new ArrayList<>(Arrays.asList(
         // Begin auto generated code
         %list_items%
         // End auto generated code
 	));
+
+	// Begin auto generated code
+    %statics%
+    // End auto generated code
 
     public static Block getBlock(String name) {
         return REGISTRY.stream().filter(block -> block.getName().equals(name)).collect(toSingleton());
