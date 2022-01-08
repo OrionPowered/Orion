@@ -2,6 +2,7 @@ package pro.prysm.orion.api.data;
 
 import lombok.Getter;
 import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,8 +12,8 @@ import java.util.stream.Collectors;
 
 @Getter
 @ToString
+@EqualsAndHashCode
 public class Block {
-
 	private static final List<Block> REGISTRY = new ArrayList<>(Arrays.asList(
         // Begin auto generated code
         %list_items%

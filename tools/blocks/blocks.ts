@@ -13,16 +13,16 @@ let listItems = ''
 data.blocksArray.forEach(block => {
     let staticVar = `public static final Block ${block.name.toUpperCase()} = getBlock(${block.id});\n\t`
 
-    const harvestTools = ""
+    let harvestTools = ""
     if (block.harvestTools != null) {
         let tools = ""
         for (const toolId in block.harvestTools) {
             tools += `${toolId}, `
         }
-        return `, new int[]{${tools}}`
+        harvestTools += `, new int[]{${tools}}`
     }
 
-    let listItem = `new Block(${block.id}, "${block.displayName}", "${block.name}", ${block.hardness ? block.hardness.toString() : '0.0'}, ${block.resistance ? block.resistance.toString() : '0.0'}, ${block.minStateId}, ${block.maxStateId}, ${block.defaultState}, ${block.diggable}, ${block.emitLight}, "${block.material}", ${harvestTools}),\n\t\t`
+    let listItem = `new Block(${block.id}, "${block.displayName}", "${block.name}", ${block.hardness ? block.hardness.toString() : '0.0'}, ${block.resistance ? block.resistance.toString() : '0.0'}, ${block.minStateId}, ${block.maxStateId}, ${block.defaultState}, ${block.diggable}, ${block.emitLight}, "${block.material}"${harvestTools}),\n\t\t`
 
     listItems += listItem
     staticVars += staticVar
