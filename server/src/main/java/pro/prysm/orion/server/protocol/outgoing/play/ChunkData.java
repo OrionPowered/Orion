@@ -1,11 +1,8 @@
 package pro.prysm.orion.server.protocol.outgoing.play;
 
 import com.alexsobiek.anvil.Chunk;
-import com.alexsobiek.anvil.ChunkSection;
 import io.netty.buffer.Unpooled;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.ListBinaryTag;
-import pro.prysm.orion.api.data.Block;
 import pro.prysm.orion.server.data.palette.BiomePalette;
 import pro.prysm.orion.server.data.palette.BlockStatePalette;
 import pro.prysm.orion.server.net.PacketByteBuf;
