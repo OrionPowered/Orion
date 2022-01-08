@@ -1,12 +1,12 @@
 package pro.prysm.orion.server.entity;
 
+import com.alexsobiek.anvil.Level;
 import lombok.Data;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.ListBinaryTag;
+import net.kyori.adventure.nbt.*;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
@@ -17,6 +17,9 @@ import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.entity.Player;
 import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.util.TagUtil;
+
+import java.util.List;
 
 // TODO: Fully implement methods from Audience
 // TODO: Write JavaDoc comments
@@ -39,13 +42,26 @@ public class ImplPlayer implements Player {
                         pos.getDouble(2)
                 },
                 new float[]{
-                        rot.getFloat(0),
+                        rot.getFloat(0), // Is this read in the correct order?
                         rot.getFloat(1)
                 },
                 nbt.getByte("OnGround") == 0x0
         );
 
         // TODO: Parse rest of player data file
+    }
+
+    // Move level into player?
+    public void savePlayerData(Level level) {
+        CompoundBinaryTag.Builder tagBuilder = CompoundBinaryTag.builder();
+
+        // TODO: Write rest of player data
+        tagBuilder.put("Pos", TagUtil.doubleList(location.getX(), location.getY(), location.getZ()));
+        tagBuilder.put("Rotation", TagUtil.floatList(location.getYaw(), location.getPitch())); // Is this written in the correct order?
+        // ...
+        tagBuilder.putBoolean("OnGround", location.isOnGround());
+
+        level.savePlayerData(uuid(), tagBuilder.build());
     }
 
     // ===============================================================================================================

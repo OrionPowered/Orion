@@ -32,6 +32,8 @@ public class PlayHandler extends ProtocolHandler {
 
     private void joinGame() {
         Level level = connection.getProtocol().getWorldManager().getLevel();
+        player.setLocation(new Location(0D, 0D, 0D, 0F, 90F, false)); // TODO: This is a temp solution, move player data generation to after player has loaded into world?
+        if(!level.hasSavedPlayerData(player.getProfile().getUniqueId())) player.savePlayerData(level);
         player.readPlayerData(level.getPlayerData(player.getProfile().getUniqueId()));
 
         Dimension dimension = new Dimension();
