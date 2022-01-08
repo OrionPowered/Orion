@@ -2,8 +2,43 @@ package pro.prysm.orion.api.data;
 
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 @Getter
 public class Block {
+    // Begin auto generated code
+    %statics%
+    // End auto generated code
+
+	private static final List<Block> REGISTRY = new ArrayList<>(Arrays.asList(
+        // Begin auto generated code
+        %list_items%
+        // End auto generated code
+	));
+
+    public static Block getBlock(String name) {
+        return REGISTRY.stream().filter(block -> block.getName().equals(name)).collect(toSingleton());
+    }
+
+    public static Block getBlock(int id) {
+        return REGISTRY.stream().filter(block -> block.getId() == id).collect(toSingleton());
+    }
+
+    public static <T> Collector<T, ?, T> toSingleton() {
+        return Collectors.collectingAndThen(
+                Collectors.toList(),
+                list -> {
+                    if (list.size() == 0) throw new NullPointerException();
+                    else if (list.size() > 1) throw new IllegalStateException();
+                    else return list.get(0);
+                }
+        );
+    }
+
     private final int id;
     private final String displayName;
     private final String name;
@@ -18,9 +53,6 @@ public class Block {
     private final String material;
     private final int[] harvestTools;
 
-    // Begin auto generated code
-    %statics%
-    // End auto generated code
 
     private Block(
             int id,
@@ -51,31 +83,31 @@ public class Block {
     }
 
     private Block(
-                int id,
-                String displayName,
-                String name,
-                double hardness,
-                double resistance,
-                long minStateId,
-                long maxStateId,
-                long defaultState,
-                boolean diggable,
-                int emitLight,
-                String material
-        ) {
-            this(
-                id,
-                displayName,
-                name,
-                hardness,
-                resistance,
-                minStateId,
-                maxStateId,
-                defaultState,
-                diggable,
-                emitLight,
-                material,
-                new int[0]
-            );
-        }
+            int id,
+            String displayName,
+            String name,
+            double hardness,
+            double resistance,
+            long minStateId,
+            long maxStateId,
+            long defaultState,
+            boolean diggable,
+            int emitLight,
+            String material
+    ) {
+        this(
+            id,
+            displayName,
+            name,
+            hardness,
+            resistance,
+            minStateId,
+            maxStateId,
+            defaultState,
+            diggable,
+            emitLight,
+            material,
+            new int[0]
+        );
+    }
 }
