@@ -9,7 +9,7 @@ import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.api.protocol.ServerListResponse;
 import pro.prysm.orion.server.Orion;
-import pro.prysm.orion.server.data.WorldManager;
+import pro.prysm.orion.server.data.LevelManager;
 import pro.prysm.orion.server.protocol.outgoing.login.EncryptionRequest;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
 
@@ -39,15 +39,15 @@ public class Protocol {
     private final KeyPair keyPair = genKeyPair();
     private final Orion orion;
     @Getter
-    private final WorldManager worldManager;
+    private final LevelManager levelManager;
     private String sessionServer;
 
     private boolean onlineMode;
     private int maxPlayers;
 
-    public Protocol(Orion orion, WorldManager worldManager, Config config) {
+    public Protocol(Orion orion, LevelManager levelManager, Config config) {
         this.orion = orion;
-        this.worldManager = worldManager;
+        this.levelManager = levelManager;
         reload(config);
     }
 
