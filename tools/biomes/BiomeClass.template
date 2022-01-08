@@ -2,6 +2,7 @@ package pro.prysm.orion.api.data;
 
 import lombok.Getter;
 import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,8 +12,8 @@ import java.util.stream.Collectors;
 
 @Getter
 @ToString
+@EqualsAndHashCode
 public class Biome {
-
     private static final List<Biome> REGISTRY = new ArrayList<>(Arrays.asList(
         // Begin auto generated code
         %list_items%
@@ -52,7 +53,7 @@ public class Biome {
         );
     }
 
-private final int id;
+    private final int id;
     private final String name;
     private final String category;
     private final double temperature;
