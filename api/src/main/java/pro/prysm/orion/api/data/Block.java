@@ -1818,12 +1818,33 @@ public class Block {
 
     // End auto generated code
 
+    /**
+     * Gets a block by its name
+     * @param name Block Name
+     * @return Block
+     */
     public static Block getBlock(String name) {
-        return REGISTRY.stream().filter(block -> block.getName().equals(name)).collect(toSingleton());
+        return REGISTRY.stream().filter(block -> block.getName().equalsIgnoreCase(name)).collect(toSingleton());
     }
 
+    /**
+     * Gets a block by its ID
+     * @param id Block ID
+     * @return Block
+     */
     public static Block getBlock(int id) {
         return REGISTRY.stream().filter(block -> block.getId() == id).collect(toSingleton());
+    }
+
+    /**
+     * Gets a Block from the provided state
+     * @param state Block State
+     * @return Block
+     */
+    public static Block getBlockFromState(long state) {
+        return REGISTRY.stream()
+                .filter(block -> block.getDefaultState() == state || (block.getMinStateId() < state && block.getMaxStateId() > state))
+                .collect(toSingleton());
     }
 
     public static <T> Collector<T, ?, T> toSingleton() {
