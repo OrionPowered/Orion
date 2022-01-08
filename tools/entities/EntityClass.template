@@ -1,0 +1,83 @@
+package pro.prysm.orion.api.data;
+
+import lombok.Getter;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
+
+import pro.prysm.orion.api.entity.Entity;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+@Getter
+@ToString
+@EqualsAndHashCode
+public class EntityType {
+    private static final List<EntityType> REGISTRY = new ArrayList<>(Arrays.asList(
+        // Begin auto generated code
+        %list_items%
+        // End auto generated code
+    ));
+
+    // Begin auto generated code
+    %statics%
+    // End auto generated code
+
+    /**
+     * Gets a entity type by its name
+     * @param name Entity name
+     * @return EntityType
+     */
+    public static EntityType getByName(String name) {
+        return REGISTRY.stream().filter(entityType -> entityType.getName().equals(name)).collect(toSingleton());
+    }
+
+    /**
+     * Gets a biome by its ID
+     * @param id Biome ID
+     * @return Biome
+     */
+    public static EntityType getById(int id) {
+        return REGISTRY.stream().filter(entityType -> entityType.getId() == id).collect(toSingleton());
+    }
+
+    public static <T> Collector<T, ?, T> toSingleton() {
+        return Collectors.collectingAndThen(
+                Collectors.toList(),
+                list -> {
+                    if (list.size() == 0) throw new NullPointerException();
+                    else if (list.size() > 1) throw new IllegalStateException();
+                    else return list.get(0);
+                }
+        );
+    }
+
+    private final int id;
+    private final int internalId;
+    private final String name;
+    private final String displayName;
+    private final double width;
+    private final double height;
+    private final Entity.Type type;
+
+    public EntityType(
+            int id,
+            int internalId,
+            String name,
+            String displayName,
+            double width,
+            double height,
+            Entity.Type type
+    ) {
+        this.id = id;
+        this.internalId = internalId;
+        this.name = name;
+        this.displayName = displayName;
+        this.width = width;
+        this.height = height;
+        this.type = type;
+    }
+}

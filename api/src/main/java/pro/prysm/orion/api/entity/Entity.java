@@ -22,4 +22,17 @@ public interface Entity extends Identity {
      * @return This entity's location
      */
     Location getLocation();
+
+    enum Type {
+        PLAYER,
+        HOSTILE,
+        PASSIVE,
+        MOB,
+        ANIMAL,
+        WATER_CREATURE,
+        AMBIENT,
+        LIVING,
+        PROJECTILE,
+        OTHER
+    }
 }
