@@ -16,12 +16,13 @@ import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;
 import pro.prysm.orion.server.protocol.outgoing.play.KeepAliveOut;
 import pro.prysm.orion.server.protocol.outgoing.play.PlayerPositionAndLook;
 import pro.prysm.orion.server.scheduler.OrionScheduler;
-import pro.prysm.orion.server.scheduler.OrionTask;
+
+import java.util.UUID;
 
 public class PlayHandler extends ProtocolHandler {
     private final ImplPlayer player;
     private final int teleportId = 0; // TODO: Implement checking of teleport ids
-    private OrionTask keepAliveTask;
+    private UUID keepAliveTask;
     private long keepAliveId;
 
     public PlayHandler(ImplPlayer player) {
@@ -63,20 +64,20 @@ public class PlayHandler extends ProtocolHandler {
     }
 
     private void startKeepAlive() {
-        keepAliveTask = Orion.getScheduler().scheduleAtFixedRate(new OrionTask() {
-            @Override
-            public void run() {
-                KeepAliveOut keepAlive = new KeepAliveOut();
-                connection.sendPacket(keepAlive);
-                keepAliveId = keepAlive.getId();
-                Orion.getLogger().debug("Send keepalive to {} ({})", connection.getAddress(), player.getProfile().getUsername());
-            }
+        keepAliveTask = Orion.getScheduler().scheduleAtFixedRate(() -> {
+            if (!connection.isActive())
+                return;
+
+            KeepAliveOut keepAlive = new KeepAliveOut();
+            connection.sendPacket(keepAlive);
+            keepAliveId = keepAlive.getId();
+            Orion.getLogger().debug("Send keepalive to {} ({})", connection.getAddress(), player.getProfile().getUsername());
         }, 0, (25 * OrionScheduler.TPS)); // Every 25 seconds (30 seconds resulted in random timeouts)
     }
 
     @Override
     public void onDisconnect() {
-        keepAliveTask.cancel();
+        Orion.getScheduler().cancel(keepAliveTask);
     }
 
     @Override
