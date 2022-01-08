@@ -252,7 +252,7 @@ public class EntityType {
     // End auto generated code
 
     /**
-     * Gets a entity type by its name
+     * Gets an entity type by its name
      * @param name Entity name
      * @return EntityType
      */
@@ -261,9 +261,9 @@ public class EntityType {
     }
 
     /**
-     * Gets a biome by its ID
-     * @param id Biome ID
-     * @return Biome
+     * Gets an entity by its ID
+     * @param id Entity ID
+     * @return EntityType
      */
     public static EntityType getById(int id) {
         return REGISTRY.stream().filter(entityType -> entityType.getId() == id).collect(toSingleton());
