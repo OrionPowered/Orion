@@ -7,12 +7,10 @@ import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.net.Connection;
 
-public interface Player extends Identity, Audience {
+public interface Player extends Entity, Identity, Audience {
     Connection getConnection();
 
     GameProfile getProfile();
-
-    Location getLocation();
 
     ClientSettings getSettings();
 

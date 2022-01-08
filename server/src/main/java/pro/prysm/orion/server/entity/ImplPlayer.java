@@ -19,12 +19,10 @@ import pro.prysm.orion.api.entity.Player;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.util.TagUtil;
 
-import java.util.List;
-
 // TODO: Fully implement methods from Audience
 // TODO: Write JavaDoc comments
 @Data
-public class ImplPlayer implements Player {
+public class ImplPlayer extends ImplEntity implements Player {
     private final Connection connection;
     private final GameProfile profile;
     private ClientSettings settings;
@@ -42,7 +40,7 @@ public class ImplPlayer implements Player {
                         pos.getDouble(2)
                 },
                 new float[]{
-                        rot.getFloat(0), // Is this read in the correct order?
+                        rot.getFloat(0),
                         rot.getFloat(1)
                 },
                 nbt.getByte("OnGround") == 0x0
@@ -57,7 +55,7 @@ public class ImplPlayer implements Player {
 
         // TODO: Write rest of player data
         tagBuilder.put("Pos", TagUtil.doubleList(location.getX(), location.getY(), location.getZ()));
-        tagBuilder.put("Rotation", TagUtil.floatList(location.getYaw(), location.getPitch())); // Is this written in the correct order?
+        tagBuilder.put("Rotation", TagUtil.floatList(location.getYaw(), location.getPitch()));
         // ...
         tagBuilder.putBoolean("OnGround", location.isOnGround());
 
