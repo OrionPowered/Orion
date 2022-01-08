@@ -12,10 +12,11 @@ public class BiomePalette {
     private final int size;
     //private final int bitsPerEntry;
     private final long[] data;
+
     public BiomePalette(ChunkSection section) {
         this.section = section;
         size = section.getBiomePalette().size();
-        data = new long[Chunk.SECTION_WIDTH*Chunk.SECTION_WIDTH];
+        data = new long[Chunk.SECTION_WIDTH * Chunk.SECTION_WIDTH];
         if (size == 1) {
             //bitsPerEntry = 3; // Indirect
             int id = Biome.getBiome(section.getBiomePaletteEntry(0).replace("minecraft:", "")).getId();

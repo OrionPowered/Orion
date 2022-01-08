@@ -12,7 +12,7 @@ public class OrionScheduler {
     private final Map<UUID, ScheduledFuture<?>> map = new ConcurrentHashMap<>();
 
     private long ticksToMs(long ticks) {
-        return (long) (((double) ticks/TPS) * 1000);
+        return (long) (((double) ticks / TPS) * 1000);
     }
 
     public UUID schedule(Runnable task, long delay) {

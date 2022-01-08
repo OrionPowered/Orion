@@ -23,7 +23,7 @@ public class BlockStatePalette {
 
         for (int i = 0; i < blockStatePalette.size(); i++) {
             // section.getPaletteEntry(i).getCompound("Properties");  TODO: use proper states
-            Block block  = Block.getBlock(section.getBlockStatePaletteEntry(i).getString("Name").replace("minecraft:", ""));
+            Block block = Block.getBlock(section.getBlockStatePaletteEntry(i).getString("Name").replace("minecraft:", ""));
             buf.writeVarLong(block.getDefaultState());
         }
 

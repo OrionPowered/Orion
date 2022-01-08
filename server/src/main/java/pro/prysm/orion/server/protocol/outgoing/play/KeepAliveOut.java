@@ -6,11 +6,10 @@ import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
 @Getter
 public class KeepAliveOut extends OutgoingPacket {
-    private final long keepAliveId;
+    private final long keepAliveId = System.currentTimeMillis();
 
     public KeepAliveOut() {
         super(0x21);
-        keepAliveId = System.currentTimeMillis();
     }
 
     @Override
