@@ -32,7 +32,8 @@ public class PlayHandler extends ProtocolHandler {
         Level level = connection.getProtocol().getLevelManager().getLevel();
         player.setLocation(new Location(level.getSpawnX(), level.getSpawnY(), level.getSpawnZ(), 0F, 90F, false)); // TODO: This is a temp solution
         if (!level.hasSavedPlayerData(player.getProfile().getUniqueId())) player.savePlayerData(level);
-        player.readPlayerData(level.getPlayerData(player.getProfile().getUniqueId()));
+
+        player.readPlayerData(level.getPlayerData(player.getProfile().getUniqueId()).orElseThrow());
 
         Dimension dimension = new Dimension();
         JoinGame packet = new JoinGame();
