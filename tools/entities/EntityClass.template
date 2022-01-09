@@ -61,7 +61,7 @@ public class EntityType {
     private final String displayName;
     private final double width;
     private final double height;
-    private final Entity.Type type;
+    private final Entity.Type category;
 
     public EntityType(
             int id,
@@ -70,7 +70,7 @@ public class EntityType {
             String displayName,
             double width,
             double height,
-            Entity.Type type
+            Entity.Type category
     ) {
         this.id = id;
         this.internalId = internalId;
@@ -78,6 +78,6 @@ public class EntityType {
         this.displayName = displayName;
         this.width = width;
         this.height = height;
-        this.type = type;
+        this.category = category;
     }
 }

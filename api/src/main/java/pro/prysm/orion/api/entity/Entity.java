@@ -31,7 +31,10 @@ public interface Entity extends Identity {
      */
     Location getLocation();
 
-    enum Type {
+    /**
+     * Entity Categories
+     */
+    enum Category {
         PLAYER,
         HOSTILE,
         PASSIVE,

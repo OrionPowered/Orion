@@ -12,7 +12,7 @@ let listItems: string = ''
 data.entitiesArray.forEach(entity => {
   let staticVar = `public static final EntityType ${entity.name.toUpperCase()} = getById(${entity.id});\n\t`
 
-  let listItem = `new EntityType(${entity.id}, ${entity.internalId}, "${entity.name}", "${entity.displayName}", ${entity.width}, ${entity.height}, Entity.Type.${entity.type.toUpperCase()}),\n\t\t`
+  let listItem = `new EntityType(${entity.id}, ${entity.internalId}, "${entity.name}", "${entity.displayName}", ${entity.width}, ${entity.height}, Entity.Category.${entity.type.toUpperCase()}),\n\t\t`
 
   listItems += listItem
   staticVars += staticVar
