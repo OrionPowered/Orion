@@ -1,9 +1,11 @@
 package pro.prysm.orion.server.data.palette;
 
 import lombok.Getter;
+import lombok.ToString;
 import pro.prysm.orion.server.net.PacketByteBuf;
 
 @Getter
+@ToString
 public class PalettedContainer {
 
     public enum Type {
