@@ -35,7 +35,9 @@ public class PlayHandler extends ProtocolHandler {
         player.setLocation(new Location(level.getSpawnX(), level.getSpawnY(), level.getSpawnZ(), 0F, 90F, false)); // TODO: This is a temp solution
         if (!level.hasSavedPlayerData(player.getProfile().getUniqueId())) player.savePlayerData(level);
 
-        player.readPlayerData(level.getPlayerData(player.getProfile().getUniqueId()).orElseThrow());
+        Optional<CompoundBinaryTag> playerData = level.getPlayerData(player.getProfile().getUniqueId());
+
+        player.readPlayerData(playerData.orElseThrow());
 
         player.setGameMode(GameMode.SPECTATOR);
 
