@@ -1,10 +1,11 @@
-package pro.prysm.orion.server.plugin;
+package pro.prysm.orion.server.module;
 
 import org.slf4j.LoggerFactory;
 import pro.prysm.orion.api.exception.InvalidPluginException;
 import pro.prysm.orion.api.plugin.JavaPlugin;
 import pro.prysm.orion.api.plugin.PluginDescription;
 import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.module.api.JavaModule;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,19 +15,14 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.jar.JarFile;
 
-/**
- * @author 254n_m
- * @since 12/20/21 / 9:29 PM
- * This file was created as a part of Orion
- */
-public class PluginClassLoader extends URLClassLoader {
-    private final PluginLoader loader;
+public class ModuleClassLoader extends URLClassLoader {
+    private final ModuleLoader loader;
     private Field dataFolderF;
     private Field loggerF;
     private Field descriptionF;
     private Field eventBusF;
 
-    public PluginClassLoader(URL[] urls, ClassLoader parent, PluginLoader loader) {
+    public ModuleClassLoader(URL[] urls, ClassLoader parent, ModuleLoader loader) {
         super(urls, parent);
         this.loader = loader;
         try {
@@ -43,7 +39,7 @@ public class PluginClassLoader extends URLClassLoader {
         }
     }
 
-    public void loadPlugins(File... files) {
+    public void loadModules(File... files) {
         for (File file : files) {
             try {
                 addURL(file.toURI().toURL());
@@ -53,23 +49,23 @@ public class PluginClassLoader extends URLClassLoader {
                 loadClasses(jarFile);
 
                 PluginDescription description = new PluginDescription(jarFile);
-                JavaPlugin plugin = (JavaPlugin) Class.forName(description.getMainClass(), false, this)
+                JavaModule module = (JavaModule) Class.forName(description.getMainClass(), false, this)
                         .getConstructors()[0].newInstance();
 
-                dataFolderF.set(plugin, new File("./plugins", description.getName()));
-                loggerF.set(plugin, LoggerFactory.getLogger(description.getName()));
-                descriptionF.set(plugin, description);
-                eventBusF.set(plugin, Orion.getEventBus());
-                loader.plugins.add(plugin);
-                plugin.onEnable();
+                dataFolderF.set(module, new File("./modules", description.getName()));
+                loggerF.set(module, LoggerFactory.getLogger(description.getName()));
+                descriptionF.set(module, description);
+                eventBusF.set(module, Orion.getEventBus());
+                loader.getModules().add(module);
+                module.onEnable();
             } catch (IOException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | InvalidPluginException e) {
-                e.printStackTrace();
+                Orion.getLogger().warn(String.format("Error loading module %s: %s", file.getName(), e.getMessage()));
             }
         }
     }
 
     private void loadClasses(JarFile jarFile) {
-        jarFile.stream(). // Load all the classes in the plugin
+        jarFile.stream(). // Load all the classes in the module
                 filter(e -> e.getName().endsWith(".class")).map(je -> je.getName().replace("/", ".").replace(".class", "")).toList().forEach(str -> {
             try {
                 loadClass(str);

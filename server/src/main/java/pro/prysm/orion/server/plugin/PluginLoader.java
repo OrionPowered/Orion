@@ -17,7 +17,6 @@ import java.util.List;
 public class PluginLoader {
     protected final List<JavaPlugin> plugins = new ArrayList<>();
     private final File pluginFolder = new File("./plugins");
-    private final File moduleFolder = new File("./modules");
     private final PluginClassLoader pluginClassLoader = new PluginClassLoader(new URL[]{}, this.getClass().getClassLoader(), this);
 
     public PluginLoader() {
@@ -32,10 +31,7 @@ public class PluginLoader {
             pluginFolder.mkdirs();
         }
 
-        if (!moduleFolder.exists()) {
-            //noinspection ResultOfMethodCallIgnored
-            moduleFolder.mkdirs();
-        }
+
 
         File[] pluginFiles = pluginFolder.listFiles();
         if (pluginFiles == null) return;

@@ -15,6 +15,7 @@ import pro.prysm.orion.server.command.commands.ReloadCommand;
 import pro.prysm.orion.server.command.commands.SendPacketCommand;
 import pro.prysm.orion.server.data.LevelManager;
 import pro.prysm.orion.server.event.EventBus;
+import pro.prysm.orion.server.module.ModuleLoader;
 import pro.prysm.orion.server.net.TCPListener;
 import pro.prysm.orion.server.plugin.PluginLoader;
 import pro.prysm.orion.server.protocol.Protocol;
@@ -38,6 +39,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
     private final Protocol protocol;
     private final LevelManager levelManager;
     private final CommandHandler commandHandler;
+    private final ModuleLoader moduleLoader;
     private final PluginLoader pluginLoader;
     private Config config;
 
@@ -51,6 +53,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         levelManager = new LevelManager(config.getString("world"));
         protocol = new Protocol(this, levelManager, config);
         commandHandler = new CommandHandler();
+        moduleLoader = new ModuleLoader();
         pluginLoader = new PluginLoader();
 
         EVENT_BUS.subscribe(this);
