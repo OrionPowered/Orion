@@ -47,7 +47,7 @@ public class Block {
      * @param state Block State
      * @return Block
      */
-    public static Block getBlockFromState(long state) {
+    public static Block getBlockFromState(int state) {
         return REGISTRY.stream()
                 .filter(block -> block.getDefaultState() == state || (block.getMinStateId() < state && block.getMaxStateId() > state))
                 .collect(toSingleton());
@@ -69,9 +69,9 @@ public class Block {
     private final String name;
     private final double hardness;
     private final double resistance;
-    private final long minStateId;
-    private final long maxStateId;
-    private final long defaultState;
+    private final int minStateId;
+    private final int maxStateId;
+    private final int defaultState;
     // TODO: States Array
     private final boolean diggable;
     private final int emitLight;
@@ -85,9 +85,9 @@ public class Block {
             String name,
             double hardness,
             double resistance,
-            long minStateId,
-            long maxStateId,
-            long defaultState,
+            int minStateId,
+            int maxStateId,
+            int defaultState,
             boolean diggable,
             int emitLight,
             String material,
@@ -113,9 +113,9 @@ public class Block {
             String name,
             double hardness,
             double resistance,
-            long minStateId,
-            long maxStateId,
-            long defaultState,
+            int minStateId,
+            int maxStateId,
+            int defaultState,
             boolean diggable,
             int emitLight,
             String material
