@@ -1,6 +1,7 @@
 package pro.prysm.orion.api.entity;
 
 import net.kyori.adventure.identity.Identity;
+import pro.prysm.orion.api.data.EntityType;
 import pro.prysm.orion.api.data.Location;
 
 /**
@@ -17,7 +18,14 @@ public interface Entity extends Identity {
     int getEntityId();
 
     /**
-     * Retrieves the location of this entity (XYZ, Yaw, Pitch, OnGround)
+     * Retrieves what type of entity this is.
+     *
+     * @return This entity's {@link EntityType}
+     */
+    EntityType getType();
+
+    /**
+     * Retrieves the location of this entity (XYZ, Yaw, Pitch, OnGround).
      *
      * @return This entity's location
      */

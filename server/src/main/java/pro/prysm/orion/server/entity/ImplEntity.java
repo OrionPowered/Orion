@@ -2,6 +2,7 @@ package pro.prysm.orion.server.entity;
 
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
+import pro.prysm.orion.api.data.EntityType;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.entity.Entity;
 
@@ -26,10 +27,18 @@ public class ImplEntity implements Entity {
      */
     private final UUID uuid;
     /**
+     * This entity's type in id form
+     */
+    private final int entityTypeId;
+    /**
      * The {@link Location} of this entity
      */
     @Setter
     protected Location location;
+
+    public EntityType getType() {
+        return EntityType.getById(entityTypeId);
+    }
 
     /**
      * Peeks the next entity id without using it.

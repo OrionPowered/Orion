@@ -14,10 +14,7 @@ import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.TitlePart;
 import org.jetbrains.annotations.NotNull;
-import pro.prysm.orion.api.data.ClientSettings;
-import pro.prysm.orion.api.data.GameMode;
-import pro.prysm.orion.api.data.GameProfile;
-import pro.prysm.orion.api.data.Location;
+import pro.prysm.orion.api.data.*;
 import pro.prysm.orion.api.entity.Player;
 import pro.prysm.orion.server.entity.ImplEntity;
 import pro.prysm.orion.server.net.Connection;
@@ -35,8 +32,8 @@ public class ImplPlayer extends ImplEntity implements Player {
     private GameMode gameMode;
     private String brand;
 
-    public ImplPlayer(Connection connection, GameProfile profile, int entityId) {
-        super(entityId, profile.getUniqueId()); // Should I be using profile's uuid for this?
+    ImplPlayer(Connection connection, GameProfile profile, int entityId) {
+        super(entityId, profile.getUniqueId(), EntityType.PLAYER.getId()); // Should I be using profile's uuid for this?
         this.connection = connection;
         this.profile = profile;
     }
