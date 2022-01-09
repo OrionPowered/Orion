@@ -63,6 +63,7 @@ public class ChunkData extends OutgoingPacket {
 
         PacketByteBuf columnBuf = new PacketByteBuf(Unpooled.buffer());
         chunk.getSections().forEach(section -> {
+            columnBuf.writeShort(section.getBlockCount());
             PalettedContainer blockContainer = PalettedContainer.from(Type.BLOCK_STATES, section.getBitsPerBlock(), generateBlockPaletteData(section), section.getStates());
             PalettedContainer biomeContainer = PalettedContainer.from(Type.BIOME, section.getBitsPerBiome(), generateBiomePaletteData(section), section.getBiomes());
             blockContainer.write(columnBuf);
