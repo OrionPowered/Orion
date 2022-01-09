@@ -8,24 +8,29 @@ import pro.prysm.orion.server.net.PacketByteBuf;
 @ToString
 public class PalettedContainer {
 
-    public enum Type {
-        BLOCK_STATES,
-        BIOME
+    private final int bitsPerEntry;
+    private final long[] data;
+    private final Palette palette;
+    private PalettedContainer(int bitsPerEntry, long[] data, Palette palette) {
+        this.bitsPerEntry = bitsPerEntry;
+        this.data = data;
+        this.palette = palette;
     }
 
     /**
      * Creates a new PalettedContainer.
      * See more: <a href="https://wiki.vg/Chunk_Format#Paletted_Container_structure">wiki.vg</a>
-     * @param type PalettedContainer Type
+     *
+     * @param type         PalettedContainer Type
      * @param bitsPerEntry bits per entry
-     * @param paletteData Palette data
-     * @param data Data to store/write
+     * @param paletteData  Palette data
+     * @param data         Data to store/write
      * @return Creates a new PalettedContainer
      */
     public static PalettedContainer from(Type type, int bitsPerEntry, int[] paletteData, long[] data) {
-        switch(type) {
+        switch (type) {
             case BLOCK_STATES -> {
-                return switch(bitsPerEntry) {
+                return switch (bitsPerEntry) {
                     case 0 -> new PalettedContainer(bitsPerEntry, data, new SingletonPalette(paletteData));
                     case 1, 2, 3, 4 -> new PalettedContainer(4, data, new IndirectPalette(paletteData));
                     case 5, 6, 7, 8 -> new PalettedContainer(bitsPerEntry, data, new IndirectPalette(paletteData));
@@ -33,7 +38,7 @@ public class PalettedContainer {
                 };
             }
             case BIOME -> {
-                return switch(bitsPerEntry) {
+                return switch (bitsPerEntry) {
                     case 0 -> new PalettedContainer(bitsPerEntry, data, new SingletonPalette(paletteData));
                     case 1, 2, 3 -> new PalettedContainer(bitsPerEntry, data, new IndirectPalette(paletteData));
                     default -> new PalettedContainer(bitsPerEntry, data, new DirectPalette(paletteData));
@@ -43,19 +48,14 @@ public class PalettedContainer {
         }
     }
 
-    private final int bitsPerEntry;
-    private final long[] data;
-    private final Palette palette;
-
-    private PalettedContainer(int bitsPerEntry, long[] data, Palette palette) {
-        this.bitsPerEntry = bitsPerEntry;
-        this.data = data;
-        this.palette = palette;
-    }
-
     public void write(PacketByteBuf buf) {
         buf.writeVarInt(bitsPerEntry);
         palette.write(buf);
         buf.writeLongArray(data);
+    }
+
+    public enum Type {
+        BLOCK_STATES,
+        BIOME
     }
 }
