@@ -1,7 +1,8 @@
-package pro.prysm.orion.server.entity;
+package pro.prysm.orion.server.entity.player;
 
 import com.alexsobiek.anvil.Level;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identity;
@@ -13,22 +14,29 @@ import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.TitlePart;
 import org.jetbrains.annotations.NotNull;
-import pro.prysm.orion.api.data.ClientSettings;
-import pro.prysm.orion.api.data.GameProfile;
-import pro.prysm.orion.api.data.Location;
+import pro.prysm.orion.api.data.*;
 import pro.prysm.orion.api.entity.Player;
+import pro.prysm.orion.server.entity.ImplEntity;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.util.TagUtil;
 
 // TODO: Fully implement methods from Audience
 // TODO: Write JavaDoc comments
-@Data
-public class ImplPlayer implements Player {
+@Getter
+@Setter
+public class ImplPlayer extends ImplEntity implements Player {
     private final Connection connection;
     private final GameProfile profile;
     private ClientSettings settings;
     private Location location;
+    private GameMode gameMode;
     private String brand;
+
+    ImplPlayer(Connection connection, GameProfile profile, int entityId) {
+        super(entityId, profile.getUniqueId(), EntityType.PLAYER.getId()); // Should I be using profile's uuid for this?
+        this.connection = connection;
+        this.profile = profile;
+    }
 
     public void readPlayerData(CompoundBinaryTag nbt) {
         // Parse Location
@@ -41,7 +49,7 @@ public class ImplPlayer implements Player {
                         pos.getDouble(2)
                 },
                 new float[]{
-                        rot.getFloat(0), // Is this read in the correct order?
+                        rot.getFloat(0),
                         rot.getFloat(1)
                 },
                 nbt.getByte("OnGround") == 0x0
@@ -50,13 +58,12 @@ public class ImplPlayer implements Player {
         // TODO: Parse rest of player data file
     }
 
-    // Move level into player?
     public void savePlayerData(Level level) {
         CompoundBinaryTag.Builder tagBuilder = CompoundBinaryTag.builder();
 
         // TODO: Write rest of player data
         tagBuilder.put("Pos", TagUtil.doubleList(location.getX(), location.getY(), location.getZ()));
-        tagBuilder.put("Rotation", TagUtil.floatList(location.getYaw(), location.getPitch())); // Is this written in the correct order?
+        tagBuilder.put("Rotation", TagUtil.floatList(location.getYaw(), location.getPitch()));
         // ...
         tagBuilder.putBoolean("OnGround", location.isOnGround());
 

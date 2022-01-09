@@ -4,7 +4,8 @@ import lombok.Getter;
 import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
-import pro.prysm.orion.server.entity.ImplPlayer;
+import pro.prysm.orion.server.entity.player.ImplPlayer;
+import pro.prysm.orion.server.entity.player.PlayerFactory;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.protocol.incoming.login.EncryptionResponse;
 import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
@@ -32,7 +33,7 @@ public class LoginHandler extends ProtocolHandler {
             // Offline mode, sends a LoginSuccess packet with a UUID following "OfflinePlayer:<username>"
             GameProfile profile = new GameProfile(username, UUID.nameUUIDFromBytes(String.format("OfflinePlayer:%s", username).getBytes(StandardCharsets.UTF_8)));
             connection.sendPacket(new LoginSuccess(profile.getUniqueId(), username));
-            player = new ImplPlayer(connection, profile);
+            player = PlayerFactory.newPlayer(connection, profile);
             connection.setState(PacketState.PLAY);
             Orion.getLogger().info("{} joining...", username);
         }
@@ -63,10 +64,9 @@ public class LoginHandler extends ProtocolHandler {
         // If the above executes properly, we can now authenticate the user with the Mojang Session service
         GameProfile profile = connection.getProtocol().join(connection.getProtocol().generateServerId(connection.getSharedSecret()), username);
         if (profile == null) connection.disconnect("Bad login.");
-
         else {
             connection.sendPacket(new LoginSuccess(profile.getUniqueId(), profile.getUsername()));
-            player = new ImplPlayer(connection, profile);
+            player = PlayerFactory.newPlayer(connection, profile);
             connection.setState(PacketState.PLAY);
             Orion.getLogger().info("{}/{} joining...", profile.getUsername(), profile.getUniqueId());
         }

@@ -15,6 +15,7 @@ import pro.prysm.orion.server.command.commands.ReloadCommand;
 import pro.prysm.orion.server.command.commands.SendPacketCommand;
 import pro.prysm.orion.server.data.LevelManager;
 import pro.prysm.orion.server.event.EventBus;
+import pro.prysm.orion.server.module.ModuleLoader;
 import pro.prysm.orion.server.net.TCPListener;
 import pro.prysm.orion.server.plugin.PluginLoader;
 import pro.prysm.orion.server.protocol.Protocol;
@@ -27,17 +28,18 @@ import java.nio.file.Path;
 
 @Getter
 public class Orion implements Listener, pro.prysm.orion.api.Orion {
-
     // STATIC - Logger, EventBus, and OrionScheduler are the only objects that should be here.
     private static final Logger logger = (Logger) LoggerFactory.getLogger("Orion");
     private static final EventBus EVENT_BUS = new pro.prysm.orion.server.event.EventBus();
     private static final OrionScheduler SCHEDULER = new OrionScheduler();
     private final long startupTime = System.currentTimeMillis();
     // END STATIC
+
     private final TCPListener listener;
     private final Protocol protocol;
     private final LevelManager levelManager;
     private final CommandHandler commandHandler;
+    private final ModuleLoader moduleLoader;
     private final PluginLoader pluginLoader;
     private Config config;
 
@@ -51,6 +53,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         levelManager = new LevelManager(config.getString("world"));
         protocol = new Protocol(this, levelManager, config);
         commandHandler = new CommandHandler();
+        moduleLoader = new ModuleLoader();
         pluginLoader = new PluginLoader();
 
         EVENT_BUS.subscribe(this);

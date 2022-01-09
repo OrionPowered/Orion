@@ -6,6 +6,7 @@
   "scripts": {
     "generate-blocks": "ts-node blocks/blocks.ts",
     "generate-biomes": "ts-node biomes/biomes.ts",
+    "generate-entities": "ts-node entities/entities.ts",
     "lint": "ts-standard",
     "fix": "ts-standard --fix"
   },

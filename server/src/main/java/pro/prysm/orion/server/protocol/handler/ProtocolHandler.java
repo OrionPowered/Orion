@@ -36,7 +36,7 @@ public abstract class ProtocolHandler {
     public void handle(ClientSettings packet) {
     }
 
-    public void handle(PluginMessageIn packet) {
+    public void handle(CPluginMessage packet) {
     }
 
     public void handle(PlayerPosition packet) {

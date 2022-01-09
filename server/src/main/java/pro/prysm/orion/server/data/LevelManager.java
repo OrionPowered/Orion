@@ -39,7 +39,7 @@ public class LevelManager {
     }
 
     public Chunk getChunk(Location location) {
-        return getChunk((int) Math.floor(location.getX()) >> 5, (int) Math.floor(location.getZ()) >> 5);
+        return getChunk((int) Math.floor(location.getX()) >> 4, (int) Math.floor(location.getZ()) >> 4);
     }
 
     public Chunk getChunk(int x, int z) {

@@ -1,13 +1,17 @@
 package pro.prysm.orion.server.protocol.outgoing.play;
 
 import com.alexsobiek.anvil.Chunk;
+import com.alexsobiek.anvil.ChunkSection;
 import io.netty.buffer.Unpooled;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import pro.prysm.orion.server.data.palette.BiomePalette;
-import pro.prysm.orion.server.data.palette.BlockStatePalette;
+import pro.prysm.orion.api.data.Biome;
+import pro.prysm.orion.api.data.Block;
+import pro.prysm.orion.server.data.palette.PalettedContainer;
+import pro.prysm.orion.server.data.palette.PalettedContainer.Type;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChunkData extends OutgoingPacket {
@@ -15,7 +19,7 @@ public class ChunkData extends OutgoingPacket {
     private final CompoundBinaryTag heightmaps;
     List<byte[]> skyLight;
     List<byte[]> blockLight;
-    private int x, z;
+    private final int x, z;
 
     public ChunkData(Chunk chunk) {
         super(0x22);
@@ -27,13 +31,28 @@ public class ChunkData extends OutgoingPacket {
         blockLight = chunk.getBlockLight();
     }
 
-    // Setters are for debug purposes only!
-    public void setX(int x) {
-        this.x = x;
+    private int[] generateBlockPaletteData(ChunkSection section) {
+        ArrayList<Integer> data = new ArrayList<>();
+        int size = section.getBlockStatePalette().size();
+        for (int i = 0; i < size; i++) data.add(blockState(section, i));
+        return data.stream().mapToInt(Integer::intValue).toArray();
     }
 
-    public void setZ(int z) {
-        this.z = z;
+    private int[] generateBiomePaletteData(ChunkSection section) {
+        ArrayList<Integer> data = new ArrayList<>();
+        int size = section.getBiomePalette().size();
+        for (int i = 0; i < size; i++) data.add(biomeId(section, i));
+        return data.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    private int blockState(ChunkSection section, int index) {
+        // section.getPaletteEntry(i).getCompound("Properties");  TODO: use proper states
+        Block block = Block.getBlock(section.getBlockStatePaletteEntry(index).getString("Name").replace("minecraft:", ""));
+        return block.getDefaultState();
+    }
+
+    private int biomeId(ChunkSection section, int index) {
+        return Biome.getBiome(section.getBiomePaletteEntry(index).replace("minecraft:", "")).getId();
     }
 
     @Override
@@ -44,8 +63,10 @@ public class ChunkData extends OutgoingPacket {
 
         PacketByteBuf columnBuf = new PacketByteBuf(Unpooled.buffer());
         chunk.getSections().forEach(section -> {
-            new BlockStatePalette(section).write(columnBuf);
-            new BiomePalette(section).write(columnBuf);
+            PalettedContainer blockContainer = PalettedContainer.from(Type.BLOCK_STATES, section.getBitsPerBlock(), generateBlockPaletteData(section), section.getStates());
+            PalettedContainer biomeContainer = PalettedContainer.from(Type.BIOME, section.getBitsPerBiome(), generateBiomePaletteData(section), section.getBiomes());
+            blockContainer.write(columnBuf);
+            biomeContainer.write(columnBuf);
         });
 
         buf.writeVarInt(columnBuf.readableBytes());
