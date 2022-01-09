@@ -4,6 +4,7 @@ import lombok.*;
 import org.jetbrains.annotations.NotNull;
 import pro.prysm.orion.api.data.EntityType;
 import pro.prysm.orion.api.data.Location;
+import pro.prysm.orion.api.data.Velocity;
 import pro.prysm.orion.api.entity.Entity;
 
 import java.util.UUID;
@@ -25,19 +26,34 @@ public class ImplEntity implements Entity {
     /**
      * The UUID of this entity
      */
-    private final UUID uuid;
+    protected final UUID uuid;
     /**
      * This entity's type in id form
      */
-    private final int entityTypeId;
+    protected final int entityTypeId;
     /**
      * The {@link Location} of this entity
      */
     @Setter
     protected Location location;
+    @Setter
+    protected Velocity velocity = Velocity.NONE;
+    @Setter
+    protected float fallDistance;
 
+    @Override
     public EntityType getType() {
         return EntityType.getById(entityTypeId);
+    }
+
+    @Override
+    public void setLocation(double x, double y, double z) {
+        location.set(x, y, z);
+    }
+
+    @Override
+    public void setVelocity(double xMot, double yMot, double zMot) {
+        velocity.set(xMot, yMot, zMot);
     }
 
     /**
@@ -60,7 +76,7 @@ public class ImplEntity implements Entity {
     }
 
     @Override
-    public java.util.@NotNull UUID uuid() {
+    public @NotNull UUID uuid() {
         return uuid;
     }
 }

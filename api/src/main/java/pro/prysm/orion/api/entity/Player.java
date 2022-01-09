@@ -9,7 +9,7 @@ import pro.prysm.orion.api.net.Connection;
 /**
  * An interface to represent a player.
  */
-public interface Player extends Entity, Audience {
+public interface Player extends LivingEntity, Audience {
     /**
      * Retrieves this player's current gamemode.
      *
