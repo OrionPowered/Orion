@@ -5,6 +5,7 @@ import pro.prysm.orion.server.net.PacketByteBuf;
 public class SingletonPalette extends Palette {
     public SingletonPalette(int[] data) {
         super(data);
+        if (data.length > 1) throw new IllegalStateException("Unexpected amount data received for SingletonPalette");
     }
 
     @Override
