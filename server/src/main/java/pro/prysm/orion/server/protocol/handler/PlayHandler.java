@@ -56,12 +56,13 @@ public class PlayHandler extends ProtocolHandler {
         connection.sendPacket(packet);
 
         connection.sendPacket(new SPluginMessage(connection.getProtocol().getSlpData().getVersion().getName()));
-
         connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
+        startKeepAlive();
+        Orion.getLogger().debug("Player {} has logged in at {}", player.getProfile().getUsername(), player.getLocation());
+
 
         // Player has joined, send first chunk
         connection.sendPacket(new ChunkData(connection.getProtocol().getLevelManager().getChunk(player.getLocation())));
-        startKeepAlive();
     }
 
     private void startKeepAlive() {
