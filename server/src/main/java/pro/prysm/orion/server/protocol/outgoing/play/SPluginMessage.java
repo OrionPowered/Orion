@@ -6,9 +6,9 @@ import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
 @Getter
 public class SPluginMessage extends OutgoingPacket {
-    private String channel;
-    private String brand;
-    private byte[] data;
+    private final String channel;
+    private final String brand;
+    private final byte[] data;
 
     public SPluginMessage(String channel, byte[] data) {
         super(0x18);

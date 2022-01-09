@@ -10,12 +10,12 @@ import pro.prysm.orion.server.util.MathUtil;
 import java.util.UUID;
 
 public class SpawnEntity extends OutgoingPacket {
-    private int entityId;
-    private UUID entityUUID;
-    private int entityType;
-    private Location location;
-    private int data;
-    private Velocity velocity;
+    private final int entityId;
+    private final UUID entityUUID;
+    private final int entityType;
+    private final Location location;
+    private final int data;
+    private final Velocity velocity;
 
     public SpawnEntity(ImplEntity entity) {
         super(0x00);
