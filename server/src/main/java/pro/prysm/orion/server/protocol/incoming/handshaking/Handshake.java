@@ -14,7 +14,7 @@ public class Handshake extends IncomingPacket {
     private PacketState nextState;
 
     public Handshake(Connection connection) {
-        super(0x00, connection);
+        super(connection);
     }
 
     @Override

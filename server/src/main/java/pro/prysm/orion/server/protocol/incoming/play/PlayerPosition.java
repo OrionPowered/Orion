@@ -11,7 +11,7 @@ public class PlayerPosition extends IncomingPacket {
     private boolean onGround;
 
     public PlayerPosition(Connection connection) {
-        super(0x11, connection);
+        super(connection);
     }
 
     @Override

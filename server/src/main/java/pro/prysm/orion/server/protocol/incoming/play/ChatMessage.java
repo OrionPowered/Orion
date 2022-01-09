@@ -10,7 +10,7 @@ public class ChatMessage extends IncomingPacket {
     private String message;
 
     public ChatMessage(Connection connection) {
-        super(0x03, connection);
+        super(connection);
     }
 
     @Override

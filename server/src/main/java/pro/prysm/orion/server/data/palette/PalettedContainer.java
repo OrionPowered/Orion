@@ -11,6 +11,7 @@ public class PalettedContainer {
     private final int bitsPerEntry;
     private final long[] data;
     private final Palette palette;
+
     private PalettedContainer(int bitsPerEntry, long[] data, Palette palette) {
         this.bitsPerEntry = bitsPerEntry;
         this.data = data;

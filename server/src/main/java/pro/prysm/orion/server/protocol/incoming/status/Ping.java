@@ -10,7 +10,7 @@ public class Ping extends IncomingPacket {
     private long value;
 
     public Ping(Connection connection) {
-        super(0x01, connection);
+        super(connection);
     }
 
     @Override

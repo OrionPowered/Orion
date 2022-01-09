@@ -11,7 +11,7 @@ public class CPluginMessage extends IncomingPacket {
     private byte[] data;
 
     public CPluginMessage(Connection connection) {
-        super(0x0A, connection);
+        super(connection);
     }
 
     @Override

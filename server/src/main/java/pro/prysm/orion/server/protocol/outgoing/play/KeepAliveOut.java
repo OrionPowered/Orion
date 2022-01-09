@@ -14,6 +14,6 @@ public class KeepAliveOut extends OutgoingPacket {
 
     @Override
     public void write(PacketByteBuf buf) {
-        buf.writeLong(id);
+        buf.writeLong(keepAliveId);
     }
 }

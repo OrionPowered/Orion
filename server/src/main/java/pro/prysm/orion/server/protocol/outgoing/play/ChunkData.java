@@ -17,9 +17,9 @@ import java.util.List;
 public class ChunkData extends OutgoingPacket {
     private final Chunk chunk;
     private final CompoundBinaryTag heightmaps;
+    private final int x, z;
     List<byte[]> skyLight;
     List<byte[]> blockLight;
-    private final int x, z;
 
     public ChunkData(Chunk chunk) {
         super(0x22);
