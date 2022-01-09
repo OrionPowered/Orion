@@ -11,5 +11,4 @@ import pro.prysm.orion.api.protocol.PacketState;
 public abstract class Packet {
     protected final int id;
     protected PacketDirection direction;
-    protected PacketState state;
 }
