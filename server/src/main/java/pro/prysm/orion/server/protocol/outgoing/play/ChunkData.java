@@ -60,18 +60,18 @@ public class ChunkData extends OutgoingPacket {
         buf.writeInt(z);
         buf.writeNBT(heightmaps);
 
-        PacketByteBuf columnBuf = new PacketByteBuf(Unpooled.buffer());
+        PacketByteBuf paletteBuf = new PacketByteBuf(Unpooled.buffer());
         chunk.getSections().forEach(section -> {
-            columnBuf.writeShort(section.getBlockCount());
+            paletteBuf.writeShort(section.getBlockCount());
             PalettedContainer blockContainer = PalettedContainer.from(Type.BLOCK_STATES, section.getBitsPerBlock(), generateBlockPaletteData(section), section.getStates());
             PalettedContainer biomeContainer = PalettedContainer.from(Type.BIOME, section.getBitsPerBiome(), generateBiomePaletteData(section), section.getBiomes());
-            blockContainer.write(columnBuf);
-            biomeContainer.write(columnBuf);
+            blockContainer.write(paletteBuf);
+            biomeContainer.write(paletteBuf);
         });
 
-        buf.writeVarInt(columnBuf.readableBytes());
-        buf.writeBytes(columnBuf);
-        columnBuf.release();
+        buf.writeVarInt(paletteBuf.readableBytes());
+        buf.writeBytes(paletteBuf);
+        paletteBuf.release();
 
         buf.writeVarInt(0); // No block entities
 
