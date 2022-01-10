@@ -15,7 +15,7 @@ public class LoginDisconnected extends OutgoingPacket {
     }
 
     public LoginDisconnected(int id, String message) {
-        super(0x00);
+        super(id);
         this.message = new Message(message);
     }
 
