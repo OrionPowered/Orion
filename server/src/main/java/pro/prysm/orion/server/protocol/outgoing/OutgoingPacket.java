@@ -1,8 +1,10 @@
 package pro.prysm.orion.server.protocol.outgoing;
 
+import lombok.Getter;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.Packet;
 
+@Getter
 public abstract class OutgoingPacket extends Packet {
     private final int id;
 
