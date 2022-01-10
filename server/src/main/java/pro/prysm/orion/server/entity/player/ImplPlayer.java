@@ -16,7 +16,7 @@ import net.kyori.adventure.title.TitlePart;
 import org.jetbrains.annotations.NotNull;
 import pro.prysm.orion.api.data.*;
 import pro.prysm.orion.api.entity.Player;
-import pro.prysm.orion.server.entity.ImplEntity;
+import pro.prysm.orion.server.entity.ImplLivingEntity;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.util.TagUtil;
 
@@ -24,7 +24,7 @@ import pro.prysm.orion.server.util.TagUtil;
 // TODO: Write JavaDoc comments
 @Getter
 @Setter
-public class ImplPlayer extends ImplEntity implements Player {
+public class ImplPlayer extends ImplLivingEntity implements Player {
     private final Connection connection;
     private final GameProfile profile;
     private ClientSettings settings;
