@@ -19,8 +19,8 @@ public class ModuleLoader {
     public void loadModules() {
         Orion.getLogger().info("Loading modules");
 
-        if(!moduleFolder.exists()) {
-            if(!moduleFolder.mkdir()) {
+        if (!moduleFolder.exists()) {
+            if (!moduleFolder.mkdir()) {
                 Orion.getLogger().warn("Unable to create module folder, aborting module load!");
                 return;
             }

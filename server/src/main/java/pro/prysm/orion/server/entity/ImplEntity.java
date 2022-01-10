@@ -41,21 +41,6 @@ public class ImplEntity implements Entity {
     @Setter
     protected float fallDistance;
 
-    @Override
-    public EntityType getType() {
-        return EntityType.getById(entityTypeId);
-    }
-
-    @Override
-    public void setLocation(double x, double y, double z) {
-        location.set(x, y, z);
-    }
-
-    @Override
-    public void setVelocity(double xMot, double yMot, double zMot) {
-        velocity.set(xMot, yMot, zMot);
-    }
-
     /**
      * Peeks the next entity id without using it.
      *
@@ -73,6 +58,21 @@ public class ImplEntity implements Entity {
     public static int useEntityId() {
         nextEntityId++;
         return nextEntityId - 1;
+    }
+
+    @Override
+    public EntityType getType() {
+        return EntityType.getById(entityTypeId);
+    }
+
+    @Override
+    public void setLocation(double x, double y, double z) {
+        location.set(x, y, z);
+    }
+
+    @Override
+    public void setVelocity(double xMot, double yMot, double zMot) {
+        velocity.set(xMot, yMot, zMot);
     }
 
     @Override

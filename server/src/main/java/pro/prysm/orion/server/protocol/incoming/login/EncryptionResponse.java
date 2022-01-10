@@ -11,7 +11,7 @@ public class EncryptionResponse extends IncomingPacket {
     private byte[] verifyToken;
 
     public EncryptionResponse(Connection connection) {
-        super(0x01, connection);
+        super(connection);
     }
 
     @Override

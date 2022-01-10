@@ -60,7 +60,7 @@ public class PlayHandler extends ProtocolHandler {
         packet.setFlat(false);
         connection.sendPacket(packet);
 
-        connection.sendPacket(new SPluginMessage(connection.getProtocol().getSlpData().getVersion().getName()));
+        connection.sendPacket(new SPluginMessage("minecraft:brand", connection.getProtocol().getSlpData().getVersion().getName()));
         connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
         startKeepAlive();
         Orion.getLogger().debug("Player {} has logged in at {}", player.getProfile().getUsername(), player.getLocation());
@@ -77,7 +77,7 @@ public class PlayHandler extends ProtocolHandler {
 
             KeepAliveOut keepAlive = new KeepAliveOut();
             connection.sendPacket(keepAlive);
-            keepAliveId = keepAlive.getId();
+            keepAliveId = keepAlive.getKeepAliveId();
             Orion.getLogger().debug("Send keepalive to {} ({})", connection.getAddress(), player.getProfile().getUsername());
         }, 0, (25 * OrionScheduler.TPS)); // Every 25 seconds (30 seconds resulted in random timeouts)
     }

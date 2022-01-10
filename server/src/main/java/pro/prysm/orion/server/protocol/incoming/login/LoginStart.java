@@ -10,7 +10,7 @@ public class LoginStart extends IncomingPacket {
     private String username;
 
     public LoginStart(Connection connection) {
-        super(0x00, connection);
+        super(connection);
     }
 
     @Override

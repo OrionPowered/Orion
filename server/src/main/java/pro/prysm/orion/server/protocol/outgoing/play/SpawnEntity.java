@@ -39,8 +39,8 @@ public class SpawnEntity extends OutgoingPacket {
         buf.writeByte(0); // Pitch
         buf.writeByte(0); // Yaw
         buf.writeInt(data);
-        buf.writeShort((int)(MathUtil.clamp(location.getX(), -3.9D, 3.9D) * 8000.0D)); // X Vel
-        buf.writeShort((int)(MathUtil.clamp(location.getY(), -3.9D, 3.9D) * 8000.0D)); // Y Vel
-        buf.writeShort((int)(MathUtil.clamp(location.getZ(), -3.9D, 3.9D) * 8000.0D)); // Z Vel
+        buf.writeShort((int) (MathUtil.clamp(location.getX(), -3.9D, 3.9D) * 8000.0D)); // X Vel
+        buf.writeShort((int) (MathUtil.clamp(location.getY(), -3.9D, 3.9D) * 8000.0D)); // Y Vel
+        buf.writeShort((int) (MathUtil.clamp(location.getZ(), -3.9D, 3.9D) * 8000.0D)); // Z Vel
     }
 }

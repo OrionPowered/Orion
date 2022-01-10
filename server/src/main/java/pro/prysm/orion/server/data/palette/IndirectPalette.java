@@ -10,6 +10,6 @@ public class IndirectPalette extends Palette {
     @Override
     public void write(PacketByteBuf buf) {
         buf.writeVarInt(data.length);
-        for(int d : data) buf.writeVarInt(d);
+        for (int d : data) buf.writeVarInt(d);
     }
 }

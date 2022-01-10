@@ -10,7 +10,7 @@ public class KeepAliveIn extends IncomingPacket {
     private long keepAliveId;
 
     public KeepAliveIn(Connection connection) {
-        super(0x0F, connection);
+        super(connection);
     }
 
     @Override

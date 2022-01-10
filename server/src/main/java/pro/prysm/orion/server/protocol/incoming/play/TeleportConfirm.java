@@ -10,7 +10,7 @@ public class TeleportConfirm extends IncomingPacket {
     private int teleportId;
 
     public TeleportConfirm(Connection connection) {
-        super(0x00, connection);
+        super(connection);
     }
 
     @Override

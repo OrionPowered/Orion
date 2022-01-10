@@ -7,8 +7,7 @@ import pro.prysm.orion.server.protocol.Packet;
 public abstract class IncomingPacket extends Packet {
     protected Connection connection;
 
-    public IncomingPacket(int id, Connection connection) {
-        super(id);
+    public IncomingPacket(Connection connection) {
         this.connection = connection;
     }
 

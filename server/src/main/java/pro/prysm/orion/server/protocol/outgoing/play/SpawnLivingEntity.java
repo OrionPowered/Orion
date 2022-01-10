@@ -15,8 +15,8 @@ public class SpawnLivingEntity extends OutgoingPacket {
     private final int entityType;
     private final Location location;
     private final float headPitch;
-    private int data;
     private final Velocity velocity;
+    private int data;
 
     public SpawnLivingEntity(ImplLivingEntity entity) {
         super(0x00);
@@ -40,8 +40,8 @@ public class SpawnLivingEntity extends OutgoingPacket {
         buf.writeByte(0); // Pitch
         buf.writeByte(0); // Yaw
         buf.writeByte(0); // Head pitch
-        buf.writeShort((int)(MathUtil.clamp(location.getX(), -3.9D, 3.9D) * 8000.0D)); // X Vel
-        buf.writeShort((int)(MathUtil.clamp(location.getY(), -3.9D, 3.9D) * 8000.0D)); // Y Vel
-        buf.writeShort((int)(MathUtil.clamp(location.getZ(), -3.9D, 3.9D) * 8000.0D)); // Z Vel
+        buf.writeShort((int) (MathUtil.clamp(location.getX(), -3.9D, 3.9D) * 8000.0D)); // X Vel
+        buf.writeShort((int) (MathUtil.clamp(location.getY(), -3.9D, 3.9D) * 8000.0D)); // Y Vel
+        buf.writeShort((int) (MathUtil.clamp(location.getZ(), -3.9D, 3.9D) * 8000.0D)); // Z Vel
     }
 }

@@ -32,7 +32,6 @@ public class PluginLoader {
         }
 
 
-
         File[] pluginFiles = pluginFolder.listFiles();
         if (pluginFiles == null) return;
 

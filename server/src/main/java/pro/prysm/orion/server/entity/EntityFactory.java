@@ -17,7 +17,8 @@ public class EntityFactory {
 
     /**
      * Creates a new entity with the specified {@link EntityType} and {@link UUID}.
-     * @param type The type of entity to create
+     *
+     * @param type       The type of entity to create
      * @param entityUUID The entity's UUID
      * @return The created entity
      */
@@ -27,8 +28,9 @@ public class EntityFactory {
 
     /**
      * Creates a new entity with the specified {@link EntityType}, entity id, and {@link UUID}.
-     * @param type The type of entity to create
-     * @param entityId The entity's id
+     *
+     * @param type       The type of entity to create
+     * @param entityId   The entity's id
      * @param entityUUID The entity's UUID
      * @return The created entity
      */
