@@ -50,7 +50,7 @@ public class PalettedContainer {
     }
 
     public void write(PacketByteBuf buf) {
-        buf.writeVarInt(bitsPerEntry);
+        buf.writeByte(bitsPerEntry);
         palette.write(buf);
         buf.writeLongArray(data);
     }
