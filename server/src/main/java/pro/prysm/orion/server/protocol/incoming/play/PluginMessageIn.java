@@ -17,7 +17,8 @@ public class PluginMessageIn extends IncomingPacket {
     @Override
     public void read(PacketByteBuf buf) {
         channel = buf.readString();
-        data = buf.readByteArray();
+        data = new byte[buf.readableBytes()];
+        buf.readBytes(data);
         connection.getHandler().handle(this);
     }
 }
