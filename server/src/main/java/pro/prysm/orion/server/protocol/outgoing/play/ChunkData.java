@@ -11,7 +11,6 @@ import pro.prysm.orion.server.data.palette.PalettedContainer.Type;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ChunkData extends OutgoingPacket {
@@ -74,7 +73,7 @@ public class ChunkData extends OutgoingPacket {
         buf.writeBytes(columnBuf);
         columnBuf.release();
 
-        buf.writeByte(0); // No block entities
+        buf.writeVarInt(0); // No block entities
 
         buf.writeBoolean(true);   // trust edges? <-- TODO
         buf.writeBitSet(chunk.getSkyLightMask());
