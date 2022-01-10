@@ -60,7 +60,7 @@ public class PlayHandler extends ProtocolHandler {
         packet.setFlat(false);
         connection.sendPacket(packet);
 
-        connection.sendPacket(new SPluginMessage("minecraft:brand", connection.getProtocol().getSlpData().getVersion().getName()));
+        connection.sendPacket(new PluginMessageOut("minecraft:brand", connection.getProtocol().getSlpData().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
         connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
         startKeepAlive();
         Orion.getLogger().debug("Player {} has logged in at {}", player.getProfile().getUsername(), player.getLocation());
@@ -105,7 +105,7 @@ public class PlayHandler extends ProtocolHandler {
     }
 
     @Override
-    public void handle(CPluginMessage packet) {
+    public void handle(PluginMessageIn packet) {
         if (packet.getChannel().equals("minecraft:brand"))
             player.setBrand(new String(packet.getData(), StandardCharsets.UTF_8));
         else System.out.println(packet.getChannel());

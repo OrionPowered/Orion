@@ -32,17 +32,17 @@ public class ChunkData extends OutgoingPacket {
     }
 
     private int[] generateBlockPaletteData(ChunkSection section) {
-        ArrayList<Integer> data = new ArrayList<>();
         int size = section.getBlockStatePalette().size();
-        for (int i = 0; i < size; i++) data.add(blockState(section, i));
-        return data.stream().mapToInt(Integer::intValue).toArray();
+        int[] data = new int[size];
+        for (int i = 0; i < size; i++) data[i] = blockState(section, i);
+        return data;
     }
 
     private int[] generateBiomePaletteData(ChunkSection section) {
-        ArrayList<Integer> data = new ArrayList<>();
         int size = section.getBiomePalette().size();
-        for (int i = 0; i < size; i++) data.add(biomeId(section, i));
-        return data.stream().mapToInt(Integer::intValue).toArray();
+        int[] data = new int[size];
+        for (int i = 0; i < size; i++) data[i] = biomeId(section, i);
+        return data;
     }
 
     private int blockState(ChunkSection section, int index) {

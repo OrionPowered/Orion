@@ -29,7 +29,7 @@ public class PacketRegistry {
     HashMap<Integer, Class<? extends IncomingPacket>> incomingPlay = new HashMap<>() {{
         put(0x00, TeleportConfirm.class);
         put(0x05, ClientSettings.class);
-        put(0x0A, CPluginMessage.class);
+        put(0x0A, PluginMessageIn.class);
         put(0x11, PlayerPosition.class);
         put(0x12, PlayerPositionAndRotation.class);
         put(0x13, PlayerRotation.class);
