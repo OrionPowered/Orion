@@ -16,27 +16,27 @@ public class Location {
         this(position[0], position[1], position[2], rotation[0], rotation[1], onGround);
     }
 
-    public void addX(int x) {
+    public void addX(double x) {
         this.x += x;
     }
 
-    public void addY(int y) {
+    public void addY(double y) {
         this.y += y;
     }
 
-    public void addZ(int z) {
+    public void addZ(double z) {
         this.z += z;
     }
 
-    public void subX(int x) {
+    public void subX(double x) {
         this.x -= x;
     }
 
-    public void subY(int x) {
+    public void subY(double x) {
         this.y -= y;
     }
 
-    public void subZ(int z) {
+    public void subZ(double z) {
         this.z -= z;
     }
 
