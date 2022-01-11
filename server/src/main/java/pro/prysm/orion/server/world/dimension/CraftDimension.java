@@ -24,7 +24,6 @@ public class CraftDimension implements DimensionProvider {
             InputStream is = Orion.class.getClassLoader().getResourceAsStream("dimension_codec.nbt");
             if (is == null) throw new ResourceNotFoundException("Could not find dimension codec in jar!");
             dimension = BinaryTagIO.reader().read(is);
-            System.out.println(dimension);
             Orion.getLogger().debug("Loaded dimension codec");
         } catch (IOException | ResourceNotFoundException e) {
             e.printStackTrace();
