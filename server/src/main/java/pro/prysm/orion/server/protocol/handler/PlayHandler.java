@@ -5,7 +5,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import pro.prysm.orion.api.data.*;
 import pro.prysm.orion.api.event.event.PlayerMoveEvent;
 import pro.prysm.orion.server.Orion;
-import pro.prysm.orion.server.data.Dimension;
+import pro.prysm.orion.server.data.dimension.Dimension;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
 import pro.prysm.orion.server.protocol.incoming.play.*;
 import pro.prysm.orion.server.protocol.incoming.play.ClientSettings;
@@ -45,8 +45,8 @@ public class PlayHandler extends ProtocolHandler {
         packet.setGamemode(player.getGameMode());             // TODO: Implement Gamemode
         packet.setPreviousGamemode(player.getGameMode());
         packet.setWorlds(new String[]{"world"});            // TODO: Implement worlds
-        packet.setDimensionCodec(dimension.getCodec());
-        packet.setDimension(dimension.getType());
+        packet.setDimensionCodec(dimension.getDimension());
+        packet.setDimension(dimension.getDimensionType("minecraft:overworld"));
         packet.setWorldName("world");                       // TODO: Implement worlds
         packet.setHashedSeed(12345678);
         packet.setMaxPlayers(connection.getProtocol().getMaxPlayers());
