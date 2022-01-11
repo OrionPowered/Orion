@@ -42,7 +42,7 @@ public class PalettedContainer {
                 return switch (bitsPerEntry) {
                     case 0 -> new PalettedContainer(bitsPerEntry, data, new SingletonPalette(paletteData));
                     case 1, 2, 3 -> new PalettedContainer(bitsPerEntry, data, new IndirectPalette(paletteData));
-                    default -> new PalettedContainer(bitsPerEntry, data, new DirectPalette(paletteData));
+                    default -> new PalettedContainer(6, data, new DirectPalette(paletteData)); // This is 100% correct
                 };
             }
             default -> throw new IllegalStateException("Not a valid palette type: " + type);
