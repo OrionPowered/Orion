@@ -1,16 +1,17 @@
-package pro.prysm.orion.server.protocol.handler;
+package pro.prysm.orion.server.protocol.handler.play;
 
 import com.alexsobiek.anvil.Level;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import pro.prysm.orion.api.data.*;
-import pro.prysm.orion.api.event.event.PlayerMoveEvent;
 import pro.prysm.orion.server.Orion;
-import pro.prysm.orion.server.data.dimension.Dimension;
+import pro.prysm.orion.server.protocol.handler.ProtocolHandler;
+import pro.prysm.orion.server.world.LevelManager;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
 import pro.prysm.orion.server.protocol.incoming.play.*;
 import pro.prysm.orion.server.protocol.incoming.play.ClientSettings;
 import pro.prysm.orion.server.protocol.outgoing.play.*;
 import pro.prysm.orion.server.scheduler.OrionScheduler;
+import pro.prysm.orion.server.world.dimension.DimensionProvider;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 public class PlayHandler extends ProtocolHandler {
     private final ImplPlayer player;
+    private final Movement movement;
     private final int teleportId = 0; // TODO: Implement checking of teleport ids
     private UUID keepAliveTask;
     private long keepAliveId;
@@ -25,11 +27,15 @@ public class PlayHandler extends ProtocolHandler {
     public PlayHandler(ImplPlayer player) {
         super(player.getConnection());
         this.player = player;
+        movement = new Movement(player);
         joinGame();
     }
 
     private void joinGame() {
-        Level level = connection.getProtocol().getLevelManager().getLevel();
+        LevelManager levelManager = connection.getProtocol().getLevelManager();
+        DimensionProvider dimension = levelManager.getDimension();
+        Level level = levelManager.getLevel();
+
         player.setLocation(new Location(level.getSpawnX(), level.getSpawnY(), level.getSpawnZ(), 0F, 90F, false)); // TODO: This is a temp solution
         if (!level.hasSavedPlayerData(player.getProfile().getUniqueId())) player.savePlayerData(level);
 
@@ -39,33 +45,28 @@ public class PlayHandler extends ProtocolHandler {
 
         player.setGameMode(GameMode.SPECTATOR);
 
-        Dimension dimension = new Dimension();
-        JoinGame packet = new JoinGame();
-        packet.setEntityId(player.getEntityId());
-        packet.setGamemode(player.getGameMode());             // TODO: Implement Gamemode
-        packet.setPreviousGamemode(player.getGameMode());
-        packet.setWorlds(new String[]{"world"});            // TODO: Implement worlds
-        packet.setDimensionCodec(dimension.getDimension());
-        packet.setDimension(dimension.getDimensionType("minecraft:overworld"));
-        packet.setWorldName("world");                       // TODO: Implement worlds
-        packet.setHashedSeed(12345678);
-        packet.setMaxPlayers(connection.getProtocol().getMaxPlayers());
-        packet.setViewDistance(10);                         // TODO: Implement view distance
-        packet.setSimulationDistance(10);                   // TODO: Implement simulation distance
-        packet.setReducedDebugInfo(false);
-        packet.setRespawnScreen(true);
-        packet.setDebug(false);
-        packet.setFlat(false);
-        connection.sendPacket(packet);
+        JoinGame joinGame = new JoinGame();
+        joinGame.setEntityId(player.getEntityId());
+        joinGame.setGamemode(player.getGameMode());             // TODO: Implement Gamemode
+        joinGame.setPreviousGamemode(player.getGameMode());
+        joinGame.setWorlds(new String[]{"world"});            // TODO: Implement worlds
+        joinGame.setDimensionCodec(dimension.getDimension());
+        joinGame.setDimension(dimension.getDimensionType("minecraft:overworld"));
+        joinGame.setWorldName(level.getName());                       // TODO: Implement worlds
+        joinGame.setHashedSeed(12345678);
+        joinGame.setMaxPlayers(connection.getProtocol().getMaxPlayers());
+        joinGame.setViewDistance(10);                         // TODO: Implement view distance
+        joinGame.setSimulationDistance(10);                   // TODO: Implement simulation distance
+        joinGame.setReducedDebugInfo(false);
+        joinGame.setRespawnScreen(true);
+        joinGame.setDebug(false);
+        joinGame.setFlat(false);
+        connection.sendPacket(joinGame);
 
         connection.sendPacket(new PluginMessageOut("minecraft:brand", connection.getProtocol().getSlpData().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
         connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
         startKeepAlive();
         Orion.getLogger().debug("Player {} has logged in at {}", player.getProfile().getUsername(), player.getLocation());
-
-
-        // Player has joined, send first chunk
-        connection.sendPacket(new ChunkData(connection.getProtocol().getLevelManager().getChunk(player.getLocation())));
     }
 
     private void startKeepAlive() {
@@ -115,7 +116,7 @@ public class PlayHandler extends ProtocolHandler {
         to.setX(packet.getX());
         to.setY(packet.getY());
         to.setZ(packet.getZ());
-        player.setLocation(playerMove(to, player.getLocation()));
+        player.setLocation(movement.playerMove(to, player.getLocation()));
     }
 
     @Override
@@ -124,7 +125,7 @@ public class PlayHandler extends ProtocolHandler {
         to.setYaw(packet.getYaw());
         to.setPitch(packet.getPitch());
         to.setOnGround(packet.isOnGround());
-        player.setLocation(playerMove(to, player.getLocation()));
+        player.setLocation(movement.playerMove(to, player.getLocation()));
     }
 
     @Override
@@ -136,23 +137,10 @@ public class PlayHandler extends ProtocolHandler {
         to.setYaw(packet.getYaw());
         to.setPitch(packet.getPitch());
         to.setOnGround(packet.isOnGround());
-        player.setLocation(playerMove(to, player.getLocation()));
+        player.setLocation(movement.playerMove(to, player.getLocation()));
     }
 
     @Override
     public void handle(TeleportConfirm packet) {
-    }
-
-    private Location playerMove(Location to, Location from) {
-        if (to.equals(from)) return from;
-        PlayerMoveEvent event = new PlayerMoveEvent(player, to, player.getLocation());
-        Orion.getEventBus().post(event);
-        if (!event.isCancelled()) {
-            // if (!event.getTo().equals(to)) // TODO: implement teleporting
-            return to;
-        } else {
-            // TODO: teleport player back to their original location
-            return from;
-        }
     }
 }
