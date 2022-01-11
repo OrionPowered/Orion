@@ -2,8 +2,13 @@ package pro.prysm.orion.server.data.dimension;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import pro.prysm.orion.api.exception.ResourceNotFoundException;
+import pro.prysm.orion.server.Orion;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -14,50 +19,15 @@ public class Dimension {
     private CompoundBinaryTag dimension;
 
     public Dimension() {
-        DimensionBuilder builder = new DimensionBuilder();
-        DimensionType overworld = new DimensionType();
-
-        // Overworld
-        overworld.setName("minecraft:overworld");
-        overworld.setId(0);
-        overworld.setPiglinSafe(false);
-        overworld.setAmbientLight(0.0F);
-        overworld.setInfiniburn("minecraft:infiniburn_overworld");
-        overworld.setRespawnAnchorWorks(false);
-        overworld.setHasSkylight(true);
-        overworld.setBedWorks(true);
-        overworld.setEffects("minecraft:overworld");
-        overworld.setHasRaids(true);
-        overworld.setMinY(0);
-        overworld.setHeight(320);
-        overworld.setLogicalHeight(320);
-        overworld.setUltrawarm(false);
-        overworld.setCoordinateScale(1.0D);
-        overworld.setHasCeiling(false);
-
-        builder.addTypeValue(overworld);
-
-        // Plains biome
-        BiomeType plains = new BiomeType();
-        plains.setName("minecraft:plains");
-        plains.setId(1);
-        plains.setPrecipitation("rain");
-        plains.setSkyColor(7907327);
-        plains.setWaterFogColor(329011);
-        plains.setFogColor(12638463);
-        plains.setWaterColor(4159204);
-        plains.setMoodSoundTickDelay(6000);
-        plains.setMoodSoundOffset(2.0D);
-        plains.setMoodSoundSound("minecraft:ambient.cave");
-        plains.setMoodSoundBlockSearchExtent(8);
-        plains.setDepth(0.125F);
-        plains.setTemperature(0.8F);
-        plains.setScale(0.05F);
-        plains.setDownfall(0.4F);
-        plains.setCategory("plains");
-
-        builder.addBiome(plains);
-        dimension = builder.build();
+        try {
+            InputStream is = Orion.class.getClassLoader().getResourceAsStream("dimension_codec.nbt");
+            if (is == null) throw new ResourceNotFoundException("Could not find dimension codec in jar!");
+            dimension = BinaryTagIO.reader().read(is);
+            System.out.println(dimension);
+            Orion.getLogger().debug("Loaded dimension codec");
+        } catch (IOException | ResourceNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public static <T> Collector<T, ?, T> toSingleton() {
