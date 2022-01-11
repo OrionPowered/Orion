@@ -15,6 +15,7 @@ import pro.prysm.orion.server.net.pipeline.CipherDecoder;
 import pro.prysm.orion.server.net.pipeline.CipherEncoder;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.handler.*;
+import pro.prysm.orion.server.protocol.handler.play.PlayHandler;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.server.protocol.outgoing.login.LoginDisconnected;
 import pro.prysm.orion.server.protocol.outgoing.play.PlayDisconnect;
