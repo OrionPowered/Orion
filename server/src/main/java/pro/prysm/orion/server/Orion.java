@@ -13,7 +13,7 @@ import pro.prysm.orion.server.command.CommandHandler;
 import pro.prysm.orion.server.command.commands.HelpCommand;
 import pro.prysm.orion.server.command.commands.ReloadCommand;
 import pro.prysm.orion.server.command.commands.SendPacketCommand;
-import pro.prysm.orion.server.data.LevelManager;
+import pro.prysm.orion.server.world.LevelManager;
 import pro.prysm.orion.server.event.EventBus;
 import pro.prysm.orion.server.module.ModuleLoader;
 import pro.prysm.orion.server.net.TCPListener;
