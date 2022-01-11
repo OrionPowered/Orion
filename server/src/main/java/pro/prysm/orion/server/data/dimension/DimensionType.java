@@ -23,4 +23,27 @@ public class DimensionType {
     private double coordinateScale;
     private boolean ultrawarm;
     private boolean hasCeiling;
+
+    public DimensionType() {
+    }
+
+    public DimensionType(String name, int id, boolean piglinSafe, boolean natural, float ambientLight, String infiniburn, boolean respawnAnchorWorks, boolean hasSkylight, boolean bedWorks, String effects, boolean hasRaids, int minY, int height, int logicalHeight, double coordinateScale, boolean ultrawarm, boolean hasCeiling) {
+        this.name = name;
+        this.id = id;
+        this.piglinSafe = piglinSafe;
+        this.natural = natural;
+        this.ambientLight = ambientLight;
+        this.infiniburn = infiniburn;
+        this.respawnAnchorWorks = respawnAnchorWorks;
+        this.hasSkylight = hasSkylight;
+        this.bedWorks = bedWorks;
+        this.effects = effects;
+        this.hasRaids = hasRaids;
+        this.minY = minY;
+        this.height = height;
+        this.logicalHeight = logicalHeight;
+        this.coordinateScale = coordinateScale;
+        this.ultrawarm = ultrawarm;
+        this.hasCeiling = hasCeiling;
+    }
 }
