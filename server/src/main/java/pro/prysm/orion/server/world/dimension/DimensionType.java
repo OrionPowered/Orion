@@ -1,4 +1,4 @@
-package pro.prysm.orion.server.data.dimension;
+package pro.prysm.orion.server.world.dimension;
 
 import lombok.Getter;
 import lombok.Setter;

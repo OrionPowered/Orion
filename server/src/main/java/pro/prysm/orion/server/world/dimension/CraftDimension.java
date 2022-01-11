@@ -1,4 +1,4 @@
-package pro.prysm.orion.server.data.dimension;
+package pro.prysm.orion.server.world.dimension;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,13 +12,14 @@ import java.io.InputStream;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+// Vanilla implementation of the dimension codec
+
 @Getter
 @Setter
-public class Dimension {
-
+public class CraftDimension implements DimensionProvider {
     private CompoundBinaryTag dimension;
 
-    public Dimension() {
+    public CraftDimension() {
         try {
             InputStream is = Orion.class.getClassLoader().getResourceAsStream("dimension_codec.nbt");
             if (is == null) throw new ResourceNotFoundException("Could not find dimension codec in jar!");

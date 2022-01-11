@@ -1,4 +1,4 @@
-package pro.prysm.orion.server.data.dimension;
+package pro.prysm.orion.server.world.dimension;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
