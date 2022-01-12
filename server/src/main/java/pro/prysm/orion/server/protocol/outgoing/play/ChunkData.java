@@ -3,6 +3,7 @@ package pro.prysm.orion.server.protocol.outgoing.play;
 import com.alexsobiek.anvil.Chunk;
 import com.alexsobiek.anvil.ChunkSection;
 import io.netty.buffer.Unpooled;
+import lombok.Getter;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import pro.prysm.orion.api.data.Biome;
 import pro.prysm.orion.api.data.Block;
@@ -15,7 +16,9 @@ import java.util.List;
 
 public class ChunkData extends OutgoingPacket {
     private final Chunk chunk;
+    private final boolean exists;
     private final CompoundBinaryTag heightmaps;
+    @Getter
     private final int x, z;
     List<byte[]> skyLight;
     List<byte[]> blockLight;
@@ -23,11 +26,16 @@ public class ChunkData extends OutgoingPacket {
     public ChunkData(Chunk chunk) {
         super(0x22);
         this.chunk = chunk;
+        this.exists = chunk.exists();
         x = chunk.getX();
         z = chunk.getZ();
         this.heightmaps = chunk.getHeightmaps().remove("MOTION_BLOCKING_NO_LEAVES").remove("OCEAN_FLOOR");
         skyLight = chunk.getSkyLight();
         blockLight = chunk.getBlockLight();
+    }
+
+    public boolean exists() {
+        return exists;
     }
 
     private int[] generateBlockPaletteData(ChunkSection section) {

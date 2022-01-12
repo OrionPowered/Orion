@@ -25,9 +25,6 @@ import pro.prysm.orion.server.protocol.outgoing.play.ChunkData;
 import pro.prysm.orion.server.util.TagUtil;
 import pro.prysm.orion.server.world.LevelManager;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
 // TODO: Fully implement methods from Audience
 // TODO: Write JavaDoc comments
 @Getter
@@ -80,15 +77,19 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
 
 
     public void sendChunkAsync(LevelManager levelManager, int x, int z) {
-        CompletableFuture<Chunk> futureChunk = levelManager.getChunk(x, z);
-        try {
-            Chunk chunk = futureChunk.get();
-            if (chunk.exists()) connection.sendPacket(new ChunkData(chunk));
-            else Orion.getLogger().warn("Missing chunk at {}, {}", chunk.getX(), chunk.getZ());
-        } catch (InterruptedException | ExecutionException e) {
-            Orion.getLogger().debug("Orion has encountered an exception:");
-            e.printStackTrace();
-        }
+        levelManager.getChunkAsync(x, z)
+                .thenApplyAsync(ChunkData::new)
+                .thenAcceptAsync(connection::sendPacket)
+                .join();
+    }
+
+    public void sendChunk(LevelManager levelManager, int x, int z) {
+        sendChunkData(new ChunkData(levelManager.getChunk(x, z)));
+    }
+
+    private void sendChunkData(ChunkData data) {
+        if (data.exists()) connection.sendPacket(data);
+        else Orion.getLogger().warn("Missing chunk at {}, {}", data.getX(), data.getZ());
     }
 
     // ===============================================================================================================

@@ -21,7 +21,8 @@ public class Movement {
         int baseZ = (int) loc.getZ() >> 4;
         for (int x = -6; x <= 6; x++) {
             for (int z = -6; z < 6; z++) {
-                player.sendChunkAsync(levelManager, baseX+x, baseZ+z);
+                //player.sendChunkAsync(levelManager, baseX+x, baseZ+z);
+                player.sendChunk(levelManager, baseX+x, baseZ+z);
             }
         }
     }

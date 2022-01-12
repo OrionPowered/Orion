@@ -45,7 +45,12 @@ public class LevelManager {
         }
     }
 
-    public CompletableFuture<Chunk> getChunk(int x, int z) {
+    public Chunk getChunk(int x, int z) {
+        Orion.getLogger().debug("Getting chunk for level {} at {}, {}", level.getName(), x, z);
+        return getRegion(x >> 5, z >> 5).getChunk(x, z);
+    }
+
+    public CompletableFuture<Chunk> getChunkAsync(int x, int z) {
         Orion.getLogger().debug("Getting chunk for level {} at {}, {}", level.getName(), x, z);
         return getRegion(x >> 5, z >> 5).getChunkAsync(x, z);
     }
