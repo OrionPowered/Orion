@@ -10,9 +10,7 @@ import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.world.dimension.CraftDimension;
 import pro.prysm.orion.server.world.dimension.DimensionProvider;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @Getter
@@ -42,8 +40,8 @@ public class LevelManager {
         }
     }
 
-    public ArrayList<Chunk> getChunks(int minX, int minZ, int maxX, int maxZ) {
-        ArrayList<Chunk> chunks = new ArrayList<>();
+    public Set<Chunk> getChunks(int minX, int minZ, int maxX, int maxZ) {
+        Set<Chunk> chunks = new HashSet<>();
         for (int x = minX; x <= maxX; x++) {
             for (int z = minZ; z < maxZ; z++) {
                 chunks.add(getChunk(x, z));

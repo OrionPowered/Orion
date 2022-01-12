@@ -25,6 +25,7 @@ import pro.prysm.orion.server.util.TagUtil;
 import pro.prysm.orion.server.world.LevelManager;
 
 import java.util.List;
+import java.util.Set;
 
 // TODO: Fully implement methods from Audience
 // TODO: Write JavaDoc comments
@@ -88,7 +89,7 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
         sendChunkData(new ChunkData(levelManager.getChunk(x, z)));
     }
 
-    public void sendChunks(List<Chunk> chunks) {
+    public void sendChunks(Set<Chunk> chunks) {
         chunks.stream().parallel().forEach(this::sendChunk);
     }
 
