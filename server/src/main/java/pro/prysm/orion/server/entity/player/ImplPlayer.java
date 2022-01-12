@@ -1,6 +1,8 @@
 package pro.prysm.orion.server.entity.player;
 
+import com.alexsobiek.anvil.Chunk;
 import com.alexsobiek.anvil.Level;
+import com.alexsobiek.anvil.Region;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.audience.MessageType;
@@ -16,9 +18,15 @@ import net.kyori.adventure.title.TitlePart;
 import org.jetbrains.annotations.NotNull;
 import pro.prysm.orion.api.data.*;
 import pro.prysm.orion.api.entity.Player;
+import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.entity.ImplLivingEntity;
 import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.protocol.outgoing.play.ChunkData;
 import pro.prysm.orion.server.util.TagUtil;
+import pro.prysm.orion.server.world.LevelManager;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 // TODO: Fully implement methods from Audience
 // TODO: Write JavaDoc comments
@@ -68,6 +76,19 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
         tagBuilder.putBoolean("OnGround", location.isOnGround());
 
         level.savePlayerData(uuid(), tagBuilder.build());
+    }
+
+
+    public void sendChunkAsync(LevelManager levelManager, int x, int z) {
+        CompletableFuture<Chunk> futureChunk = levelManager.getChunk(x, z);
+        try {
+            Chunk chunk = futureChunk.get();
+            if (chunk.exists()) connection.sendPacket(new ChunkData(chunk));
+            else Orion.getLogger().warn("Missing chunk at {}, {}", chunk.getX(), chunk.getZ());
+        } catch (InterruptedException | ExecutionException e) {
+            Orion.getLogger().debug("Orion has encountered an exception:");
+            e.printStackTrace();
+        }
     }
 
     // ===============================================================================================================
