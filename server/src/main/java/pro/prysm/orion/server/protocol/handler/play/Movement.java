@@ -17,14 +17,11 @@ public class Movement {
         Connection connection = player.getConnection();
         LevelManager levelManager = connection.getProtocol().getLevelManager();
         Location loc = player.getLocation();
+
         int baseX = (int) loc.getX() >> 4;
         int baseZ = (int) loc.getZ() >> 4;
-        for (int x = -6; x <= 6; x++) {
-            for (int z = -6; z < 6; z++) {
-                //player.sendChunkAsync(levelManager, baseX+x, baseZ+z);
-                player.sendChunk(levelManager, baseX+x, baseZ+z);
-            }
-        }
+        int halfDistance = player.getSettings().getViewDistance()/2;
+        player.sendChunks(levelManager.getChunks(baseX-halfDistance, baseZ-halfDistance, baseX+halfDistance, baseZ+halfDistance));
     }
 
     public Location playerMove(Location to, Location from) {

@@ -6,11 +6,11 @@ import com.alexsobiek.anvil.Level;
 import com.alexsobiek.anvil.Region;
 import lombok.Getter;
 import lombok.Setter;
-import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.world.dimension.CraftDimension;
 import pro.prysm.orion.server.world.dimension.DimensionProvider;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -31,8 +31,6 @@ public class LevelManager {
         regions = new HashMap<>();
     }
 
-
-
     public Region getRegion(int x, int z) {
         Orion.getLogger().debug("Getting region for level {} at {}, {}", level.getName(), x, z);
         int[] pos = new int[]{x, z};
@@ -43,6 +41,16 @@ public class LevelManager {
             regions.put(pos, region);
             return region;
         }
+    }
+
+    public ArrayList<Chunk> getChunks(int minX, int minZ, int maxX, int maxZ) {
+        ArrayList<Chunk> chunks = new ArrayList<>();
+        for (int x = minX; x <= maxX; x++) {
+            for (int z = minZ; z < maxZ; z++) {
+                chunks.add(getChunk(x ,z));
+            }
+        }
+        return chunks;
     }
 
     public Chunk getChunk(int x, int z) {
