@@ -13,7 +13,6 @@ import pro.prysm.orion.server.command.CommandHandler;
 import pro.prysm.orion.server.command.commands.HelpCommand;
 import pro.prysm.orion.server.command.commands.ReloadCommand;
 import pro.prysm.orion.server.command.commands.SendPacketCommand;
-import pro.prysm.orion.server.world.LevelManager;
 import pro.prysm.orion.server.event.EventBus;
 import pro.prysm.orion.server.module.ModuleLoader;
 import pro.prysm.orion.server.net.TCPListener;
@@ -21,6 +20,7 @@ import pro.prysm.orion.server.plugin.PluginLoader;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.scheduler.OrionScheduler;
 import pro.prysm.orion.server.scheduler.TickService;
+import pro.prysm.orion.server.world.LevelManager;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

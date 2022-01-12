@@ -9,6 +9,7 @@ import pro.prysm.orion.server.world.LevelManager;
 
 public class Movement {
     private final ImplPlayer player;
+
     public Movement(ImplPlayer player) {
         this.player = player;
     }
@@ -20,8 +21,8 @@ public class Movement {
 
         int baseX = (int) loc.getX() >> 4;
         int baseZ = (int) loc.getZ() >> 4;
-        int halfDistance = player.getSettings().getViewDistance()/2;
-        player.sendChunks(levelManager.getChunks(baseX-halfDistance, baseZ-halfDistance, baseX+halfDistance, baseZ+halfDistance));
+        int halfDistance = player.getSettings().getViewDistance() / 2;
+        player.sendChunks(levelManager.getChunks(baseX - halfDistance, baseZ - halfDistance, baseX + halfDistance, baseZ + halfDistance));
     }
 
     public Location playerMove(Location to, Location from) {

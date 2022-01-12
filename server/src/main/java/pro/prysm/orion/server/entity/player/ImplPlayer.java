@@ -2,7 +2,6 @@ package pro.prysm.orion.server.entity.player;
 
 import com.alexsobiek.anvil.Chunk;
 import com.alexsobiek.anvil.Level;
-import com.alexsobiek.anvil.Region;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.audience.MessageType;
@@ -25,7 +24,6 @@ import pro.prysm.orion.server.protocol.outgoing.play.ChunkData;
 import pro.prysm.orion.server.util.TagUtil;
 import pro.prysm.orion.server.world.LevelManager;
 
-import java.util.Arrays;
 import java.util.List;
 
 // TODO: Fully implement methods from Audience

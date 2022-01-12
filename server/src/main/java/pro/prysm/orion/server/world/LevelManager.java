@@ -19,10 +19,9 @@ import java.util.concurrent.CompletableFuture;
 public class LevelManager {
     private final AnvilLib anvil;
     private final Level level;
+    private final Map<int[], Region> regions;
     @Setter
     private DimensionProvider dimension;
-
-    private final Map<int[], Region> regions;
 
     public LevelManager(String world) {
         anvil = new AnvilLib();
@@ -47,7 +46,7 @@ public class LevelManager {
         ArrayList<Chunk> chunks = new ArrayList<>();
         for (int x = minX; x <= maxX; x++) {
             for (int z = minZ; z < maxZ; z++) {
-                chunks.add(getChunk(x ,z));
+                chunks.add(getChunk(x, z));
             }
         }
         return chunks;

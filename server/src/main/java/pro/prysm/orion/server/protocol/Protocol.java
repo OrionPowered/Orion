@@ -9,9 +9,9 @@ import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.api.protocol.status.ServerListResponse;
 import pro.prysm.orion.server.Orion;
-import pro.prysm.orion.server.world.LevelManager;
 import pro.prysm.orion.server.protocol.outgoing.login.EncryptionRequest;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
+import pro.prysm.orion.server.world.LevelManager;
 
 import javax.crypto.Cipher;
 import java.io.IOException;

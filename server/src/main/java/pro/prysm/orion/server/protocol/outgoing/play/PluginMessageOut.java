@@ -5,7 +5,7 @@ import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
 @Getter
-public class PluginMessageOut extends OutgoingPacket  {
+public class PluginMessageOut extends OutgoingPacket {
     private final String channel;
     private final byte[] data;
 

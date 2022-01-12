@@ -6,12 +6,14 @@ public interface DimensionProvider {
 
     /**
      * Gets the dimension codec
+     *
      * @return NBT
      */
     CompoundBinaryTag getDimension();
 
     /**
      * Gets the NBT data of a specific dimension
+     *
      * @param name Dimension name
      * @return NBT
      */
@@ -19,6 +21,7 @@ public interface DimensionProvider {
 
     /**
      * Gets the NBT data of the provided biome
+     *
      * @param name Biome
      * @return NBT
      */
