@@ -5,7 +5,6 @@ import pro.prysm.orion.api.event.event.PlayerMoveEvent;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
 import pro.prysm.orion.server.net.Connection;
-import pro.prysm.orion.server.protocol.outgoing.play.ChunkData;
 import pro.prysm.orion.server.world.LevelManager;
 
 public class Movement {
@@ -17,27 +16,21 @@ public class Movement {
     public void sendChunks() {
         Connection connection = player.getConnection();
         LevelManager levelManager = connection.getProtocol().getLevelManager();
-        // Player has joined, send first chunk
-
-        // NOTE: This is a really bad implementation just to confirm loading multiple chunks works
-        // I will fix later - Alex
         Location loc = player.getLocation();
-        connection.sendPacket(new ChunkData(levelManager.getChunk(loc)));
-        loc.addX(16);
-        connection.sendPacket(new ChunkData(levelManager.getChunk(loc)));
-        loc.addZ(16);
-        connection.sendPacket(new ChunkData(levelManager.getChunk(loc)));
-        loc.subX(32);
-        connection.sendPacket(new ChunkData(levelManager.getChunk(loc)));
-        loc.subZ(32);
-        connection.sendPacket(new ChunkData(levelManager.getChunk(loc)));
+        int baseX = (int) loc.getX() >> 4;
+        int baseZ = (int) loc.getZ() >> 4;
+        for (int x = -6; x <= 6; x++) {
+            for (int z = -6; z < 6; z++) {
+                player.sendChunkAsync(levelManager, baseX+x, baseZ+z);
+            }
+        }
     }
 
     public Location playerMove(Location to, Location from) {
         // Every time the game sends a move packet, we should respond with the chunks around the player
         sendChunks();
-
         if (to.equals(from)) return from;
+
         PlayerMoveEvent event = new PlayerMoveEvent(player, to, player.getLocation());
         Orion.getEventBus().post(event);
         if (!event.isCancelled()) {
@@ -48,5 +41,4 @@ public class Movement {
             return from;
         }
     }
-
 }
