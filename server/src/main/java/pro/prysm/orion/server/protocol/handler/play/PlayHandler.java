@@ -85,7 +85,7 @@ public class PlayHandler extends ProtocolHandler {
             connection.sendPacket(keepAlive);
             keepAliveId = keepAlive.getKeepAliveId();
             Orion.getLogger().debug("Sent keepalive to {} ({})", connection.getAddress(), player.getProfile().getUsername());
-        }, 0, (25 * OrionScheduler.TPS)); // Every 25 seconds (30 seconds resulted in random timeouts)
+        }, 10L, (25 * OrionScheduler.TPS)); // Every 25 seconds (30 seconds resulted in random timeouts)
     }
 
     @Override

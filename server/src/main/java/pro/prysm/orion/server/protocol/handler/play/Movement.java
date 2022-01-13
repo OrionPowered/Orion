@@ -19,7 +19,6 @@ public class Movement {
     }
 
     public void startChunkSending() {
-
         chunkTask = Orion.getScheduler().scheduleAtFixedRate(() -> {
             LevelManager levelManager = player.getConnection().getProtocol().getLevelManager();
             Location loc = player.getLocation();
@@ -38,7 +37,7 @@ public class Movement {
                     player.sendChunkAsync(levelManager, x, z);
                 }
             }
-        }, 5L, 60L);
+        }, 2L, 60L);
     }
 
     public Location playerMove(Location to, Location from) {
