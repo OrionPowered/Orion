@@ -27,6 +27,7 @@ public class PlayHandler extends ProtocolHandler {
     private final Movement movement;
     private final int teleportId = 0; // TODO: Implement checking of teleport ids
     private UUID keepAliveTask;
+    private UUID chunkTask;
     private long keepAliveId;
 
     public PlayHandler(ImplPlayer player) {
@@ -73,7 +74,7 @@ public class PlayHandler extends ProtocolHandler {
         startKeepAlive();
         Orion.getLogger().info("{}({}) has logged in", player.getProfile().getUsername(), connection.getAddress());
         Orion.getLogger().debug("Player {} has logged in at {}", player.getProfile().getUsername(), player.getLocation());
-        movement.startChunkSending();
+        startChunkSending();
     }
 
     private void startKeepAlive() {
@@ -88,9 +89,31 @@ public class PlayHandler extends ProtocolHandler {
         }, 10L, (25 * OrionScheduler.TPS)); // Every 25 seconds (30 seconds resulted in random timeouts)
     }
 
+    public void startChunkSending() {
+        chunkTask = Orion.getScheduler().scheduleAtFixedRate(() -> {
+            LevelManager levelManager = player.getConnection().getProtocol().getLevelManager();
+            Location loc = player.getLocation();
+
+            int baseX = (int) loc.getX() >> 4;
+            int baseZ = (int) loc.getZ() >> 4;
+            int halfDistance = player.getSettings().getViewDistance() / 2;
+
+            int minX = baseX - halfDistance;
+            int minZ = baseZ - halfDistance;
+            int maxX = baseX + halfDistance;
+            int maxZ = baseZ + halfDistance;
+
+            for (int x = minX; x <= maxX; x++) {
+                for (int z = minZ; z < maxZ; z++) {
+                    player.sendChunkAsync(levelManager, x, z);
+                }
+            }
+        }, 2L, 60L);
+    }
+
     @Override
     public void onDisconnect() {
-        Orion.getScheduler().cancel(movement.getChunkTask());
+        Orion.getScheduler().cancel(chunkTask);
         Orion.getScheduler().cancel(keepAliveTask);
     }
 
