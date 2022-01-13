@@ -6,7 +6,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
+// @EqualsAndHashCode lombok equals() does not work for this
 public class Location {
     private double x, y, z;
     private float yaw, pitch;
@@ -44,5 +44,14 @@ public class Location {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    // TODO: this is always true
+    public boolean equals(Location other) {
+        if (other.getX() != x) return false;
+        else if (other.getY() != y) return false;
+        else if (other.getZ() != z) return false;
+        else if (other.getYaw() != yaw) return false;
+        else return (other.getPitch() == pitch);
     }
 }
