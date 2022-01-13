@@ -40,8 +40,8 @@ public class LevelManager {
         }
     }
 
-    public Set<Chunk> getChunks(int minX, int minZ, int maxX, int maxZ) {
-        Set<Chunk> chunks = new HashSet<>();
+    public Queue<Chunk> getChunks(int minX, int minZ, int maxX, int maxZ) {
+        Queue<Chunk> chunks = new LinkedList<>();
         for (int x = minX; x <= maxX; x++) {
             for (int z = minZ; z < maxZ; z++) {
                 chunks.add(getChunk(x, z));

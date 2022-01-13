@@ -24,8 +24,7 @@ import pro.prysm.orion.server.protocol.outgoing.play.ChunkData;
 import pro.prysm.orion.server.util.TagUtil;
 import pro.prysm.orion.server.world.LevelManager;
 
-import java.util.List;
-import java.util.Set;
+import java.util.Queue;
 
 // TODO: Fully implement methods from Audience
 // TODO: Write JavaDoc comments
@@ -77,24 +76,22 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
         level.savePlayerData(uuid(), tagBuilder.build());
     }
 
+    public void sendChunks(Queue<Chunk> chunks) {
+        chunks.parallelStream().dropWhile(chunk -> !chunk.exists()).forEach(this::sendChunk);
+    }
 
     public void sendChunkAsync(LevelManager levelManager, int x, int z) {
         levelManager.getChunkAsync(x, z)
-                .thenApplyAsync(ChunkData::new)
-                .thenAcceptAsync(connection::sendPacket)
+                .thenAcceptAsync(this::sendChunk)
                 .join();
-    }
-
-    public void sendChunk(LevelManager levelManager, int x, int z) {
-        sendChunkData(new ChunkData(levelManager.getChunk(x, z)));
-    }
-
-    public void sendChunks(Set<Chunk> chunks) {
-        chunks.stream().parallel().forEach(this::sendChunk);
     }
 
     public void sendChunk(Chunk chunk) {
         sendChunkData(new ChunkData(chunk));
+    }
+
+    public void sendChunk(LevelManager levelManager, int x, int z) {
+        sendChunk(levelManager.getChunk(x, z));
     }
 
     private void sendChunkData(ChunkData data) {
