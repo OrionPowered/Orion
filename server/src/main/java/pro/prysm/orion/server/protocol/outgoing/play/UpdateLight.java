@@ -10,14 +10,12 @@ import java.util.BitSet;
 import java.util.List;
 
 public class UpdateLight extends OutgoingPacket  {
-    private final Chunk chunk;
     @Getter
     private final int x, z;
     List<byte[]> skyLight;
     List<byte[]> blockLight;
     protected UpdateLight(Chunk chunk) {
         super(0x25);
-        this.chunk = chunk;
         x = chunk.getX();
         z = chunk.getZ();
         skyLight = chunk.getSkyLight();
