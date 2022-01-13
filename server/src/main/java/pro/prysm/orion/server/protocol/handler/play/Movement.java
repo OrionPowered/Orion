@@ -1,14 +1,10 @@
 package pro.prysm.orion.server.protocol.handler.play;
 
-import lombok.Getter;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.event.event.PlayerMoveEvent;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
 import pro.prysm.orion.server.protocol.outgoing.play.UpdateViewPosition;
-import pro.prysm.orion.server.world.LevelManager;
-
-import java.util.UUID;
 
 public class Movement {
     private final ImplPlayer player;
@@ -26,11 +22,11 @@ public class Movement {
         if (!event.isCancelled()) {
             // if (!event.getTo().equals(to)) // TODO: implement teleporting
 
-            if ((int)to.getX() << 4 != (int) from.getX() << 4 | (int) to.getZ() << 4 != (int) from.getZ() << 4) {
+            if ((int) to.getX() << 4 != (int) from.getX() << 4 | (int) to.getZ() << 4 != (int) from.getZ() << 4) {
                 // A note about performance:
                 // It is faster overall to perform the bit shift twice here rather than creating a variable for each
                 // X and Y chunk coordinate since it is more likely that this if statement will be false than not.
-                player.getConnection().sendPacket(new UpdateViewPosition((int)to.getX() << 4, (int) to.getZ() << 4));
+                player.getConnection().sendPacket(new UpdateViewPosition((int) to.getX() << 4, (int) to.getZ() << 4));
             }
 
             return to;

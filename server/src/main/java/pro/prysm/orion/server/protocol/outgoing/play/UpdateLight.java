@@ -9,11 +9,12 @@ import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 import java.util.BitSet;
 import java.util.List;
 
-public class UpdateLight extends OutgoingPacket  {
+public class UpdateLight extends OutgoingPacket {
     @Getter
     private final int x, z;
     List<byte[]> skyLight;
     List<byte[]> blockLight;
+
     protected UpdateLight(Chunk chunk) {
         super(0x25);
         x = chunk.getX();
@@ -60,10 +61,11 @@ public class UpdateLight extends OutgoingPacket  {
             byte[] array = lightData.get(i);
             if (array.length == 0) array = new byte[2048]; // Sometimes we don't have any data, but the client needs it
             else {
-                for (byte b : array) if (b > 0x00) {
-                    mask.set(i);
-                    break;
-                }
+                for (byte b : array)
+                    if (b > 0x00) {
+                        mask.set(i);
+                        break;
+                    }
             }
             lightingBuf.writeByteArray(array);
         }

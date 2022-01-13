@@ -14,7 +14,6 @@ public class UpdateViewPosition extends OutgoingPacket {
 
     @Override
     public void write(PacketByteBuf buf) {
-        System.out.println("SENDING update view ");
         buf.writeVarInt(x);
         buf.writeVarInt(z);
     }

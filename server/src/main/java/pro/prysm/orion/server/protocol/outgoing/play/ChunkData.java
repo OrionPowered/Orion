@@ -12,8 +12,6 @@ import pro.prysm.orion.server.data.palette.PalettedContainer.Type;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
-import java.util.List;
-
 public class ChunkData extends OutgoingPacket {
     private final Chunk chunk;
     private final boolean exists;
