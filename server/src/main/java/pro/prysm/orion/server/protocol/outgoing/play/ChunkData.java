@@ -20,8 +20,6 @@ public class ChunkData extends OutgoingPacket {
     private final CompoundBinaryTag heightmaps;
     @Getter
     private final int x, z;
-    List<byte[]> skyLight;
-    List<byte[]> blockLight;
 
     public ChunkData(Chunk chunk) {
         super(0x22);
@@ -30,8 +28,6 @@ public class ChunkData extends OutgoingPacket {
         x = chunk.getX();
         z = chunk.getZ();
         this.heightmaps = chunk.getHeightmaps().remove("MOTION_BLOCKING_NO_LEAVES").remove("OCEAN_FLOOR");
-        skyLight = chunk.getSkyLight();
-        blockLight = chunk.getBlockLight();
     }
 
     public boolean exists() {
@@ -83,16 +79,6 @@ public class ChunkData extends OutgoingPacket {
 
         buf.writeVarInt(0); // No block entities
 
-        buf.writeBoolean(true);   // trust edges? <-- TODO
-        buf.writeBitSet(chunk.getSkyLightMask());
-        buf.writeBitSet(chunk.getBlockLightMask());
-        buf.writeBitSet(chunk.getEmptySkyLightMask());
-        buf.writeBitSet(chunk.getEmptyBlockLightMask());
-
-        buf.writeVarInt(skyLight.size());
-        for (byte[] array : skyLight) buf.writeByteArray(array);
-
-        buf.writeVarInt(blockLight.size());
-        for (byte[] array : blockLight) buf.writeByteArray(array);
+        new UpdateLight(chunk).writePartial(buf);
     }
 }
