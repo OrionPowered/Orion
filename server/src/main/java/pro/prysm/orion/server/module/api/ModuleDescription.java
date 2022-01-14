@@ -12,9 +12,9 @@ import java.util.jar.JarFile;
 
 @Getter
 public class ModuleDescription {
-    private final String name;
-    private final String mainClass;
-    private final String author;
+    private String name;
+    private String mainClass;
+    private String author;
 
     public ModuleDescription(JarFile file) throws InvalidModuleException {
         try (InputStream desc = file.getInputStream(file.getEntry("module.json"))) {
