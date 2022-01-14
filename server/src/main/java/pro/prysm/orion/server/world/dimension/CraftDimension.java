@@ -6,6 +6,7 @@ import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import pro.prysm.orion.api.exception.ResourceNotFoundException;
 import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.util.ExceptionHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +27,7 @@ public class CraftDimension implements DimensionProvider {
             dimension = BinaryTagIO.reader().read(is);
             Orion.getLogger().debug("Loaded dimension codec");
         } catch (IOException | ResourceNotFoundException e) {
-            e.printStackTrace();
+            ExceptionHandler.error(e);
         }
     }
 

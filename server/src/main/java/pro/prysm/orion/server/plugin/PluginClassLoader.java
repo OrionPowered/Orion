@@ -5,6 +5,7 @@ import pro.prysm.orion.api.exception.InvalidPluginException;
 import pro.prysm.orion.api.plugin.JavaPlugin;
 import pro.prysm.orion.api.plugin.PluginDescription;
 import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.util.ExceptionHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class PluginClassLoader extends URLClassLoader {
             eventBusF = JavaPlugin.class.getDeclaredField("eventBus");
             eventBusF.setAccessible(true);
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionHandler.error(e);
         }
     }
 
@@ -63,7 +64,7 @@ public class PluginClassLoader extends URLClassLoader {
                 loader.plugins.add(plugin);
                 plugin.onEnable();
             } catch (IOException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | InvalidPluginException e) {
-                e.printStackTrace();
+                ExceptionHandler.error(e);
             }
         }
     }
@@ -74,7 +75,7 @@ public class PluginClassLoader extends URLClassLoader {
             try {
                 loadClass(str);
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                ExceptionHandler.error(e);
             }
         });
     }

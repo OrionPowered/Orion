@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import pro.prysm.orion.api.event.EventBus;
 import pro.prysm.orion.api.json.Config;
+import pro.prysm.orion.server.util.ExceptionHandler;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,8 +27,8 @@ public abstract class JavaModule {
             if (!Files.exists(dataFolder)) Files.createDirectories(dataFolder);
 
             config = new Config(getClass().getClassLoader(), dataFolder.resolve("config.json"), "config.json");
-        } catch (Throwable e) {
-            e.printStackTrace();
+        } catch (Throwable t) {
+            ExceptionHandler.error(t);
         }
     }
 }

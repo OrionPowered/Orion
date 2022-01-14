@@ -25,6 +25,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
 import lombok.RequiredArgsConstructor;
+import pro.prysm.orion.server.util.ExceptionHandler;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class CipherEncoder extends MessageToMessageEncoder<ByteBuf> {
             list.add(compatible);
         } catch (Exception e) {
             compatible.release();
-            throw e;
+            ExceptionHandler.error(e);
         }
     }
 

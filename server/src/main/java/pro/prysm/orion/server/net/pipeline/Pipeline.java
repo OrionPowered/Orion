@@ -24,6 +24,6 @@ public class Pipeline extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(Protocol.DECODER, new PacketDecoder(channelHandler));
         pipeline.addLast(Protocol.ENCODER, new PacketEncoder());
         pipeline.addLast(channelHandler);
-        pipeline.addLast(new ExceptionHandler());
+        pipeline.addLast(new NettyExceptionHandler());
     }
 }

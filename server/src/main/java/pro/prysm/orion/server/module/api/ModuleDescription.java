@@ -3,6 +3,7 @@ package pro.prysm.orion.server.module.api;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.Getter;
+import pro.prysm.orion.server.util.ExceptionHandler;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -29,7 +30,7 @@ public class ModuleDescription {
                 }
             }
         } catch (InvalidModuleException e) {
-            throw e;
+            ExceptionHandler.error(e);
         } catch (Exception e) {
             throw new InvalidModuleException(e.getMessage());
         }

@@ -11,7 +11,7 @@ public class OrionThreadFactory implements ThreadFactory {
     private int count;
 
     public OrionThreadFactory(String name) {
-        this.exceptionHandler = new ThreadExceptionHandler();
+        this.exceptionHandler = ExceptionHandler.threadExceptionHandler;
         this.name = name;
         count = 0;
     }
@@ -24,14 +24,5 @@ public class OrionThreadFactory implements ThreadFactory {
         Thread thread = new Thread(runnable, threadName);
         thread.setUncaughtExceptionHandler(exceptionHandler);
         return thread;
-    }
-
-
-    class ThreadExceptionHandler implements Thread.UncaughtExceptionHandler {
-        @Override
-        public void uncaughtException(Thread thread, Throwable throwable) {
-            Orion.getLogger().error("Thread \"{}\" encountered an exception:", thread.getName());
-            throwable.printStackTrace();
-        }
     }
 }

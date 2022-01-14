@@ -20,6 +20,7 @@ import pro.prysm.orion.server.plugin.PluginLoader;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.scheduler.OrionScheduler;
 import pro.prysm.orion.server.scheduler.TickService;
+import pro.prysm.orion.server.util.ExceptionHandler;
 import pro.prysm.orion.server.world.LevelManager;
 
 import java.io.IOException;
@@ -45,6 +46,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
 
     public Orion() {
         logger.info("Starting Orion...");
+        Thread.currentThread().setUncaughtExceptionHandler(ExceptionHandler.threadExceptionHandler);
         loadConfig();
 
         Logger root = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
@@ -70,8 +72,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
             new TickService(); // Start ticking
             listener.listen(); // Start listening, any code below this will NOT execute (blocking)
         } catch (InterruptedException e) {
-            e.printStackTrace();
-            // TODO: Shutdown here
+            ExceptionHandler.error(e);
         }
     }
 
@@ -95,8 +96,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         try {
             config = new Config(getClass().getClassLoader(), Path.of("settings.json"), "settings.json");
         } catch (IOException e) {
-            logger.warn("Failed to load settings.json!");
-            e.printStackTrace();
+            ExceptionHandler.error("Failed to load settings.json", e);
         }
     }
 

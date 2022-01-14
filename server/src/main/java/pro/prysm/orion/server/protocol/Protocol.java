@@ -11,6 +11,7 @@ import pro.prysm.orion.api.protocol.status.ServerListResponse;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.protocol.outgoing.login.EncryptionRequest;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
+import pro.prysm.orion.server.util.ExceptionHandler;
 import pro.prysm.orion.server.world.LevelManager;
 
 import javax.crypto.Cipher;
@@ -66,7 +67,7 @@ public class Protocol {
                 return;
             slpData.setFavicon(ServerListResponse.generateFavicon(is));
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionHandler.error(e);
         }
         if (!onlineMode) Orion.getLogger().warn("Orion is running in offline mode. Players will not be authenticated!");
         else {
@@ -82,8 +83,7 @@ public class Protocol {
             gen.initialize(1024);
             keyPair = gen.generateKeyPair();
         } catch (NoSuchAlgorithmException e) {
-            Orion.getLogger().warn("Error generating key pair for encryption:");
-            e.printStackTrace();
+            ExceptionHandler.error("Error generating key pair for encryption", e);
         }
         return keyPair;
     }
@@ -102,9 +102,7 @@ public class Protocol {
             md.update(keyPair.getPublic().getEncoded());
             id = new BigInteger(md.digest()).toString(16);
         } catch (NoSuchAlgorithmException e) {
-            Orion.getLogger().error("Failed to create server ID. Is your java unsupported?");
-            e.printStackTrace();
-            // TODO: shutdown here
+            ExceptionHandler.error("Failed to create server ID. Is your java unsupported?", e);
         }
         return id;
     }
@@ -134,8 +132,7 @@ public class Protocol {
             HttpResponse<String> response = future.get();
             return new GameProfile(JsonParser.parseString(response.body()).getAsJsonObject());
         } catch (InterruptedException | ExecutionException e) {
-            Orion.getLogger().error("Got error when attempting to authenticate session");
-            e.printStackTrace();
+            ExceptionHandler.error("Got error when attempting to authenticate session", e);
             return null;
         }
     }

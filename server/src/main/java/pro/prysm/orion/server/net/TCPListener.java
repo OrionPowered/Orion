@@ -11,6 +11,7 @@ import pro.prysm.orion.api.event.event.ServerReadyEvent;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.net.pipeline.Pipeline;
 import pro.prysm.orion.server.protocol.Protocol;
+import pro.prysm.orion.server.util.ExceptionHandler;
 import pro.prysm.orion.server.util.OrionThreadFactory;
 
 import java.net.InetSocketAddress;
@@ -50,7 +51,7 @@ public class TCPListener {
             });
             channelFuture.channel().closeFuture().sync();
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionHandler.error(e);
         } finally {
             group.shutdownGracefully().sync();
         }

@@ -4,6 +4,7 @@ import pro.prysm.orion.api.event.Event;
 import pro.prysm.orion.api.event.Listener;
 import pro.prysm.orion.server.event.events.PacketEvent;
 import pro.prysm.orion.server.protocol.Packet;
+import pro.prysm.orion.server.util.ExceptionHandler;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -32,7 +33,7 @@ public class EventBus implements pro.prysm.orion.api.event.EventBus {
                     method.invoke(listener, event);
                 }
             } catch (Throwable t) {
-                t.printStackTrace();
+                ExceptionHandler.error(t);
             }
         }));
     }
@@ -45,7 +46,7 @@ public class EventBus implements pro.prysm.orion.api.event.EventBus {
                     method.invoke(listener, event, packet);
                 }
             } catch (Throwable t) {
-                t.printStackTrace();
+                ExceptionHandler.error(t);
             }
         }));
     }

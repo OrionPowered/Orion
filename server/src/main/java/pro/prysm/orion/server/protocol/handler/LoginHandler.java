@@ -10,6 +10,7 @@ import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.protocol.incoming.login.EncryptionResponse;
 import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
 import pro.prysm.orion.server.protocol.outgoing.login.LoginSuccess;
+import pro.prysm.orion.server.util.ExceptionHandler;
 
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
@@ -55,9 +56,7 @@ public class LoginHandler extends ProtocolHandler {
             connection.enableEncryption(sharedSecret);
             Orion.getLogger().debug("Started encryption for {}", connection.getAddress());
         } catch (GeneralSecurityException e) {
-            connection.disconnect("Failed to load encryption.");
-            Orion.getLogger().warn("Failed to enable encryption for {}", connection.getAddress());
-            e.printStackTrace();
+            ExceptionHandler.error("Failed to enable encryption for " +  connection.getAddress(), e);
         }
 
         // If the above executes properly, we can now authenticate the user with the Mojang Session service

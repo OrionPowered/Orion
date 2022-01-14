@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import pro.prysm.orion.api.data.Location;
+import pro.prysm.orion.server.util.ExceptionHandler;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -245,7 +246,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
         try {
             BinaryTagIO.writer().write(tag, out);
         } catch (IOException e) {
-            e.printStackTrace();
+            ExceptionHandler.error(e);
         }
         buf.writeBytes(stream.toByteArray());
     }
