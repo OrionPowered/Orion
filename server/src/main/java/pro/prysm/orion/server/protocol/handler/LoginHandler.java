@@ -42,7 +42,7 @@ public class LoginHandler extends ProtocolHandler {
     public void handle(EncryptionResponse packet) {
         // If server isn't in online mode disconnect the player and stop from handling further
         if (!connection.getProtocol().isOnlineMode()) {
-            Orion.getLogger().debug("{} sent an encryption response when no request was sent!", username);
+            Orion.getLogger().warn("{} sent an encryption response when no request was sent!", username);
             player.getConnection().disconnect("Invalid encryption packet");
             return;
         }
