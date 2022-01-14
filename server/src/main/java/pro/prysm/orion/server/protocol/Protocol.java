@@ -65,14 +65,15 @@ public class Protocol {
         try (InputStream is = getClass().getClassLoader().getResourceAsStream("prysm.png")) {
             if (is == null)
                 return;
-
             slpData.setFavicon(ServerListResponse.generateFavicon(is));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        sessionServer = config.getStringOrDefault("session-server", "https://sessionserver.mojang.com");
-        Orion.getLogger().debug("Using session server {}", sessionServer);
+        if (!onlineMode) Orion.getLogger().warn("Orion is running in offline mode. Players will not be authenticated!");
+        else {
+            sessionServer = config.getStringOrDefault("session-server", "https://sessionserver.mojang.com");
+            Orion.getLogger().debug("Using session server {}", sessionServer);
+        }
     }
 
     private KeyPair genKeyPair() {

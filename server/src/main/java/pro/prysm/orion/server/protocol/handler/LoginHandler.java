@@ -35,7 +35,6 @@ public class LoginHandler extends ProtocolHandler {
             connection.sendPacket(new LoginSuccess(profile.getUniqueId(), username));
             player = PlayerFactory.newPlayer(connection, profile);
             connection.setState(PacketState.PLAY);
-            Orion.getLogger().info("{} joining...", username);
         }
     }
 
@@ -68,7 +67,6 @@ public class LoginHandler extends ProtocolHandler {
             connection.sendPacket(new LoginSuccess(profile.getUniqueId(), profile.getUsername()));
             player = PlayerFactory.newPlayer(connection, profile);
             connection.setState(PacketState.PLAY);
-            Orion.getLogger().info("{}/{} joining...", profile.getUsername(), profile.getUniqueId());
         }
     }
 }
