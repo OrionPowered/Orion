@@ -5,12 +5,11 @@ import lombok.ToString;
 import lombok.EqualsAndHashCode;
 
 import pro.prysm.orion.api.entity.Entity;
+import pro.prysm.orion.api.util.CollectorUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @Getter
 @ToString
@@ -248,7 +247,7 @@ public class EntityType {
 	public static final EntityType ZOMBIFIED_PIGLIN = getById(110);
 	public static final EntityType PLAYER = getById(111);
 	public static final EntityType FISHING_BOBBER = getById(112);
-	
+
     // End auto generated code
 
     /**
@@ -257,7 +256,7 @@ public class EntityType {
      * @return EntityType
      */
     public static EntityType getByName(String name) {
-        return REGISTRY.stream().filter(entityType -> entityType.getName().equals(name)).collect(toSingleton());
+        return REGISTRY.stream().filter(entityType -> entityType.getName().equals(name)).collect(CollectorUtil.toSingleton());
     }
 
     /**
@@ -266,18 +265,7 @@ public class EntityType {
      * @return EntityType
      */
     public static EntityType getById(int id) {
-        return REGISTRY.stream().filter(entityType -> entityType.getId() == id).collect(toSingleton());
-    }
-
-    public static <T> Collector<T, ?, T> toSingleton() {
-        return Collectors.collectingAndThen(
-                Collectors.toList(),
-                list -> {
-                    if (list.size() == 0) throw new NullPointerException();
-                    else if (list.size() > 1) throw new IllegalStateException();
-                    else return list.get(0);
-                }
-        );
+        return REGISTRY.stream().filter(entityType -> entityType.getId() == id).collect(CollectorUtil.toSingleton());
     }
 
     private final int id;

@@ -3,12 +3,11 @@ package pro.prysm.orion.api.data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import pro.prysm.orion.api.util.CollectorUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @Getter
 @ToString
@@ -186,7 +185,7 @@ public class Biome {
      * @return Biome
      */
     public static Biome getBiome(String name) {
-        return REGISTRY.stream().filter(biome -> biome.getName().equalsIgnoreCase(name)).collect(toSingleton());
+        return REGISTRY.stream().filter(biome -> biome.getName().equalsIgnoreCase(name)).collect(CollectorUtil.toSingleton());
     }
 
     /**
@@ -196,17 +195,6 @@ public class Biome {
      * @return Biome
      */
     public static Biome getBiome(int id) {
-        return REGISTRY.stream().filter(biome -> biome.getId() == id).collect(toSingleton());
-    }
-
-    public static <T> Collector<T, ?, T> toSingleton() {
-        return Collectors.collectingAndThen(
-                Collectors.toList(),
-                list -> {
-                    if (list.size() == 0) throw new NullPointerException();
-                    else if (list.size() > 1) throw new IllegalStateException();
-                    else return list.get(0);
-                }
-        );
+        return REGISTRY.stream().filter(biome -> biome.getId() == id).collect(CollectorUtil.toSingleton());
     }
 }

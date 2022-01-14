@@ -3,6 +3,7 @@ package pro.prysm.orion.api.data;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.EqualsAndHashCode;
+import pro.prysm.orion.api.util.CollectorUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1825,7 +1826,7 @@ public class Block {
      * @return Block
      */
     public static Block getBlock(String name) {
-        return REGISTRY.stream().filter(block -> block.getName().equalsIgnoreCase(name)).collect(toSingleton());
+        return REGISTRY.stream().filter(block -> block.getName().equalsIgnoreCase(name)).collect(CollectorUtil.toSingleton());
     }
 
     /**
@@ -1834,7 +1835,7 @@ public class Block {
      * @return Block
      */
     public static Block getBlock(int id) {
-        return REGISTRY.stream().filter(block -> block.getId() == id).collect(toSingleton());
+        return REGISTRY.stream().filter(block -> block.getId() == id).collect(CollectorUtil.toSingleton());
     }
 
     /**
@@ -1845,18 +1846,7 @@ public class Block {
     public static Block getBlockFromState(int state) {
         return REGISTRY.stream()
                 .filter(block -> block.getDefaultState() == state || (block.getMinStateId() < state && block.getMaxStateId() > state))
-                .collect(toSingleton());
-    }
-
-    public static <T> Collector<T, ?, T> toSingleton() {
-        return Collectors.collectingAndThen(
-                Collectors.toList(),
-                list -> {
-                    if (list.size() == 0) throw new NullPointerException();
-                    else if (list.size() > 1) throw new IllegalStateException();
-                    else return list.get(0);
-                }
-        );
+                .collect(CollectorUtil.toSingleton());
     }
 
     private final int id;
