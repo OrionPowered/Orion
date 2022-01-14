@@ -40,7 +40,6 @@ public class Protocol {
     private final ServerListResponse slpData = new ServerListResponse();
     private final KeyPair keyPair = genKeyPair();
     private final Orion orion;
-    @Getter
     private final LevelManager levelManager;
     private String sessionServer;
 
@@ -119,7 +118,7 @@ public class Protocol {
         slpData.getPlayers().setOnline(
                 (int) orion.getListener().getPipeline().getChannelHandler()
                         .getConnections().values().stream().filter(
-                                (c) -> c.getState() == PacketState.PLAY).count());
+                                (c) -> c.getState() == PacketState.PLAY && c.isActive()).count());
         slp.setDescription(slpData.getDescription());
 
         return new SLPResponse(slpData);
