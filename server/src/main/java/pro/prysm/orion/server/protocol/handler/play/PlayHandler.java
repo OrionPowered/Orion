@@ -2,19 +2,18 @@ package pro.prysm.orion.server.protocol.handler.play;
 
 import com.alexsobiek.anvil.Level;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import pro.prysm.orion.api.chat.Message;
 import pro.prysm.orion.api.data.ChatMode;
 import pro.prysm.orion.api.data.GameMode;
 import pro.prysm.orion.api.data.Hand;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.event.event.IncomingPluginMessageEvent;
+import pro.prysm.orion.api.event.event.PlayerJoinEvent;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
 import pro.prysm.orion.server.protocol.handler.ProtocolHandler;
 import pro.prysm.orion.server.protocol.incoming.play.*;
-import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;
-import pro.prysm.orion.server.protocol.outgoing.play.KeepAliveOut;
-import pro.prysm.orion.server.protocol.outgoing.play.PlayerPositionAndLook;
-import pro.prysm.orion.server.protocol.outgoing.play.PluginMessageOut;
+import pro.prysm.orion.server.protocol.outgoing.play.*;
 import pro.prysm.orion.server.scheduler.OrionScheduler;
 import pro.prysm.orion.server.world.LevelManager;
 import pro.prysm.orion.server.world.dimension.DimensionProvider;
@@ -70,12 +69,27 @@ public class PlayHandler extends ProtocolHandler {
         joinGame.setFlat(false);
         connection.sendPacket(joinGame);
 
+        PlayerJoinEvent playerJoinEvent = new PlayerJoinEvent(player);
+        Orion.getEventBus().post(playerJoinEvent);
+        if (playerJoinEvent.isCancelled()) {
+            player.getConnection().disconnect("Kicked from server.");   // TODO: Change
+            return;
+        }
+
         connection.sendPacket(new PluginMessageOut("minecraft:brand", connection.getProtocol().getSlpData().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
         connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
+
         startKeepAlive();
         Orion.getLogger().info("{} ({}) has logged in", player.getProfile().getUsername(), connection.getAddress());
         Orion.getLogger().debug("Player {} has logged in at {}", player.getProfile().getUsername(), player.getLocation());
         startChunkSending();
+
+        // Testing
+        connection.sendPacket(new PlayerlistHeaderFooter(
+                new Message("<color:#2fc1fa>Orion Server Software</color>"),
+                new Message("<color:#2fc1fa>Orion Server Software</color>")
+        ));
+
     }
 
     private void startKeepAlive() {
