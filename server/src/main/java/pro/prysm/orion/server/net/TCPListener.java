@@ -11,6 +11,7 @@ import pro.prysm.orion.api.event.event.ServerReadyEvent;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.net.pipeline.Pipeline;
 import pro.prysm.orion.server.protocol.Protocol;
+import pro.prysm.orion.server.util.OrionThreadFactory;
 
 import java.net.InetSocketAddress;
 
@@ -32,7 +33,7 @@ public class TCPListener {
     }
 
     private void listen(InetSocketAddress address, int threads) throws InterruptedException {
-        EventLoopGroup group = new NioEventLoopGroup(threads);
+        EventLoopGroup group = new NioEventLoopGroup(threads, new OrionThreadFactory("netty"));
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(group);

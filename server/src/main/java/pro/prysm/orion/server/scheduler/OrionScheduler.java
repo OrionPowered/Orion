@@ -1,5 +1,7 @@
 package pro.prysm.orion.server.scheduler;
 
+import pro.prysm.orion.server.util.OrionThreadFactory;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
@@ -8,7 +10,7 @@ import java.util.concurrent.*;
 // - Alex
 public class OrionScheduler {
     public static final int TPS = 20;
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new OrionThreadFactory("scheduler"));
     private final Map<UUID, ScheduledFuture<?>> map = new ConcurrentHashMap<>();
 
     private long ticksToMs(long ticks) {
