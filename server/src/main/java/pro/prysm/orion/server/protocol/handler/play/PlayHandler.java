@@ -55,10 +55,10 @@ public class PlayHandler extends ProtocolHandler {
         joinGame.setEntityId(player.getEntityId());
         joinGame.setGamemode(player.getGameMode());             // TODO: Implement Gamemode
         joinGame.setPreviousGamemode(player.getGameMode());
-        joinGame.setWorlds(new String[]{"world"});            // TODO: Implement worlds
+        joinGame.setWorlds(levelManager.getWorlds());           // TODO: Implement worlds
         joinGame.setDimensionCodec(dimension.getDimension());
         joinGame.setDimension(dimension.getDimensionType("minecraft:overworld"));
-        joinGame.setWorldName(level.getName());                       // TODO: Implement worlds
+        joinGame.setWorldName(level.getName());                // TODO: Implement worlds
         joinGame.setHashedSeed(12345678);
         joinGame.setMaxPlayers(connection.getProtocol().getMaxPlayers());
         joinGame.setViewDistance(10);                         // TODO: Implement view distance

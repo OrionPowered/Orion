@@ -17,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 public class LevelManager {
     private final AnvilLib anvil;
     private final Level level;
+    private final Set<String> worlds;
     private final Map<int[], Region> regions;
     @Setter
     private DimensionProvider dimension;
@@ -25,7 +26,14 @@ public class LevelManager {
         anvil = new AnvilLib();
         level = anvil.loadLevel(world);
         dimension = new CraftDimension();
+        worlds = new HashSet<>();
         regions = new HashMap<>();
+
+        worlds.add(level.getName());
+    }
+
+    public String[] getWorlds() {
+        return worlds.toArray(new String[]{});
     }
 
     public Region getRegion(int x, int z) {
