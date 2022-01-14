@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.protocol.Protocol;
+import pro.prysm.orion.server.protocol.handler.ProtocolHandler;
 
 import java.net.SocketAddress;
 import java.util.Map;
@@ -27,7 +28,9 @@ public class ChannelHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
-        connections.remove(ctx.channel().remoteAddress().hashCode()).setActive(false);
+        Connection connection = connections.remove(ctx.channel().remoteAddress().hashCode());
+        connection.setActive(false);
+        connection.getHandler().onDisconnect();
     }
 
     public Connection getConnection(SocketAddress remoteAddress) {
