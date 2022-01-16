@@ -2,7 +2,7 @@ package pro.prysm.orion.server.protocol.handler.play;
 
 import com.alexsobiek.anvil.Level;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import pro.prysm.orion.api.chat.Message;
+import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.api.data.ChatMode;
 import pro.prysm.orion.api.data.GameMode;
 import pro.prysm.orion.api.data.Hand;

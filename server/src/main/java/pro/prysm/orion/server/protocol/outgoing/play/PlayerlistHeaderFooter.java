@@ -1,6 +1,6 @@
 package pro.prysm.orion.server.protocol.outgoing.play;
 
-import pro.prysm.orion.api.chat.Message;
+import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 

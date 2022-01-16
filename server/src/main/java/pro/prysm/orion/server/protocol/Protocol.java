@@ -3,7 +3,7 @@ package pro.prysm.orion.server.protocol;
 import com.google.gson.JsonParser;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-import pro.prysm.orion.api.chat.Message;
+import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.protocol.PacketState;

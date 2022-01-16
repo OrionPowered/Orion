@@ -1,4 +1,4 @@
-package pro.prysm.orion.api.chat;
+package pro.prysm.orion.api.message;
 
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
