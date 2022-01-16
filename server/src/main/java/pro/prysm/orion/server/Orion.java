@@ -9,11 +9,14 @@ import pro.prysm.orion.api.event.Listener;
 import pro.prysm.orion.api.event.event.ReloadEvent;
 import pro.prysm.orion.api.event.event.ServerReadyEvent;
 import pro.prysm.orion.api.json.Config;
+import pro.prysm.orion.api.message.PlaceholderService;
 import pro.prysm.orion.server.command.CommandHandler;
 import pro.prysm.orion.server.command.commands.HelpCommand;
 import pro.prysm.orion.server.command.commands.ReloadCommand;
 import pro.prysm.orion.server.command.commands.SendPacketCommand;
+import pro.prysm.orion.server.command.commands.UptimeCommand;
 import pro.prysm.orion.server.event.EventBus;
+import pro.prysm.orion.server.message.placeholder.UptimePlaceholder;
 import pro.prysm.orion.server.module.ModuleLoader;
 import pro.prysm.orion.server.net.TCPListener;
 import pro.prysm.orion.server.plugin.PluginLoader;
@@ -29,11 +32,13 @@ import java.nio.file.Path;
 
 @Getter
 public class Orion implements Listener, pro.prysm.orion.api.Orion {
-    // STATIC - Logger, EventBus, and OrionScheduler are the only objects that should be here.
+    // STATIC
     private static final Logger logger = (Logger) LoggerFactory.getLogger("Orion");
     private static final EventBus EVENT_BUS = new pro.prysm.orion.server.event.EventBus();
     private static final OrionScheduler SCHEDULER = new OrionScheduler();
-    private final long startupTime = System.currentTimeMillis();
+    private static final PlaceholderService placeholderService = new pro.prysm.orion.server.message.PlaceholderService();
+    private static final long startupTime = System.currentTimeMillis();
+
     // END STATIC
 
     private final TCPListener listener;
@@ -43,6 +48,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
     private final ModuleLoader moduleLoader;
     private final PluginLoader pluginLoader;
     private Config config;
+
 
     public Orion() {
         logger.info("Starting Orion...");
@@ -67,6 +73,7 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         );
 
         registerCommands();
+        registerPlaceholders();
 
         try {
             new TickService(); // Start ticking
@@ -92,6 +99,14 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         return SCHEDULER;
     }
 
+    public static PlaceholderService getPlaceholderService() {
+        return placeholderService;
+    }
+
+    public static long getStartupTime() {
+        return startupTime;
+    }
+
     private void loadConfig() {
         try {
             config = new Config(getClass().getClassLoader(), Path.of("settings.json"), "settings.json");
@@ -103,7 +118,12 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
     private void registerCommands() {
         commandHandler.registerCommand(new HelpCommand());
         commandHandler.registerCommand(new ReloadCommand());
+        commandHandler.registerCommand(new UptimeCommand());
         commandHandler.registerCommand(new SendPacketCommand(listener.getPipeline().getChannelHandler()));
+    }
+
+    private void registerPlaceholders() {
+        placeholderService.register("uptime", new UptimePlaceholder());
     }
 
     @EventHandler
