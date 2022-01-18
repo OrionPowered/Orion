@@ -67,7 +67,9 @@ public class ImplEntity implements Entity {
 
     @Override
     public void setLocation(double x, double y, double z) {
-        location.set(x, y, z);
+        if (location != null) location.set(x, y, z);
+        else location = new Location(x, y, z, 0, 0, true);
+
     }
 
     @Override

@@ -34,7 +34,6 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
     private final Connection connection;
     private final GameProfile profile;
     private ClientSettings settings;
-    private Location location;
     private GameMode gameMode;
     private String brand;
 
