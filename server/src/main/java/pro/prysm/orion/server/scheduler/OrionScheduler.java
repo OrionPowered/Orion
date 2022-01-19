@@ -36,6 +36,7 @@ public class OrionScheduler {
     }
 
     public void cancel(UUID id) {
-        map.remove(id).cancel(true);
+        ScheduledFuture<?> removed = map.remove(id);
+        if (removed != null) removed.cancel(true);
     }
 }
