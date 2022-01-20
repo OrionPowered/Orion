@@ -12,14 +12,14 @@ import pro.prysm.orion.server.data.palette.PalettedContainer.Type;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
-public class ChunkData extends OutgoingPacket {
+public class ChunkWithLight extends OutgoingPacket {
     private final Chunk chunk;
     private final boolean exists;
     private final CompoundBinaryTag heightmaps;
     @Getter
     private final int x, z;
 
-    public ChunkData(Chunk chunk) {
+    public ChunkWithLight(Chunk chunk) {
         super(0x22);
         this.chunk = chunk;
         this.exists = chunk.exists();
