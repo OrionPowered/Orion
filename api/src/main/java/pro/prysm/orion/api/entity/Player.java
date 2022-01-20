@@ -1,6 +1,7 @@
 package pro.prysm.orion.api.entity;
 
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.identity.Identity;
 import pro.prysm.orion.api.data.ClientSettings;
 import pro.prysm.orion.api.data.GameMode;
 import pro.prysm.orion.api.data.GameProfile;
@@ -9,7 +10,7 @@ import pro.prysm.orion.api.net.Connection;
 /**
  * An interface to represent a player.
  */
-public interface Player extends LivingEntity, Audience {
+public interface Player extends Identity, LivingEntity, Audience {
     /**
      * Retrieves this player's current gamemode.
      *
