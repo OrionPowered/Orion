@@ -20,7 +20,7 @@ import pro.prysm.orion.api.entity.Player;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.entity.ImplLivingEntity;
 import pro.prysm.orion.server.net.Connection;
-import pro.prysm.orion.server.protocol.outgoing.play.ChunkData;
+import pro.prysm.orion.server.protocol.outgoing.play.ChunkWithLight;
 import pro.prysm.orion.server.util.TagUtil;
 import pro.prysm.orion.server.world.LevelManager;
 
@@ -81,19 +81,18 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
 
     public void sendChunkAsync(LevelManager levelManager, int x, int z) {
         levelManager.getChunkAsync(x, z)
-                .thenAcceptAsync(this::sendChunk)
-                .join();
+                .thenAcceptAsync(this::sendChunk);
     }
 
     public void sendChunk(Chunk chunk) {
-        sendChunkData(new ChunkData(chunk));
+        sendChunkData(new ChunkWithLight(chunk));
     }
 
     public void sendChunk(LevelManager levelManager, int x, int z) {
         sendChunk(levelManager.getChunk(x, z));
     }
 
-    private void sendChunkData(ChunkData data) {
+    private void sendChunkData(ChunkWithLight data) {
         if (data.exists()) connection.sendPacket(data);
         else Orion.getLogger().warn("Missing chunk at {}, {}", data.getX(), data.getZ());
     }
