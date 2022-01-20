@@ -158,7 +158,7 @@ public class PlayHandler extends ProtocolHandler {
 
     @Override
     public void handle(PlayerPosition packet) {
-        Location to = player.getLocation();
+        Location to = player.getLocation().clone();
         to.setX(packet.getX());
         to.setY(packet.getY());
         to.setZ(packet.getZ());
@@ -167,7 +167,7 @@ public class PlayHandler extends ProtocolHandler {
 
     @Override
     public void handle(PlayerRotation packet) {
-        Location to = player.getLocation();
+        Location to = player.getLocation().clone();
         to.setYaw(packet.getYaw());
         to.setPitch(packet.getPitch());
         to.setOnGround(packet.isOnGround());
@@ -176,7 +176,7 @@ public class PlayHandler extends ProtocolHandler {
 
     @Override
     public void handle(PlayerPositionAndRotation packet) {
-        Location to = player.getLocation();
+        Location to = player.getLocation().clone();
         to.setX(packet.getX());
         to.setY(packet.getY());
         to.setZ(packet.getZ());
