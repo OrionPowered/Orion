@@ -2,56 +2,58 @@ package pro.prysm.orion.api.data;
 
 import lombok.*;
 
+
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
-// @EqualsAndHashCode lombok equals() does not work for this
-public class Location {
+@EqualsAndHashCode
+public class Location implements Cloneable {
     private double x, y, z;
     private float yaw, pitch;
     private boolean onGround;
+    private int chunkX, chunkZ;
+
+    public Location(double x, double y, double z, float yaw, float pitch, boolean onGround) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.yaw = yaw;
+        this.pitch = pitch;
+        this.onGround = onGround;
+    }
 
     public Location(double[] position, float[] rotation, boolean onGround) {
         this(position[0], position[1], position[2], rotation[0], rotation[1], onGround);
     }
-
-    public void addX(double x) {
-        this.x += x;
-    }
-
-    public void addY(double y) {
-        this.y += y;
-    }
-
-    public void addZ(double z) {
-        this.z += z;
-    }
-
-    public void subX(double x) {
-        this.x -= x;
-    }
-
-    public void subY(double x) {
-        this.y -= y;
-    }
-
-    public void subZ(double z) {
-        this.z -= z;
-    }
-
     public void set(double x, double y, double z) {
-        this.x = x;
+        setX(x);
+        setZ(z);
         this.y = y;
-        this.z = z;
     }
 
-    // TODO: this is always true
-    public boolean equals(Location other) {
-        if (other.getX() != x) return false;
-        else if (other.getY() != y) return false;
-        else if (other.getZ() != z) return false;
-        else if (other.getYaw() != yaw) return false;
-        else return (other.getPitch() == pitch);
+    public void setX(double x) {
+        this.x = x;
+        this.chunkX = (int) x >> 4;
+    }
+
+    public void setZ(double z) {
+        this.z = z;
+        this.chunkZ = (int) z >> 4;
+    }
+
+    public boolean isSameChunk(Location other) {
+        if (chunkX != other.getChunkX()) return false;
+        else return (chunkZ == other.getChunkZ());
+    }
+
+    @Override
+    public Location clone() {
+        try {
+            return (Location) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            throw new AssertionError();
+        }
     }
 }
