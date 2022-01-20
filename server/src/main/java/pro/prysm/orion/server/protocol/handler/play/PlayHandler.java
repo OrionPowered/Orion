@@ -2,13 +2,13 @@ package pro.prysm.orion.server.protocol.handler.play;
 
 import com.alexsobiek.anvil.Level;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.api.data.ChatMode;
 import pro.prysm.orion.api.data.GameMode;
 import pro.prysm.orion.api.data.Hand;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.event.event.IncomingPluginMessageEvent;
 import pro.prysm.orion.api.event.event.PlayerJoinEvent;
+import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
 import pro.prysm.orion.server.protocol.handler.ProtocolHandler;
@@ -91,7 +91,6 @@ public class PlayHandler extends ProtocolHandler {
                 new Message("<color:#2fc1fa>Orion Server Software</color>"),
                 new Message("<color:#2fc1fa>Orion Server Software</color>")
         ));
-
     }
 
     private void startKeepAlive() {
@@ -187,6 +186,7 @@ public class PlayHandler extends ProtocolHandler {
         to.setYaw(packet.getYaw());
         to.setPitch(packet.getPitch());
         to.setOnGround(packet.isOnGround());
+
         player.setLocation(movement.playerMove(to, player.getLocation()));
     }
 

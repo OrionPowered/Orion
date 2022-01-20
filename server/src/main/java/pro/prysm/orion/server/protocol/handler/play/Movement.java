@@ -21,7 +21,8 @@ public class Movement {
         if (!event.isCancelled()) {
             // if (!event.getTo().equals(to)) // TODO: implement teleporting
 
-            if (!to.isSameChunk(from)) player.getConnection().sendPacket(new UpdateViewPosition(to.getChunkX(), to.getChunkZ()));
+            if (!to.isSameChunk(from))
+                player.getConnection().sendPacket(new UpdateViewPosition(to.getChunkX(), to.getChunkZ()));
 
             return to;
         } else {

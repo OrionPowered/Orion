@@ -7,7 +7,6 @@ import pro.prysm.orion.server.net.PacketByteBuf;
 @Getter
 @ToString
 public class PalettedContainer {
-
     private final int bitsPerEntry;
     private final long[] data;
     private final Palette palette;
