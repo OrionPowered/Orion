@@ -42,8 +42,10 @@ public class PlayHandler extends ProtocolHandler {
         DimensionProvider dimension = levelManager.getDimension();
         Level level = levelManager.getLevel();
 
-        player.setLocation(new Location(level.getSpawnX(), level.getSpawnY(), level.getSpawnZ(), 0F, 90F, false)); // TODO: This is a temp solution
-        if (!level.hasSavedPlayerData(player.getProfile().getUniqueId())) player.savePlayerData(level);
+        if (!level.hasSavedPlayerData(player.getProfile().getUniqueId())) {
+            player.setLocation(new Location(level.getSpawnX(), level.getSpawnY(), level.getSpawnZ(), 0F, 90F, false)); // TODO: This is a temp solution
+            player.savePlayerData(level);
+        }
 
         Optional<CompoundBinaryTag> playerData = level.getPlayerData(player.getProfile().getUniqueId());
 
