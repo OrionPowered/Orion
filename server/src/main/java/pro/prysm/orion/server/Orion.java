@@ -43,10 +43,10 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
 
     private final TCPListener listener;
     private final Protocol protocol;
-    private final LevelManager levelManager;
     private final CommandHandler commandHandler;
     private final ModuleLoader moduleLoader;
     private final PluginLoader pluginLoader;
+    private final LevelManager levelManager;
     private Config config;
 
 
@@ -58,7 +58,9 @@ public class Orion implements Listener, pro.prysm.orion.api.Orion {
         Logger root = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
         root.setLevel(Level.valueOf(config.getString("log-level")));
 
-        levelManager = new LevelManager(config.getString("world"));
+        // If world.void is true, we create a level manager with no specified world.
+        levelManager = (config.getBoolean("world.void")) ? new LevelManager() : new LevelManager(config.getString("world.name"));
+
         protocol = new Protocol(this, levelManager, config);
         commandHandler = new CommandHandler();
         moduleLoader = new ModuleLoader();

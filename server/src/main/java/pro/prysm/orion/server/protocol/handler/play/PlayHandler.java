@@ -39,36 +39,30 @@ public class PlayHandler extends ProtocolHandler {
 
     private void joinGame() {
         LevelManager levelManager = connection.getProtocol().getLevelManager();
-        DimensionProvider dimension = levelManager.getDimension();
-        Level level = levelManager.getLevel();
+        JoinGame joinGame = connection.getProtocol().getJoinGamePacket();
 
-        if (!level.hasSavedPlayerData(player.getProfile().getUniqueId())) {
-            player.setLocation(new Location(level.getSpawnX(), level.getSpawnY(), level.getSpawnZ(), 0F, 90F, false)); // TODO: This is a temp solution
-            player.savePlayerData(level);
+        joinGame.setEntityId(player.getEntityId());
+
+        if (!levelManager.isVoidWorld()) {
+            DimensionProvider dimension = levelManager.getDimension();
+            Level level = levelManager.getLevel();
+
+            if (!level.hasSavedPlayerData(player.getProfile().getUniqueId())) {
+                player.setLocation(new Location(level.getSpawnX(), level.getSpawnY(), level.getSpawnZ(), 0F, 90F, false)); // TODO: This is a temp solution
+                player.savePlayerData(level);
+            }
+
+            Optional<CompoundBinaryTag> playerData = level.getPlayerData(player.getProfile().getUniqueId());
+
+            player.readPlayerData(playerData.orElseThrow());
+            player.setGameMode(GameMode.SPECTATOR);
+            joinGame.setGamemode(player.getGameMode());             // TODO: Implement Gamemode
+            joinGame.setPreviousGamemode(player.getGameMode());
+            joinGame.setWorldName(level.getName());                // TODO: Implement worlds
+        } else {
+            player.setLocation(new Location(0, 64, 0, 0, 0, true));
         }
 
-        Optional<CompoundBinaryTag> playerData = level.getPlayerData(player.getProfile().getUniqueId());
-
-        player.readPlayerData(playerData.orElseThrow());
-
-        player.setGameMode(GameMode.SPECTATOR);
-
-        JoinGame joinGame = new JoinGame();
-        joinGame.setEntityId(player.getEntityId());
-        joinGame.setGamemode(player.getGameMode());             // TODO: Implement Gamemode
-        joinGame.setPreviousGamemode(player.getGameMode());
-        joinGame.setWorlds(levelManager.getWorlds());           // TODO: Implement worlds
-        joinGame.setDimensionCodec(dimension.getDimension());
-        joinGame.setDimension(dimension.getDimensionType("minecraft:overworld"));
-        joinGame.setWorldName(level.getName());                // TODO: Implement worlds
-        joinGame.setHashedSeed(12345678);
-        joinGame.setMaxPlayers(connection.getProtocol().getMaxPlayers());
-        joinGame.setViewDistance(10);                         // TODO: Implement view distance
-        joinGame.setSimulationDistance(10);                   // TODO: Implement simulation distance
-        joinGame.setReducedDebugInfo(false);
-        joinGame.setRespawnScreen(true);
-        joinGame.setDebug(false);
-        joinGame.setFlat(false);
         connection.sendPacket(joinGame);
 
         PlayerJoinEvent playerJoinEvent = new PlayerJoinEvent(player);
@@ -84,7 +78,7 @@ public class PlayHandler extends ProtocolHandler {
         startKeepAlive();
         Orion.getLogger().info("{} ({}) has logged in", player.getProfile().getUsername(), connection.getAddress());
         Orion.getLogger().debug("Player {} has logged in at {}", player.getProfile().getUsername(), player.getLocation());
-        startChunkSending();
+        if (!levelManager.isVoidWorld()) startChunkSending();
 
         // Testing
         connection.sendPacket(new PlayerlistHeaderFooter(

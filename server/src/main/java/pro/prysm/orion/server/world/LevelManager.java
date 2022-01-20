@@ -7,6 +7,7 @@ import com.alexsobiek.anvil.Region;
 import lombok.Getter;
 import lombok.Setter;
 import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.util.ExceptionHandler;
 import pro.prysm.orion.server.world.dimension.CraftDimension;
 import pro.prysm.orion.server.world.dimension.DimensionProvider;
 
@@ -15,10 +16,11 @@ import java.util.concurrent.CompletableFuture;
 
 @Getter
 public class LevelManager {
-    private final AnvilLib anvil;
-    private final Level level;
+    private AnvilLib anvil;
+    private Level level;
     private final Set<String> worlds;
-    private final Map<int[], Region> regions;
+    private Map<int[], Region> regions;
+    private final boolean voidWorld;
     @Setter
     private DimensionProvider dimension;
 
@@ -28,24 +30,33 @@ public class LevelManager {
         dimension = new CraftDimension();
         worlds = new HashSet<>();
         regions = new HashMap<>();
-
+        voidWorld = false;
         worlds.add(level.getName());
+    }
+
+    public LevelManager() {
+        worlds = new HashSet<>();
+        worlds.add("void");
+        dimension = new CraftDimension();
+        voidWorld = true;
     }
 
     public String[] getWorlds() {
         return worlds.toArray(new String[]{});
     }
 
-    public Region getRegion(int x, int z) {
+    public Region getRegion(int x, int z) throws IllegalAccessException {
         Orion.getLogger().debug("Getting region for level {} at {}, {}", level.getName(), x, z);
-        int[] pos = new int[]{x, z};
-        if (regions.containsKey(pos)) {
-            return regions.get(pos);
-        } else {
-            Region region = level.getRegion(x, z);
-            regions.put(pos, region);
-            return region;
-        }
+        if (!voidWorld) {
+            int[] pos = new int[]{x, z};
+            if (regions.containsKey(pos)) {
+                return regions.get(pos);
+            } else {
+                Region region = level.getRegion(x, z);
+                regions.put(pos, region);
+                return region;
+            }
+        } else throw new IllegalAccessException("World is a void world");
     }
 
     public Queue<Chunk> getChunks(int minX, int minZ, int maxX, int maxZ) {
@@ -60,11 +71,23 @@ public class LevelManager {
 
     public Chunk getChunk(int x, int z) {
         Orion.getLogger().debug("Getting chunk for level {} at {}, {}", level.getName(), x, z);
-        return getRegion(x >> 5, z >> 5).getChunk(x, z);
+        Chunk chunk = null;
+        try {
+            chunk = getRegion(x >> 5, z >> 5).getChunk(x, z);
+        } catch (IllegalAccessException e) {
+            ExceptionHandler.error(e);
+        }
+        return chunk;
     }
 
     public CompletableFuture<Chunk> getChunkAsync(int x, int z) {
         Orion.getLogger().debug("Getting chunk for level {} at {}, {}", level.getName(), x, z);
-        return getRegion(x >> 5, z >> 5).getChunkAsync(x, z);
+        CompletableFuture<Chunk> chunk = null;
+        try {
+            chunk = getRegion(x >> 5, z >> 5).getChunkAsync(x, z);
+        } catch (IllegalAccessException e) {
+            ExceptionHandler.error(e);
+        }
+        return chunk;
     }
 }

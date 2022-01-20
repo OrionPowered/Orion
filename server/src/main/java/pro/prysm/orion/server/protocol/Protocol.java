@@ -3,16 +3,19 @@ package pro.prysm.orion.server.protocol;
 import com.google.gson.JsonParser;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-import pro.prysm.orion.api.message.Message;
+import pro.prysm.orion.api.data.GameMode;
 import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.api.json.Config;
+import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.api.protocol.status.ServerListResponse;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.protocol.outgoing.login.EncryptionRequest;
+import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
 import pro.prysm.orion.server.util.ExceptionHandler;
 import pro.prysm.orion.server.world.LevelManager;
+import pro.prysm.orion.server.world.dimension.DimensionProvider;
 
 import javax.crypto.Cipher;
 import java.io.IOException;
@@ -39,6 +42,7 @@ public class Protocol {
 
     private final PacketRegistry packetRegistry = new PacketRegistry();
     private final ServerListResponse slpData = new ServerListResponse();
+    private final JoinGame joinGamePacket;
     private final KeyPair keyPair = genKeyPair();
     private final Orion orion;
     private final LevelManager levelManager;
@@ -50,6 +54,7 @@ public class Protocol {
     public Protocol(Orion orion, LevelManager levelManager, Config config) {
         this.orion = orion;
         this.levelManager = levelManager;
+        joinGamePacket = createJoinGamePacket();
         reload(config);
     }
 
@@ -74,6 +79,33 @@ public class Protocol {
             sessionServer = config.getStringOrDefault("session-server", "https://sessionserver.mojang.com");
             Orion.getLogger().debug("Using session server {}", sessionServer);
         }
+    }
+
+    private JoinGame createJoinGamePacket() {
+        JoinGame packet = new JoinGame();
+        DimensionProvider dimension = levelManager.getDimension();
+
+        packet.setDimensionCodec(dimension.getDimension());
+        packet.setWorlds(levelManager.getWorlds());
+        packet.setHashedSeed(12345678);                         // TODO: Implement Seed
+        packet.setMaxPlayers(maxPlayers);
+        packet.setViewDistance(10);                             // TODO: View distance
+        packet.setSimulationDistance(10);                       // TODO: Simulation distance
+        packet.setReducedDebugInfo(false);
+        packet.setRespawnScreen(true);
+        packet.setDebug(false);
+        packet.setFlat(false);
+
+        if (levelManager.isVoidWorld()) {
+            packet.setGamemode(GameMode.SPECTATOR);
+            packet.setPreviousGamemode(GameMode.SPECTATOR);
+            packet.setDimension(dimension.getDimensionType("minecraft:the_end"));
+            packet.setWorldName("void");
+        } else {
+            packet.setDimension(dimension.getDimensionType("minecraft:overworld"));
+        }
+
+        return packet;
     }
 
     private KeyPair genKeyPair() {
