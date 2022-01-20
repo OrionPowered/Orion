@@ -8,6 +8,7 @@ import io.netty.channel.ChannelHandlerContext;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import net.kyori.adventure.text.Component;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.event.events.OutgoingPacketEvent;
@@ -72,7 +73,7 @@ public class Connection implements pro.prysm.orion.api.net.Connection {
      *
      * @param reason Reason for disconnect
      */
-    public void disconnect(String reason) {
+    public void disconnect(Component reason) {
         if (active) {
             if (state == PacketState.LOGIN) sendPacket(new LoginDisconnected(reason));
             else if (state == PacketState.PLAY) sendPacket(new PlayDisconnect(reason));

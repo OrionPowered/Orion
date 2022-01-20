@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import lombok.RequiredArgsConstructor;
+import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.event.events.IncomingPacketEvent;
@@ -35,7 +36,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
                 Orion.getEventBus().post(new IncomingPacketEvent(), packet);
             }
         } else {
-            connection.disconnect(String.format("<red>Invalid packet ID: 0x%s</red>", Integer.toHexString(id).toUpperCase()));
+            connection.disconnect(new Message(String.format("<red>Invalid packet ID: 0x%s</red>", Integer.toHexString(id).toUpperCase())).toComponent());
         }
     }
 }

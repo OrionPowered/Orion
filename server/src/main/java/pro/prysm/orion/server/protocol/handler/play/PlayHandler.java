@@ -2,6 +2,7 @@ package pro.prysm.orion.server.protocol.handler.play;
 
 import com.alexsobiek.anvil.Level;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.text.Component;
 import pro.prysm.orion.api.data.ChatMode;
 import pro.prysm.orion.api.data.GameMode;
 import pro.prysm.orion.api.data.Hand;
@@ -68,7 +69,7 @@ public class PlayHandler extends ProtocolHandler {
         PlayerJoinEvent playerJoinEvent = new PlayerJoinEvent(player);
         Orion.getEventBus().post(playerJoinEvent);
         if (playerJoinEvent.isCancelled()) {
-            player.getConnection().disconnect("Kicked from server.");   // TODO: Change
+            player.getConnection().disconnect(Component.text("Kicked from server."));   // TODO: Change
             return;
         }
 
@@ -82,8 +83,8 @@ public class PlayHandler extends ProtocolHandler {
 
         // Testing
         connection.sendPacket(new PlayerlistHeaderFooter(
-                new Message("<color:#2fc1fa>Orion Server Software</color>"),
-                new Message("<color:#2fc1fa>Orion Server Software</color>")
+                new Message("<color:#2fc1fa>Orion Server Software</color>").toComponent(),
+                new Message("<color:#2fc1fa>Orion Server Software</color>").toComponent()
         ));
     }
 
@@ -129,7 +130,7 @@ public class PlayHandler extends ProtocolHandler {
 
     @Override
     public void handle(KeepAliveIn packet) {
-        if (keepAliveId != packet.getKeepAliveId()) connection.disconnect("<red>Invalid Keep Alive ID</red>");
+        if (keepAliveId != packet.getKeepAliveId()) connection.disconnect(Component.text("Invalid Keep Alive ID"));
     }
 
     @Override

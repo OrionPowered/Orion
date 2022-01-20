@@ -1,6 +1,7 @@
 package pro.prysm.orion.server.protocol.handler;
 
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
 import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
@@ -44,7 +45,7 @@ public class LoginHandler extends ProtocolHandler {
         // If server isn't in online mode disconnect the player and stop from handling further
         if (!connection.getProtocol().isOnlineMode()) {
             Orion.getLogger().warn("{} sent an encryption response when no request was sent!", username);
-            player.getConnection().disconnect("Invalid encryption packet");
+            player.getConnection().disconnect(Component.text("Invalid encryption packet"));
             return;
         }
 
@@ -61,7 +62,7 @@ public class LoginHandler extends ProtocolHandler {
 
         // If the above executes properly, we can now authenticate the user with the Mojang Session service
         GameProfile profile = connection.getProtocol().join(connection.getProtocol().generateServerId(connection.getSharedSecret()), username);
-        if (profile == null) connection.disconnect("Bad login.");
+        if (profile == null) connection.disconnect(Component.text("Bad Login."));
         else {
             connection.sendPacket(new LoginSuccess(profile.getUniqueId(), profile.getUsername()));
             player = PlayerFactory.newPlayer(connection, profile);

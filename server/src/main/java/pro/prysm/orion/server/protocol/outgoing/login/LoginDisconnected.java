@@ -1,26 +1,26 @@
 package pro.prysm.orion.server.protocol.outgoing.login;
 
 import lombok.Getter;
-import pro.prysm.orion.api.message.Message;
+import net.kyori.adventure.text.Component;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
 @Getter
 public class LoginDisconnected extends OutgoingPacket {
-    private final Message message;
+    private final Component reason;
 
-    public LoginDisconnected(String message) {
+    public LoginDisconnected(Component reason) {
         super(0x00);
-        this.message = new Message(message);
+        this.reason = reason;
     }
 
-    public LoginDisconnected(int id, String message) {
+    public LoginDisconnected(int id, Component reason) {
         super(id);
-        this.message = new Message(message);
+        this.reason = reason;
     }
 
     @Override
     public void write(PacketByteBuf buf) {
-        buf.writeString(message.toJsonString());
+        buf.writeComponent(reason);
     }
 }

@@ -1,6 +1,7 @@
 package pro.prysm.orion.api.net;
 
 import io.netty.channel.ChannelHandlerContext;
+import net.kyori.adventure.text.Component;
 import pro.prysm.orion.api.protocol.PacketState;
 
 import java.net.SocketAddress;
@@ -39,5 +40,5 @@ public interface Connection {
      *
      * @param reason The reason for disconnecting
      */
-    void disconnect(String reason);
+    void disconnect(Component reason);
 }
