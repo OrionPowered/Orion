@@ -3,6 +3,8 @@ package pro.prysm.orion.server.net;
 import io.netty.buffer.ByteBuf;
 import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.server.util.ExceptionHandler;
 
@@ -233,6 +235,24 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
     public void writeBitSet(BitSet bitSet) {
         long[] data = bitSet.toLongArray();
         writeLongArray(data);
+    }
+
+    /**
+     * Writes a component to the Byte Buffer
+     *
+     * @param component Component to writes
+     */
+    public void writeComponent(Component component) {
+        writeString(GsonComponentSerializer.gson().serialize(component));
+    }
+
+    /**
+     * Reads and deserializes a component from the Byte Buffer
+     *
+     * @return Component
+     */
+    public Component readComponent() {
+        return GsonComponentSerializer.gson().deserialize(readString());
     }
 
     /**
