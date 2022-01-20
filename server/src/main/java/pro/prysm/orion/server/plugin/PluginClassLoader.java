@@ -26,6 +26,7 @@ public class PluginClassLoader extends URLClassLoader {
     private Field loggerF;
     private Field descriptionF;
     private Field eventBusF;
+    private Field serverF;
 
     public PluginClassLoader(URL[] urls, ClassLoader parent, PluginLoader loader) {
         super(urls, parent);
@@ -39,6 +40,8 @@ public class PluginClassLoader extends URLClassLoader {
             descriptionF.setAccessible(true);
             eventBusF = JavaPlugin.class.getDeclaredField("eventBus");
             eventBusF.setAccessible(true);
+            serverF = JavaPlugin.class.getDeclaredField("server");
+            serverF.setAccessible(true);
         } catch (Exception e) {
             ExceptionHandler.error(e);
         }
@@ -61,6 +64,7 @@ public class PluginClassLoader extends URLClassLoader {
                 loggerF.set(plugin, LoggerFactory.getLogger(description.getName()));
                 descriptionF.set(plugin, description);
                 eventBusF.set(plugin, Orion.getEventBus());
+                serverF.set(plugin, Orion.getServer());
                 loader.plugins.add(plugin);
                 plugin.onEnable();
             } catch (IOException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | InvalidPluginException e) {

@@ -2,11 +2,10 @@ package pro.prysm.orion.server;
 
 import ch.qos.logback.classic.Logger;
 import org.slf4j.LoggerFactory;
-import pro.prysm.orion.api.event.Listener;
 import pro.prysm.orion.server.event.EventBus;
 import pro.prysm.orion.server.scheduler.OrionScheduler;
 
-public class Orion implements Listener, pro.prysm.orion.api.Orion {
+public class Orion {
     private static final long startupTime = System.currentTimeMillis();
     private static Logger logger;
     private static OrionScheduler scheduler;

@@ -2,6 +2,7 @@ package pro.prysm.orion.api.plugin;
 
 import lombok.Getter;
 import org.slf4j.Logger;
+import pro.prysm.orion.api.Server;
 import pro.prysm.orion.api.event.EventBus;
 import pro.prysm.orion.api.json.Config;
 
@@ -20,6 +21,7 @@ public abstract class JavaPlugin {
     private PluginDescription description;
     private Logger logger;
     private EventBus eventBus;
+    private Server server;
 
 
     public abstract void onEnable();
