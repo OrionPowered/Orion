@@ -6,6 +6,7 @@ import lombok.Getter;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.List;
 
@@ -59,8 +60,11 @@ public class UpdateLight extends OutgoingPacket {
         lightingBuf.writeVarInt(lightData.size());
         for (int i = 0; i < lightData.size(); i++) {
             byte[] array = lightData.get(i);
-            if (array.length == 0) array = new byte[2048]; // Sometimes we don't have any data, but the client needs it
-            else {
+            if (array.length == 0) {
+                array = new byte[2048]; // Sometimes we don't have any data, but the client needs it
+                Arrays.fill(array, (byte) 0x0F); // Light the entire area
+                mask.set(i);
+            } else {
                 for (byte b : array)
                     if (b > 0x00) {
                         mask.set(i);
