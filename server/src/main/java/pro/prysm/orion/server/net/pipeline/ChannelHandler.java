@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.protocol.Protocol;
-import pro.prysm.orion.server.protocol.handler.ProtocolHandler;
 
 import java.net.SocketAddress;
 import java.util.Map;
@@ -23,7 +22,7 @@ public class ChannelHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) {
         ctx.channel().config().setOption(ChannelOption.TCP_NODELAY, true);
-        connections.put(ctx.channel().remoteAddress().hashCode(), new Connection(ctx, protocol));
+        connections.put(ctx.channel().remoteAddress().hashCode(), new Connection(ctx));
     }
 
     @Override

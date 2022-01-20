@@ -12,6 +12,7 @@ import pro.prysm.orion.api.event.event.PlayerJoinEvent;
 import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
+import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.handler.ProtocolHandler;
 import pro.prysm.orion.server.protocol.incoming.play.*;
 import pro.prysm.orion.server.protocol.outgoing.play.*;
@@ -39,8 +40,9 @@ public class PlayHandler extends ProtocolHandler {
     }
 
     private void joinGame() {
-        LevelManager levelManager = connection.getProtocol().getLevelManager();
-        JoinGame joinGame = connection.getProtocol().getJoinGamePacket();
+        Protocol protocol = Orion.getServer().getProtocol();
+        LevelManager levelManager = Orion.getServer().getLevelManager();
+        JoinGame joinGame = protocol.getJoinGamePacket();
 
         joinGame.setEntityId(player.getEntityId());
 
@@ -73,7 +75,7 @@ public class PlayHandler extends ProtocolHandler {
             return;
         }
 
-        connection.sendPacket(new PluginMessageOut("minecraft:brand", connection.getProtocol().getSlpData().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
+        connection.sendPacket(new PluginMessageOut("minecraft:brand", protocol.getSlpData().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
         connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
 
         startKeepAlive();
@@ -102,7 +104,7 @@ public class PlayHandler extends ProtocolHandler {
 
     public void startChunkSending() {
         chunkTask = Orion.getScheduler().scheduleAtFixedRate(() -> {
-            LevelManager levelManager = player.getConnection().getProtocol().getLevelManager();
+            LevelManager levelManager = Orion.getServer().getLevelManager();
             Location loc = player.getLocation();
 
             int baseX = (int) loc.getX() >> 4;

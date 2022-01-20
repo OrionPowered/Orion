@@ -33,7 +33,6 @@ import java.security.GeneralSecurityException;
 @RequiredArgsConstructor
 public class Connection implements pro.prysm.orion.api.net.Connection {
     private final ChannelHandlerContext ctx;
-    private final Protocol protocol;
     @Setter
     private byte[] sharedSecret;
     @Setter

@@ -8,6 +8,7 @@ import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
 import pro.prysm.orion.server.entity.player.PlayerFactory;
 import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.incoming.login.EncryptionResponse;
 import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
 import pro.prysm.orion.server.protocol.outgoing.login.LoginSuccess;
@@ -29,8 +30,9 @@ public class LoginHandler extends ProtocolHandler {
     @Override
     public void handle(LoginStart packet) {
         username = packet.getUsername();
-        if (connection.getProtocol().isOnlineMode())
-            connection.sendPacket(connection.getProtocol().newEncryptionRequest());
+        Protocol protocol = Orion.getServer().getProtocol();
+        if (protocol.isOnlineMode())
+            connection.sendPacket(protocol.newEncryptionRequest());
         else {
             // Offline mode, sends a LoginSuccess packet with a UUID following "OfflinePlayer:<username>"
             GameProfile profile = new GameProfile(username, UUID.nameUUIDFromBytes(String.format("OfflinePlayer:%s", username).getBytes(StandardCharsets.UTF_8)));
@@ -42,8 +44,9 @@ public class LoginHandler extends ProtocolHandler {
 
     @Override
     public void handle(EncryptionResponse packet) {
+        Protocol protocol = Orion.getServer().getProtocol();
         // If server isn't in online mode disconnect the player and stop from handling further
-        if (!connection.getProtocol().isOnlineMode()) {
+        if (!protocol.isOnlineMode()) {
             Orion.getLogger().warn("{} sent an encryption response when no request was sent!", username);
             player.getConnection().disconnect(Component.text("Invalid encryption packet"));
             return;
@@ -51,8 +54,8 @@ public class LoginHandler extends ProtocolHandler {
 
         byte[] sharedSecret;
         try {
-            connection.setVerifyToken(connection.getProtocol().decryptRSA(packet.getVerifyToken()));
-            sharedSecret = connection.getProtocol().decryptRSA(packet.getSharedSecret());
+            connection.setVerifyToken(protocol.decryptRSA(packet.getVerifyToken()));
+            sharedSecret = protocol.decryptRSA(packet.getSharedSecret());
             connection.setSharedSecret(sharedSecret);
             connection.enableEncryption(sharedSecret);
             Orion.getLogger().debug("Started encryption for {}", connection.getAddress());
@@ -61,7 +64,7 @@ public class LoginHandler extends ProtocolHandler {
         }
 
         // If the above executes properly, we can now authenticate the user with the Mojang Session service
-        GameProfile profile = connection.getProtocol().join(connection.getProtocol().generateServerId(connection.getSharedSecret()), username);
+        GameProfile profile = protocol.join(protocol.generateServerId(connection.getSharedSecret()), username);
         if (profile == null) connection.disconnect(Component.text("Bad Login."));
         else {
             connection.sendPacket(new LoginSuccess(profile.getUniqueId(), profile.getUsername()));

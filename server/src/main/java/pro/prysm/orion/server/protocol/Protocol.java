@@ -10,6 +10,7 @@ import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.api.protocol.status.ServerListResponse;
 import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.protocol.outgoing.login.EncryptionRequest;
 import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
@@ -44,18 +45,14 @@ public class Protocol {
     private final ServerListResponse slpData = new ServerListResponse();
     private final JoinGame joinGamePacket;
     private final KeyPair keyPair = genKeyPair();
-    private final Orion orion;
-    private final LevelManager levelManager;
     private String sessionServer;
 
     private boolean onlineMode;
     private int maxPlayers;
 
-    public Protocol(Orion orion, LevelManager levelManager, Config config) {
-        this.orion = orion;
-        this.levelManager = levelManager;
-        joinGamePacket = createJoinGamePacket();
-        reload(config);
+    public Protocol(Server server) {
+        joinGamePacket = createJoinGamePacket(server.getLevelManager());
+        reload(server.getConfig());
     }
 
     public void reload(@NotNull Config config) {
@@ -81,7 +78,7 @@ public class Protocol {
         }
     }
 
-    private JoinGame createJoinGamePacket() {
+    private JoinGame createJoinGamePacket(LevelManager levelManager) {
         JoinGame packet = new JoinGame();
         DimensionProvider dimension = levelManager.getDimension();
 
@@ -146,7 +143,7 @@ public class Protocol {
         slp.getVersion().setName(slpData.getVersion().getName());
         slp.getPlayers().setMax(slpData.getPlayers().getMax());
         slpData.getPlayers().setOnline(
-                (int) orion.getListener().getPipeline().getChannelHandler()
+                (int) Orion.getServer().getListener().getPipeline().getChannelHandler()
                         .getConnections().values().stream().filter(
                                 (c) -> c.getState() == PacketState.PLAY && c.isActive()).count());
         slp.setDescription(slpData.getDescription());

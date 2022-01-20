@@ -10,6 +10,7 @@ import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.event.events.IncomingPacketEvent;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.net.PacketByteBuf;
+import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 import java.util.List;
@@ -27,9 +28,11 @@ public class PacketDecoder extends ByteToMessageDecoder {
         PacketByteBuf buf = new PacketByteBuf(byteBuf);
         int id = buf.readVarInt();
 
-        if (connection.getProtocol().getPacketRegistry().getIncoming(state, id) != null) {
+        Protocol protocol = Orion.getServer().getProtocol();
+
+        if (protocol.getPacketRegistry().getIncoming(state, id) != null) {
             Orion.getLogger().trace("Received packet with ID 0x{} and state: {}", Integer.toHexString(id).toUpperCase(), state);
-            Class<? extends IncomingPacket> packetClass = connection.getProtocol().getPacketRegistry().getIncoming(state, id);
+            Class<? extends IncomingPacket> packetClass = protocol.getPacketRegistry().getIncoming(state, id);
             if (packetClass != null && packetClass != IncomingPacket.class) {
                 IncomingPacket packet = (IncomingPacket) packetClass.getConstructors()[0].newInstance(connection);
                 packet.read(buf);
