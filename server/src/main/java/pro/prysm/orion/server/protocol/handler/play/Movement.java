@@ -14,25 +14,18 @@ public class Movement {
     }
 
     public Location playerMove(Location to, Location from) {
-        // Every time the game sends a move packet, we should respond with the chunks around the player
-        if (to.equals(from)) return from;   // TODO: this is always true
+        if (to.equals(from)) return from;
 
         PlayerMoveEvent event = new PlayerMoveEvent(player, to, player.getLocation());
         Orion.getEventBus().post(event);
         if (!event.isCancelled()) {
             // if (!event.getTo().equals(to)) // TODO: implement teleporting
 
-            if ((int) to.getX() >> 4 != (int) from.getX() >> 4 | (int) to.getZ() >> 4 != (int) from.getZ() << 4) {
-                // A note about performance:
-                // It is faster overall to perform the bit shift twice here rather than creating a variable for each
-                // X and Y chunk coordinate since it is more likely that this if statement will be false than not.
-                player.getConnection().sendPacket(new UpdateViewPosition((int) to.getX() >> 4, (int) to.getZ() >> 4));
-            }
+            if (!to.isSameChunk(from)) player.getConnection().sendPacket(new UpdateViewPosition(to.getChunkX(), to.getChunkZ()));
 
             return to;
         } else {
             // TODO: teleport player back to their original location
-
             return from;
         }
     }
