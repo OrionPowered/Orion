@@ -2,6 +2,7 @@ package pro.prysm.orion.api.entity;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.text.Component;
 import pro.prysm.orion.api.data.ClientSettings;
 import pro.prysm.orion.api.data.GameMode;
 import pro.prysm.orion.api.data.GameProfile;
@@ -45,4 +46,16 @@ public interface Player extends Identity, LivingEntity, Audience {
      * @return The client's brand
      */
     String getBrand();
+
+    /**
+     * Retrieves the display name component of this player
+     *
+     * @return The player's display name component
+     */
+    Component getDisplayName();
+
+    /**
+     * Sets the display name component of this player
+     */
+    void setDisplayName(Component displayName);
 }
