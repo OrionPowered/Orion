@@ -164,6 +164,8 @@ public class PlayHandler extends ProtocolHandler {
         to.setX(packet.getX());
         to.setY(packet.getY());
         to.setZ(packet.getZ());
+        to.setOnGround(packet.isOnGround());
+
         player.setLocation(movement.playerMove(to, player.getLocation()));
     }
 
