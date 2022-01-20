@@ -25,4 +25,11 @@ public class OrionThreadFactory implements ThreadFactory {
         thread.setUncaughtExceptionHandler(exceptionHandler);
         return thread;
     }
+
+    public static Thread singleThread(String name, @NotNull Runnable runnable) {
+        Orion.getLogger().debug("Created new thread: {}", name);
+        Thread thread = new Thread(runnable, name);
+        thread.setUncaughtExceptionHandler(ExceptionHandler.threadExceptionHandler);
+        return thread;
+    }
 }
