@@ -113,8 +113,8 @@ public class PlayHandler extends ProtocolHandler {
             LevelManager levelManager = Orion.getServer().getLevelManager();
             Location loc = player.getLocation();
 
-            int baseX = (int) loc.getX() >> 4;
-            int baseZ = (int) loc.getZ() >> 4;
+            int baseX = loc.getChunkX();
+            int baseZ = loc.getChunkZ();
             int halfDistance = player.getSettings().getViewDistance() / 2;
 
             int minX = baseX - halfDistance;
