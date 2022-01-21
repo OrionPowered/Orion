@@ -1,12 +1,11 @@
 package pro.prysm.orion.server.protocol.outgoing.play;
 
 import com.alexsobiek.anvil.Chunk;
-import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
@@ -37,47 +36,43 @@ public class UpdateLight extends OutgoingPacket {
 
         BitSet skyLightMask = new BitSet();
         BitSet blockLightMask = new BitSet();
-
-        PacketByteBuf lightingBuf = new PacketByteBuf(Unpooled.buffer());
-
+        BitSet emptySkylightMask = new BitSet();
+        BitSet emptyBlockLightMask = new BitSet();
         // Sky lighting
-        calculateAndWriteLighting(lightingBuf, skyLightMask, skyLight);
+        skyLight = calculateLighting(skyLightMask, emptySkylightMask, skyLight);
 
         // Block lighting
-        calculateAndWriteLighting(lightingBuf, blockLightMask, blockLight);
+        blockLight = calculateLighting(blockLightMask, emptyBlockLightMask, blockLight);
 
         buf.writeBitSet(skyLightMask);
         buf.writeBitSet(blockLightMask);
 
-        buf.writeBitSet(flipBitSet(skyLightMask));
-        buf.writeBitSet(flipBitSet(blockLightMask));
+        buf.writeBitSet(emptySkylightMask);
+        buf.writeBitSet(emptyBlockLightMask);
 
-        buf.writeBytes(lightingBuf);
-        lightingBuf.release();
+        buf.writeVarInt(skyLight.size());
+        for (byte[] array : skyLight) {
+            buf.writeByteArray(array);
+        }
+
+        buf.writeVarInt(blockLight.size());
+        for (byte[] array : blockLight) {
+            buf.writeByteArray(array);
+        }
+
     }
 
-    private void calculateAndWriteLighting(PacketByteBuf lightingBuf, BitSet mask, List<byte[]> lightData) {
-        lightingBuf.writeVarInt(lightData.size());
+    private List<byte[]> calculateLighting(BitSet mask, BitSet emptyMask, List<byte[]> lightData) {
+        ArrayList<byte[]> data = new ArrayList<>();
         for (int i = 0; i < lightData.size(); i++) {
             byte[] array = lightData.get(i);
             if (array.length == 0) {
-                array = new byte[2048]; // Sometimes we don't have any data, but the client needs it
-                Arrays.fill(array, (byte) 0x0F); // Light the entire area
-                mask.set(i);
+                emptyMask.set(i, true);
             } else {
-                for (byte b : array)
-                    if (b > 0x00) {
-                        mask.set(i);
-                        break;
-                    }
+                mask.set(i, true);
+                data.add(array);
             }
-            lightingBuf.writeByteArray(array);
         }
-    }
-
-    private BitSet flipBitSet(BitSet set) {
-        BitSet flipped = (BitSet) set.clone();
-        flipped.flip(0, set.length());
-        return flipped;
+        return data;
     }
 }
