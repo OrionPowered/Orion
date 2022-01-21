@@ -3,6 +3,10 @@ package pro.prysm.orion.server;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import lombok.Getter;
+import lombok.Setter;
+import net.kyori.adventure.audience.MessageType;
+import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.text.Component;
 import org.slf4j.LoggerFactory;
 import pro.prysm.orion.api.entity.Player;
 import pro.prysm.orion.api.event.EventHandler;
@@ -12,6 +16,8 @@ import pro.prysm.orion.api.event.event.ServerReadyEvent;
 import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.message.ChatFormatter;
 import pro.prysm.orion.api.message.PlaceholderService;
+import pro.prysm.orion.api.net.Connection;
+import pro.prysm.orion.api.util.CollectorUtil;
 import pro.prysm.orion.server.command.CommandHandler;
 import pro.prysm.orion.server.command.commands.HelpCommand;
 import pro.prysm.orion.server.command.commands.ReloadCommand;
@@ -30,7 +36,9 @@ import pro.prysm.orion.server.world.LevelManager;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.file.Path;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -42,7 +50,8 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
     private final CommandHandler commandHandler;
     private final ModuleLoader moduleLoader;
     private final PluginLoader pluginLoader;
-    private final HashMap<UUID, Player> players;
+    private final List<Player> players;
+    private Config config;
     private final PlaceholderService placeholderService;
 
     @Setter
@@ -61,7 +70,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         commandHandler = new CommandHandler();
         moduleLoader = new ModuleLoader();
         pluginLoader = new PluginLoader();
-        players = new HashMap<>();
+        players = new ArrayList<>();
         placeholderService = new pro.prysm.orion.server.message.PlaceholderService();
         chatFormatter = new DefaultChatFormatter();
 
@@ -104,9 +113,27 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         placeholderService.register("uptime", new UptimePlaceholder());
     }
 
+    public void addPlayer(Player player) {
+        players.add(player);
+    }
+
+    public void removePlayer(Player player) {
+        players.remove(player);
+    }
+
     @Override
     public Player getPlayer(UUID uuid) {
-        return players.get(uuid);
+        return players.stream().filter(p -> p.uuid().equals(uuid)).collect(CollectorUtil.toSingleton());
+    }
+
+    @Override
+    public Player getPlayer(Connection connection) {
+        return players.stream().filter(p -> p.getConnection().equals(connection)).collect(CollectorUtil.toSingleton());
+    }
+
+    @Override
+    public List<Player> getPlayers() {
+        return Collections.unmodifiableList(players);
     }
 
     @EventHandler
