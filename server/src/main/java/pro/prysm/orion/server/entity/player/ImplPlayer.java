@@ -101,6 +101,11 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
         else Orion.getLogger().warn("Missing chunk at {}, {}", data.getX(), data.getZ());
     }
 
+    @Override
+    public void teleport(Location location) {
+        connection.sendPacket(new PlayerPositionAndLook(location));
+    }
+
     // ===============================================================================================================
     // Kyori Adventure Identity Implementation
     // ===============================================================================================================

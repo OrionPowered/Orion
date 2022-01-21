@@ -2,6 +2,7 @@ package pro.prysm.test;
 
 import pro.prysm.orion.api.plugin.JavaPlugin;
 import pro.prysm.test.listener.PlayerJoin;
+import pro.prysm.test.listener.PlayerMove;
 import pro.prysm.test.listener.ServerReadyListener;
 
 /**
@@ -15,6 +16,7 @@ public class TestPlugin extends JavaPlugin {
         getLogger().info("Plugin " + getDescription().getName() + " loaded");
         getEventBus().subscribe(new ServerReadyListener());
         getEventBus().subscribe(new PlayerJoin());
+        getEventBus().subscribe(new PlayerMove());
         generateConfig();
     }
 

@@ -6,6 +6,7 @@ import net.kyori.adventure.text.Component;
 import pro.prysm.orion.api.data.ClientSettings;
 import pro.prysm.orion.api.data.GameMode;
 import pro.prysm.orion.api.data.GameProfile;
+import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.net.Connection;
 
 /**
@@ -58,4 +59,11 @@ public interface Player extends Identity, LivingEntity, Audience {
      * Sets the display name component of this player
      */
     void setDisplayName(Component displayName);
+
+    /**
+     * Teleports the player to the provided location
+     *
+     * @param location Location to teleport this player to
+     */
+    void teleport(Location location);
 }
