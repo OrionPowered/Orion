@@ -19,9 +19,6 @@ public class Movement {
         PlayerMoveEvent event = new PlayerMoveEvent(player, to, player.getLocation());
         Orion.getEventBus().post(event);
         if (!event.isCancelled()) {
-            if (!event.getTo().equals(to))
-                player.teleport(to);
-
             if (!to.isSameChunk(from))
                 player.getConnection().sendPacket(new UpdateViewPosition(to.getChunkX(), to.getChunkZ()));
 
