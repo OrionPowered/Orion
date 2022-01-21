@@ -7,10 +7,12 @@ import pro.prysm.orion.api.data.ChatMode;
 import pro.prysm.orion.api.data.GameMode;
 import pro.prysm.orion.api.data.Hand;
 import pro.prysm.orion.api.data.Location;
+import pro.prysm.orion.api.entity.Player;
 import pro.prysm.orion.api.event.event.IncomingPluginMessageEvent;
 import pro.prysm.orion.api.event.event.PlayerJoinEvent;
 import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.handler.ProtocolHandler;
@@ -189,5 +191,14 @@ public class PlayHandler extends ProtocolHandler {
 
     @Override
     public void handle(TeleportConfirm packet) {
+    }
+
+    @Override
+    public void handle(ChatMessageIn packet) {
+        Server server = Orion.getServer();
+        Player sender = server.getPlayer(packet.getConnection());
+        Component message = packet.getMessage();
+        // TODO: post chat event
+        server.sendChat(sender, message);
     }
 }

@@ -53,4 +53,7 @@ public abstract class ProtocolHandler {
 
     public void handle(KeepAliveIn packet) {
     }
+
+    public void handle(ChatMessageIn packet) {
+    }
 }
