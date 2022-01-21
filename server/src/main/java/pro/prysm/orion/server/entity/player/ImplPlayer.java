@@ -19,8 +19,12 @@ import pro.prysm.orion.api.data.*;
 import pro.prysm.orion.api.entity.Player;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.entity.ImplLivingEntity;
+import pro.prysm.orion.server.message.ChatPosition;
 import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.protocol.outgoing.play.ActionBar;
+import pro.prysm.orion.server.protocol.outgoing.play.ChatMessageOut;
 import pro.prysm.orion.server.protocol.outgoing.play.ChunkWithLight;
+import pro.prysm.orion.server.protocol.outgoing.play.PlayerlistHeaderFooter;
 import pro.prysm.orion.server.util.TagUtil;
 import pro.prysm.orion.server.world.LevelManager;
 
@@ -114,17 +118,22 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
 
     @Override
     public void sendMessage(final @NotNull Identity source, final @NotNull Component message, final @NotNull MessageType type) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (type == MessageType.CHAT && settings.getChatMode() == ChatMode.ENABLED) { // If it's a chat message, we need to format it
+            Component formatted = Orion.getServer().getChatFormatter().format(source, message);
+            connection.sendPacket(new ChatMessageOut(ChatPosition.CHAT, source.uuid(), formatted));
+        } else if (settings.getChatMode() != ChatMode.HIDDEN) { // If not, we don't need to format anything
+            connection.sendPacket(new ChatMessageOut(ChatPosition.SYSTEM, source.uuid(), message));
+        }
     }
 
     @Override
     public void sendActionBar(final @NotNull Component message) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        connection.sendPacket(new ActionBar(message));
     }
 
     @Override
     public void sendPlayerListHeaderAndFooter(final @NotNull Component header, final @NotNull Component footer) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        connection.sendPacket(new PlayerlistHeaderFooter(header, footer));
     }
 
     @Override
