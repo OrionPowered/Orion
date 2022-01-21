@@ -44,9 +44,9 @@ public class PlayHandler extends ProtocolHandler {
     private void joinGame() {
         Server server = Orion.getServer();
         Protocol protocol = server.getProtocol();
-        LevelManager levelManager = Orion.getServer().getLevelManager();
+        LevelManager levelManager = server.getLevelManager();
         JoinGame joinGame = protocol.getJoinGamePacket();
-
+        connection.sendPacket(new PluginMessageOut("minecraft:brand", protocol.getSlpData().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
         joinGame.setEntityId(player.getEntityId());
 
         if (!levelManager.isVoidWorld()) {
@@ -71,6 +71,10 @@ public class PlayHandler extends ProtocolHandler {
 
         connection.sendPacket(joinGame);
 
+    }
+
+    private void finalizeJoin() {
+        Server server = Orion.getServer();
         PlayerJoinEvent playerJoinEvent = new PlayerJoinEvent(player);
         Orion.getEventBus().post(playerJoinEvent);
         if (playerJoinEvent.isCancelled()) {
@@ -79,13 +83,12 @@ public class PlayHandler extends ProtocolHandler {
         }
 
         server.addPlayer(player);
-        connection.sendPacket(new PluginMessageOut("minecraft:brand", protocol.getSlpData().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
         connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
 
         startKeepAlive();
         Orion.getLogger().info("{} ({}) has logged in", player.getProfile().getUsername(), connection.getAddress());
         Orion.getLogger().debug("Player {} has logged in at {}", player.getProfile().getUsername(), player.getLocation());
-        if (!levelManager.isVoidWorld()) startChunkSending();
+        if (!server.getLevelManager().isVoidWorld()) startChunkSending();
 
         // Testing
         connection.sendPacket(new PlayerlistHeaderFooter(
@@ -136,11 +139,6 @@ public class PlayHandler extends ProtocolHandler {
     }
 
     @Override
-    public void handle(KeepAliveIn packet) {
-        if (keepAliveId != packet.getKeepAliveId()) connection.disconnect(Component.text("Invalid Keep Alive ID"));
-    }
-
-    @Override
     public void handle(ClientSettings packet) {
         player.setSettings(new pro.prysm.orion.api.data.ClientSettings(
                 packet.getLocale(),
@@ -150,6 +148,14 @@ public class PlayHandler extends ProtocolHandler {
                 packet.getSkinParts(),
                 (packet.getMainHand() == 0) ? Hand.LEFT : Hand.RIGHT
         ));
+
+        // Once we know the player's settings, we can let them join.
+        finalizeJoin();
+    }
+
+    @Override
+    public void handle(KeepAliveIn packet) {
+        if (keepAliveId != packet.getKeepAliveId()) connection.disconnect(Component.text("Invalid Keep Alive ID"));
     }
 
     @Override
