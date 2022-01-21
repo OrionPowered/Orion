@@ -10,12 +10,14 @@ import pro.prysm.orion.api.event.Listener;
 import pro.prysm.orion.api.event.event.ReloadEvent;
 import pro.prysm.orion.api.event.event.ServerReadyEvent;
 import pro.prysm.orion.api.json.Config;
+import pro.prysm.orion.api.message.ChatFormatter;
 import pro.prysm.orion.api.message.PlaceholderService;
 import pro.prysm.orion.server.command.CommandHandler;
 import pro.prysm.orion.server.command.commands.HelpCommand;
 import pro.prysm.orion.server.command.commands.ReloadCommand;
 import pro.prysm.orion.server.command.commands.SendPacketCommand;
 import pro.prysm.orion.server.command.commands.UptimeCommand;
+import pro.prysm.orion.server.message.DefaultChatFormatter;
 import pro.prysm.orion.server.message.placeholder.UptimePlaceholder;
 import pro.prysm.orion.server.module.ModuleLoader;
 import pro.prysm.orion.server.net.TCPListener;
@@ -42,7 +44,9 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
     private final PluginLoader pluginLoader;
     private final HashMap<UUID, Player> players;
     private final PlaceholderService placeholderService;
-    private Config config;
+
+    @Setter
+    private ChatFormatter chatFormatter;
 
     public Server() {
         loadConfig();
@@ -59,6 +63,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         pluginLoader = new PluginLoader();
         players = new HashMap<>();
         placeholderService = new pro.prysm.orion.server.message.PlaceholderService();
+        chatFormatter = new DefaultChatFormatter();
 
         listener = new TCPListener(
                 protocol,
