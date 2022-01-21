@@ -1,5 +1,6 @@
 package pro.prysm.orion.server.net;
 
+import com.google.gson.JsonSyntaxException;
 import io.netty.buffer.ByteBuf;
 import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
@@ -252,7 +253,14 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
      * @return Component
      */
     public Component readComponent() {
-        return GsonComponentSerializer.gson().deserialize(readString());
+        String s = readString();
+        Component c;
+        try {
+            c = GsonComponentSerializer.gson().deserialize(s);
+        } catch (JsonSyntaxException e) { // If the string sent is not a valid json component, assume it's regular text
+            c = Component.text(s);
+        }
+        return c;
     }
 
     /**
