@@ -5,6 +5,7 @@ import com.velocitypowered.natives.encryption.VelocityCipherFactory;
 import com.velocitypowered.natives.util.Natives;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -31,6 +32,7 @@ import java.security.GeneralSecurityException;
 
 @Getter
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public class Connection implements pro.prysm.orion.api.net.Connection {
     private final ChannelHandlerContext ctx;
     @Setter
