@@ -7,7 +7,6 @@ import pro.prysm.orion.api.data.GameMode;
 import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.message.Message;
-import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.api.protocol.status.ServerListResponse;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
@@ -142,10 +141,7 @@ public class Protocol {
         slp.getVersion().setProtocol(slpData.getVersion().getProtocol());
         slp.getVersion().setName(slpData.getVersion().getName());
         slp.getPlayers().setMax(slpData.getPlayers().getMax());
-        slpData.getPlayers().setOnline(
-                (int) Orion.getServer().getListener().getPipeline().getChannelHandler()
-                        .getConnections().values().stream().filter(
-                                (c) -> c.getState() == PacketState.PLAY && c.isActive()).count());
+        slpData.getPlayers().setOnline(Orion.getServer().getPlayers().size());
         slp.setDescription(slpData.getDescription());
 
         return new SLPResponse(slpData);
