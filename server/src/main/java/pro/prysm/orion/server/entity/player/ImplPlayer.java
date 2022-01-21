@@ -118,9 +118,6 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
     public void sendMessage(final @NotNull Identity source, final @NotNull Component message, final @NotNull MessageType type) {
         if (type == MessageType.CHAT && settings.getChatMode() == ChatMode.ENABLED) { // If it's a chat message, we need to format it
             TextComponent formatted = (TextComponent) Orion.getServer().getChatFormatter().format(source, message);
-            StringBuilder plain = new StringBuilder(formatted.content());
-            formatted.children().forEach(c -> plain.append(((TextComponent) c).content()));
-            Orion.getLogger().info("[CHAT] {}", plain.toString());
             connection.sendPacket(new ChatMessageOut(ChatPosition.CHAT, source.uuid(), formatted));
         } else if (settings.getChatMode() != ChatMode.HIDDEN) { // If not, we don't need to format anything
             connection.sendPacket(new ChatMessageOut(ChatPosition.SYSTEM, source.uuid(), message));

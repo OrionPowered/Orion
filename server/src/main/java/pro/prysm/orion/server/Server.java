@@ -7,6 +7,7 @@ import lombok.Setter;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.slf4j.LoggerFactory;
 import pro.prysm.orion.api.entity.Player;
 import pro.prysm.orion.api.event.EventHandler;
@@ -138,12 +139,20 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
 
     @Override
     public void broadcast(Identity source, Component message) {
+        logChat(message);
         players.parallelStream().forEach(player -> player.sendMessage(source, message, MessageType.CHAT));
     }
 
     @Override
     public void broadcast(Component message) {
+        logChat(message);
         players.parallelStream().forEach(player -> player.sendMessage(message));
+    }
+
+    private void logChat(Component message) {
+        StringBuilder plain = new StringBuilder(((TextComponent) message).content());
+        message.children().forEach(c -> plain.append(((TextComponent) c).content()));
+        Orion.getLogger().info("[CHAT] {}", plain.toString());
     }
 
     @EventHandler
