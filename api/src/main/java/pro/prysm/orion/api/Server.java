@@ -26,6 +26,4 @@ public interface Server {
     ChatFormatter getChatFormatter();
 
     void setChatFormatter(ChatFormatter formatter);
-
-
 }
