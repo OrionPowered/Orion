@@ -42,7 +42,8 @@ public class PlayHandler extends ProtocolHandler {
     }
 
     private void joinGame() {
-        Protocol protocol = Orion.getServer().getProtocol();
+        Server server = Orion.getServer();
+        Protocol protocol = server.getProtocol();
         LevelManager levelManager = Orion.getServer().getLevelManager();
         JoinGame joinGame = protocol.getJoinGamePacket();
 
@@ -77,6 +78,7 @@ public class PlayHandler extends ProtocolHandler {
             return;
         }
 
+        server.addPlayer(player);
         connection.sendPacket(new PluginMessageOut("minecraft:brand", protocol.getSlpData().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
         connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
 
@@ -128,6 +130,7 @@ public class PlayHandler extends ProtocolHandler {
 
     @Override
     public void onDisconnect() {
+        Orion.getServer().removePlayer(player);
         Orion.getScheduler().cancel(chunkTask);
         Orion.getScheduler().cancel(keepAliveTask);
     }
