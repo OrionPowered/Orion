@@ -137,8 +137,13 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
     }
 
     @Override
-    public void broadcastChat(Identity source, Component message) {
+    public void broadcast(Identity source, Component message) {
         players.parallelStream().forEach(player -> player.sendMessage(source, message, MessageType.CHAT));
+    }
+
+    @Override
+    public void broadcast(Component message) {
+        players.parallelStream().forEach(player -> player.sendMessage(message));
     }
 
     @EventHandler
