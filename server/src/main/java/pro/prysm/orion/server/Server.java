@@ -136,6 +136,11 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         return Collections.unmodifiableList(players);
     }
 
+    @Override
+    public void broadcastChat(Identity source, Component message) {
+        players.parallelStream().forEach(player -> player.sendMessage(source, message, MessageType.CHAT));
+    }
+
     @EventHandler
     public void onServerReady(ServerReadyEvent event) {
         long difference = System.currentTimeMillis() - Orion.getStartupTime();

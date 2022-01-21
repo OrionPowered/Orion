@@ -17,7 +17,7 @@ public interface Server {
 
     List<Player> getPlayers();
 
-    void sendChat(Identity source, Component message);
+    void broadcastChat(Identity source, Component message);
 
     PlaceholderService getPlaceholderService();
 

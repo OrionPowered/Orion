@@ -202,6 +202,6 @@ public class PlayHandler extends ProtocolHandler {
         Player sender = server.getPlayer(packet.getConnection());
         Component message = packet.getMessage();
         // TODO: post chat event
-        server.sendChat(sender, message);
+        server.broadcastChat(sender, message);
     }
 }
