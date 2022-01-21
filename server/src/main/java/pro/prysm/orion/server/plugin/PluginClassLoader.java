@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Path;
 import java.util.jar.JarFile;
 
 /**
@@ -60,7 +61,7 @@ public class PluginClassLoader extends URLClassLoader {
                 JavaPlugin plugin = (JavaPlugin) Class.forName(description.getMainClass(), false, this)
                         .getConstructors()[0].newInstance();
 
-                dataFolderF.set(plugin, new File("./plugins", description.getName()));
+                dataFolderF.set(plugin, Path.of("plugins", description.getName()));
                 loggerF.set(plugin, LoggerFactory.getLogger(description.getName()));
                 descriptionF.set(plugin, description);
                 eventBusF.set(plugin, Orion.getEventBus());
