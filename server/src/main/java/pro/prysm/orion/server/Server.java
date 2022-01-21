@@ -139,7 +139,6 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
 
     @Override
     public void broadcast(Identity source, Component message) {
-        logChat(message);
         players.parallelStream().forEach(player -> player.sendMessage(source, message, MessageType.CHAT));
     }
 
@@ -149,7 +148,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         players.parallelStream().forEach(player -> player.sendMessage(message));
     }
 
-    private void logChat(Component message) {
+    public void logChat(Component message) {
         StringBuilder plain = new StringBuilder(((TextComponent) message).content());
         message.children().forEach(c -> plain.append(((TextComponent) c).content()));
         Orion.getLogger().info("[CHAT] {}", plain.toString());
