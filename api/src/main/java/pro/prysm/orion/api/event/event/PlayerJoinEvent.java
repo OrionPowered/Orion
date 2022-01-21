@@ -8,7 +8,7 @@ import pro.prysm.orion.api.event.Event;
 @Getter
 public class PlayerJoinEvent implements Event, Cancellable {
     private boolean cancelled;
-    private Player player;
+    private final Player player;
 
     public PlayerJoinEvent(Player player) {
         this.player = player;
