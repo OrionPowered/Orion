@@ -46,7 +46,6 @@ public class PlayHandler extends ProtocolHandler {
         Protocol protocol = server.getProtocol();
         LevelManager levelManager = server.getLevelManager();
         JoinGame joinGame = protocol.getJoinGamePacket();
-        connection.sendPacket(new PluginMessageOut("minecraft:brand", protocol.getSlpData().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
         joinGame.setEntityId(player.getEntityId());
 
         if (!levelManager.isVoidWorld()) {
@@ -70,7 +69,7 @@ public class PlayHandler extends ProtocolHandler {
         }
 
         connection.sendPacket(joinGame);
-
+        connection.sendPacket(new PluginMessageOut("minecraft:brand", protocol.getSlpData().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
     }
 
     private void finalizeJoin() {
