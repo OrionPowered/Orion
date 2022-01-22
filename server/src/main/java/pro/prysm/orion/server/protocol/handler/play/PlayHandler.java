@@ -122,6 +122,7 @@ public class PlayHandler extends ProtocolHandler {
     @Override
     public void onDisconnect() {
         Orion.getServer().removePlayer(player);
+        Orion.getLogger().info("{} ({}) has logged out", player.getProfile().getUsername(), player.getConnection().getAddress());
     }
 
     @Override
