@@ -18,20 +18,16 @@ import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.handler.ProtocolHandler;
 import pro.prysm.orion.server.protocol.incoming.play.*;
 import pro.prysm.orion.server.protocol.outgoing.play.*;
-import pro.prysm.orion.server.scheduler.OrionScheduler;
 import pro.prysm.orion.server.world.LevelManager;
 import pro.prysm.orion.server.world.dimension.DimensionProvider;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
-import java.util.UUID;
 
 public class PlayHandler extends ProtocolHandler {
     private final ImplPlayer player;
     private final Movement movement;
     private final int teleportId = 0; // TODO: Implement checking of teleport ids
-    private UUID keepAliveTask;
-    private UUID chunkTask;
     private long keepAliveId;
 
     public PlayHandler(ImplPlayer player) {
@@ -82,59 +78,51 @@ public class PlayHandler extends ProtocolHandler {
         }
 
         server.addPlayer(player);
-        connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
+        Location location = player.getLocation();
+        connection.sendPacket(new PlayerPositionAndLook(location));
 
-        startKeepAlive();
         Orion.getLogger().info("{} ({}) has logged in", player.getProfile().getUsername(), connection.getAddress());
         Orion.getLogger().debug("Player {} has logged in at {}", player.getProfile().getUsername(), player.getLocation());
-        if (!server.getLevelManager().isVoidWorld()) startChunkSending();
+
+        Orion.getScheduler().schedule(this::sendChunks, 2L);
 
         // Testing
         connection.sendPacket(new PlayerlistHeaderFooter(
                 new Message("<color:#2fc1fa>Orion Server Software</color>").toComponent(),
                 new Message("<color:#2fc1fa>Orion Server Software</color>").toComponent()
         ));
+
     }
 
-    private void startKeepAlive() {
-        keepAliveTask = Orion.getScheduler().scheduleAtFixedRate(() -> {
-            if (!connection.isActive())
-                return;
-
-            KeepAliveOut keepAlive = new KeepAliveOut();
-            connection.sendPacket(keepAlive);
-            keepAliveId = keepAlive.getKeepAliveId();
-            Orion.getLogger().debug("Sent keepalive to {} ({})", connection.getAddress(), player.getProfile().getUsername());
-        }, 10L, (25 * OrionScheduler.TPS)); // Every 25 seconds (30 seconds resulted in random timeouts)
+    public void sendKeepAlive() {
+        KeepAliveOut keepAlive = new KeepAliveOut();
+        connection.sendPacket(keepAlive);
+        keepAliveId = keepAlive.getKeepAliveId();
+        Orion.getLogger().debug("Sent keepalive to {} ({})", connection.getAddress(), player.getProfile().getUsername());
     }
 
-    public void startChunkSending() {
-        chunkTask = Orion.getScheduler().scheduleAtFixedRate(() -> {
-            LevelManager levelManager = Orion.getServer().getLevelManager();
-            Location loc = player.getLocation();
+    public void sendChunks() {
+        Location loc = player.getLocation();
 
-            int baseX = loc.getChunkX();
-            int baseZ = loc.getChunkZ();
-            int halfDistance = player.getSettings().getViewDistance() / 2;
+        int baseX = loc.getChunkX();
+        int baseZ = loc.getChunkZ();
+        int halfDistance = player.getSettings().getViewDistance() / 2;
 
-            int minX = baseX - halfDistance;
-            int minZ = baseZ - halfDistance;
-            int maxX = baseX + halfDistance;
-            int maxZ = baseZ + halfDistance;
+        int minX = baseX - halfDistance;
+        int minZ = baseZ - halfDistance;
+        int maxX = baseX + halfDistance;
+        int maxZ = baseZ + halfDistance;
 
-            for (int x = minX; x <= maxX; x++) {
-                for (int z = minZ; z < maxZ; z++) {
-                    player.sendChunkAsync(levelManager, x, z);
-                }
+        for (int x = minX; x <= maxX; x++) {
+            for (int z = minZ; z < maxZ; z++) {
+                player.sendChunkAsync(Orion.getServer().getLevelManager(), x, z);
             }
-        }, 2L, 60L);
+        }
     }
 
     @Override
     public void onDisconnect() {
         Orion.getServer().removePlayer(player);
-        Orion.getScheduler().cancel(chunkTask);
-        Orion.getScheduler().cancel(keepAliveTask);
     }
 
     @Override

@@ -30,6 +30,7 @@ import pro.prysm.orion.server.module.ModuleLoader;
 import pro.prysm.orion.server.net.TCPListener;
 import pro.prysm.orion.server.plugin.PluginLoader;
 import pro.prysm.orion.server.protocol.Protocol;
+import pro.prysm.orion.server.scheduler.KeepAliveService;
 import pro.prysm.orion.server.scheduler.TickService;
 import pro.prysm.orion.server.util.ExceptionHandler;
 import pro.prysm.orion.server.world.LevelManager;
@@ -85,6 +86,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         CompletableFuture.runAsync(() -> { // Prevent listening from blocking the thread
             try {
                 new TickService(); // Start ticking
+                new KeepAliveService();
                 listener.listen(); // Start listening
             } catch (InterruptedException e) {
                 ExceptionHandler.error(e);
