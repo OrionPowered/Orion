@@ -78,13 +78,12 @@ public class PlayHandler extends ProtocolHandler {
         }
 
         server.addPlayer(player);
-        Location location = player.getLocation();
-        connection.sendPacket(new PlayerPositionAndLook(location));
 
         Orion.getLogger().info("{} ({}) has logged in", player.getProfile().getUsername(), connection.getAddress());
         Orion.getLogger().debug("Player {} has logged in at {}", player.getProfile().getUsername(), player.getLocation());
 
         Orion.getScheduler().schedule(this::sendChunks, 2L);
+        connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
 
         // Testing
         connection.sendPacket(new PlayerlistHeaderFooter(
