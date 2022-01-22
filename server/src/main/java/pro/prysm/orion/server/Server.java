@@ -138,7 +138,9 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
 
     @Override
     public void broadcast(Identity source, Component message) {
-        players.parallelStream().forEach(player -> player.sendMessage(source, message, MessageType.CHAT));
+        TextComponent formatted = (TextComponent) Orion.getServer().getChatFormatter().format(source, message);
+        logChat(formatted);
+        players.parallelStream().forEach(player -> player.sendMessage(source, formatted, MessageType.CHAT));
     }
 
     @Override

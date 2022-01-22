@@ -13,7 +13,6 @@ import net.kyori.adventure.nbt.ListBinaryTag;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.title.TitlePart;
 import org.jetbrains.annotations.NotNull;
 import pro.prysm.orion.api.data.*;
@@ -122,9 +121,7 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
     @Override
     public void sendMessage(final @NotNull Identity source, final @NotNull Component message, final @NotNull MessageType type) {
         if (type == MessageType.CHAT && settings.getChatMode() == ChatMode.ENABLED) { // If it's a chat message, we need to format it
-            TextComponent formatted = (TextComponent) Orion.getServer().getChatFormatter().format(source, message);
-            Orion.getServer().logChat(formatted);
-            connection.sendPacket(new ChatMessageOut(ChatPosition.CHAT, source.uuid(), formatted));
+            connection.sendPacket(new ChatMessageOut(ChatPosition.CHAT, source.uuid(), message));
         } else if (settings.getChatMode() != ChatMode.HIDDEN) { // If not, we don't need to format anything
             connection.sendPacket(new ChatMessageOut(ChatPosition.SYSTEM, source.uuid(), message));
         }
