@@ -204,7 +204,7 @@ public class PlayHandler extends ProtocolHandler {
     @Override
     public void handle(ChatMessageIn packet) {
         Server server = Orion.getServer();
-        Player sender = server.getPlayer(packet.getConnection());
+        Player sender = server.getPlayer(packet.getConnection()).orElseThrow();
         Component message = packet.getMessage();
         // TODO: post chat event
         server.broadcast(sender, message);

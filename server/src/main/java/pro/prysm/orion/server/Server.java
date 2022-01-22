@@ -37,10 +37,7 @@ import pro.prysm.orion.server.world.LevelManager;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @Getter
@@ -123,13 +120,13 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
     }
 
     @Override
-    public Player getPlayer(UUID uuid) {
-        return players.stream().filter(p -> p.uuid().equals(uuid)).collect(CollectorUtil.toSingleton());
+    public Optional<Player> getPlayer(UUID uuid) {
+        return Optional.of(players.stream().filter(p -> p.uuid().equals(uuid)).collect(CollectorUtil.toSingleton()));
     }
 
     @Override
-    public Player getPlayer(Connection connection) {
-        return players.stream().filter(p -> p.getConnection().equals(connection)).collect(CollectorUtil.toSingleton());
+    public Optional<Player> getPlayer(Connection connection) {
+        return Optional.of(players.stream().filter(p -> p.getConnection().equals(connection)).collect(CollectorUtil.toSingleton()));
     }
 
     @Override

@@ -8,12 +8,13 @@ import pro.prysm.orion.api.message.PlaceholderService;
 import pro.prysm.orion.api.net.Connection;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface Server {
-    Player getPlayer(UUID uuid);
+    Optional<Player> getPlayer(UUID uuid);
 
-    Player getPlayer(Connection connection);
+    Optional<Player> getPlayer(Connection connection);
 
     List<Player> getPlayers();
 
