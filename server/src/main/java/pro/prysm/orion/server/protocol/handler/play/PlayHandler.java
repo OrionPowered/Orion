@@ -19,7 +19,6 @@ import pro.prysm.orion.server.protocol.handler.ProtocolHandler;
 import pro.prysm.orion.server.protocol.incoming.play.*;
 import pro.prysm.orion.server.protocol.outgoing.play.*;
 import pro.prysm.orion.server.world.LevelManager;
-import pro.prysm.orion.server.world.dimension.DimensionProvider;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -45,7 +44,6 @@ public class PlayHandler extends ProtocolHandler {
         joinGame.setEntityId(player.getEntityId());
 
         if (!levelManager.isVoidWorld()) {
-            DimensionProvider dimension = levelManager.getDimension();
             Level level = levelManager.getLevel();
 
             if (!level.hasSavedPlayerData(player.getProfile().getUniqueId())) {
@@ -101,20 +99,23 @@ public class PlayHandler extends ProtocolHandler {
     }
 
     public void sendChunks() {
+        LevelManager levelManager = Orion.getServer().getLevelManager();
         Location loc = player.getLocation();
 
-        int baseX = loc.getChunkX();
-        int baseZ = loc.getChunkZ();
-        int halfDistance = player.getSettings().getViewDistance() / 2;
+        int centerX = loc.getChunkX();
+        int centerZ = loc.getChunkZ();
+        int radius = Math.min(player.getSettings().getViewDistance(), Orion.getServer().getRenderDistance());
 
-        int minX = baseX - halfDistance;
-        int minZ = baseZ - halfDistance;
-        int maxX = baseX + halfDistance;
-        int maxZ = baseZ + halfDistance;
-
-        for (int x = minX; x <= maxX; x++) {
-            for (int z = minZ; z < maxZ; z++) {
-                player.sendChunkAsync(Orion.getServer().getLevelManager(), x, z);
+        for (int x = centerX - radius; x <= centerX; x++) {
+            for (int z = centerZ - radius; z <= centerZ; z++) {
+                if ((x - centerX) * (x - centerX) + (z - centerZ) * (z - centerZ) <= radius * radius) {
+                    int chunkX = centerX - (x - centerX);
+                    int chunkZ = centerZ - (z - centerZ);
+                    player.sendChunkAsync(levelManager, x, z);
+                    player.sendChunkAsync(levelManager, x, chunkZ);
+                    player.sendChunkAsync(levelManager, chunkX, z);
+                    player.sendChunkAsync(levelManager, chunkX, chunkZ);
+                }
             }
         }
     }
