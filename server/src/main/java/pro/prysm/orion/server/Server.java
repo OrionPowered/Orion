@@ -55,6 +55,8 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
 
     @Setter
     private ChatFormatter chatFormatter;
+    private int renderDistance;
+    private int simulationDistance;
 
     public Server() {
         loadConfig();
@@ -97,6 +99,8 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
     private void loadConfig() {
         try {
             config = new Config(getClass().getClassLoader(), Path.of("settings.json"), "settings.json");
+            renderDistance = config.getInt("world.render-distance");
+            simulationDistance = config.getInt("world.simulation-distance");
         } catch (IOException e) {
             ExceptionHandler.error("Failed to load settings.json", e);
         }
