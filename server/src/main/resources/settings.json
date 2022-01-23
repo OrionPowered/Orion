@@ -8,7 +8,8 @@
   "world": {
     "void": true,
     "name": "world",
-    "render-distance": 10
+    "render-distance": 10,
+    "simulation-distance": 10
   },
   "motd": "<color:#2fc1fa>Orion Server Software</color>",
   "serverName": "Orion",
