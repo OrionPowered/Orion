@@ -16,6 +16,7 @@ import pro.prysm.orion.api.event.event.ReloadEvent;
 import pro.prysm.orion.api.event.event.ServerReadyEvent;
 import pro.prysm.orion.api.json.Config;
 import pro.prysm.orion.api.message.ChatFormatter;
+import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.api.message.PlaceholderService;
 import pro.prysm.orion.api.net.Connection;
 import pro.prysm.orion.api.util.CollectorUtil;
@@ -55,8 +56,14 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
 
     @Setter
     private ChatFormatter chatFormatter;
+
+    private String name;
+    private String sessionServer;
+    private boolean onlineMode;
+    private int maxPlayers;
     private int renderDistance;
     private int simulationDistance;
+    private Component motdComponent;
 
     public Server() {
         loadConfig();
@@ -99,8 +106,13 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
     private void loadConfig() {
         try {
             config = new Config(getClass().getClassLoader(), Path.of("settings.json"), "settings.json");
+            name = config.getString("serverName");
+            sessionServer = config.getStringOrDefault("session-server", "https://sessionserver.mojang.com");
+            onlineMode = config.getBoolean("online-mode");
+            maxPlayers = config.getInt("max-players");
             renderDistance = config.getInt("world.render-distance");
             simulationDistance = config.getInt("world.simulation-distance");
+            motdComponent = new Message(config.getString("motd")).toComponent();
         } catch (IOException e) {
             ExceptionHandler.error("Failed to load settings.json", e);
         }
@@ -169,6 +181,6 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
     @EventHandler
     public void onReload(ReloadEvent event) {
         loadConfig();
-        protocol.reload(config);
+        protocol.reload();
     }
 }

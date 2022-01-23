@@ -2,11 +2,8 @@ package pro.prysm.orion.server.protocol;
 
 import com.google.gson.JsonParser;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 import pro.prysm.orion.api.data.GameMode;
 import pro.prysm.orion.api.data.GameProfile;
-import pro.prysm.orion.api.json.Config;
-import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.api.protocol.status.ServerListResponse;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
@@ -44,24 +41,18 @@ public class Protocol {
     private final ServerListResponse slpData = new ServerListResponse();
     private final JoinGame joinGamePacket;
     private final KeyPair keyPair = genKeyPair();
-    private String sessionServer;
-
-    private boolean onlineMode;
-    private int maxPlayers;
 
     public Protocol(Server server) {
         joinGamePacket = createJoinGamePacket(server.getLevelManager());
-        reload(server.getConfig());
+        reload();
     }
 
-    public void reload(@NotNull Config config) {
-        onlineMode = config.getBoolean("online-mode");
-        maxPlayers = config.getInt("max-players");
-
+    public void reload() {
+        Server server = Orion.getServer();
         slpData.getVersion().setProtocol(PROTOCOL_NUMBER);
-        slpData.getVersion().setName(config.getString("serverName"));
-        slpData.setDescription(new Message(config.getString("motd")).toComponent());
-        slpData.getPlayers().setMax(maxPlayers);
+        slpData.getVersion().setName(server.getName());
+        slpData.setDescription(server.getMotdComponent());
+        slpData.getPlayers().setMax(server.getMaxPlayers());
 
         try (InputStream is = getClass().getClassLoader().getResourceAsStream("prysm.png")) {
             if (is == null)
@@ -70,11 +61,9 @@ public class Protocol {
         } catch (IOException e) {
             ExceptionHandler.error(e);
         }
-        if (!onlineMode) Orion.getLogger().warn("Orion is running in offline mode. Players will not be authenticated!");
-        else {
-            sessionServer = config.getStringOrDefault("session-server", "https://sessionserver.mojang.com");
-            Orion.getLogger().debug("Using session server {}", sessionServer);
-        }
+        if (server.isOnlineMode())
+            Orion.getLogger().warn("Orion is running in offline mode. Players will not be authenticated!");
+        else Orion.getLogger().debug("Using session server {}", server.getSessionServer());
     }
 
     private JoinGame createJoinGamePacket(LevelManager levelManager) {
@@ -84,7 +73,7 @@ public class Protocol {
         packet.setDimensionCodec(dimension.getDimension());
         packet.setWorlds(levelManager.getWorlds());
         packet.setHashedSeed(12345678);                         // TODO: Implement Seed
-        packet.setMaxPlayers(maxPlayers);
+        packet.setMaxPlayers(Orion.getServer().getMaxPlayers());
         packet.setViewDistance(10);                             // TODO: View distance
         packet.setSimulationDistance(10);                       // TODO: Simulation distance
         packet.setReducedDebugInfo(false);
@@ -151,7 +140,7 @@ public class Protocol {
         try {
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder(
-                    URI.create(String.format("%s/session/minecraft/hasJoined?username=%s&serverId=%s", sessionServer, username, serverId)
+                    URI.create(String.format("%s/session/minecraft/hasJoined?username=%s&serverId=%s", Orion.getServer().getSessionServer(), username, serverId)
                     )).header("accept", "application/json").GET().build();
             CompletableFuture<HttpResponse<String>> future = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
             HttpResponse<String> response = future.get();
