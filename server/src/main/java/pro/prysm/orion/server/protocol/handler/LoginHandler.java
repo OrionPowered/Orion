@@ -31,7 +31,7 @@ public class LoginHandler extends ProtocolHandler {
     public void handle(LoginStart packet) {
         username = packet.getUsername();
         Protocol protocol = Orion.getServer().getProtocol();
-        if (protocol.isOnlineMode())
+        if (Orion.getServer().isOnlineMode())
             connection.sendPacket(protocol.newEncryptionRequest());
         else {
             // Offline mode, sends a LoginSuccess packet with a UUID following "OfflinePlayer:<username>"
@@ -46,7 +46,7 @@ public class LoginHandler extends ProtocolHandler {
     public void handle(EncryptionResponse packet) {
         Protocol protocol = Orion.getServer().getProtocol();
         // If server isn't in online mode disconnect the player and stop from handling further
-        if (!protocol.isOnlineMode()) {
+        if (!Orion.getServer().isOnlineMode()) {
             Orion.getLogger().warn("{} sent an encryption response when no request was sent!", username);
             player.getConnection().disconnect(Component.text("Invalid encryption packet"));
             return;

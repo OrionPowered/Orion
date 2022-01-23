@@ -43,12 +43,11 @@ public class Protocol {
     private final KeyPair keyPair = genKeyPair();
 
     public Protocol(Server server) {
-        joinGamePacket = createJoinGamePacket(server.getLevelManager());
-        reload();
+        reload(server);
+        joinGamePacket = createJoinGamePacket(server);
     }
 
-    public void reload() {
-        Server server = Orion.getServer();
+    public void reload(Server server) {
         slpData.getVersion().setProtocol(PROTOCOL_NUMBER);
         slpData.getVersion().setName(server.getName());
         slpData.setDescription(server.getMotdComponent());
@@ -66,14 +65,15 @@ public class Protocol {
         else Orion.getLogger().debug("Using session server {}", server.getSessionServer());
     }
 
-    private JoinGame createJoinGamePacket(LevelManager levelManager) {
+    private JoinGame createJoinGamePacket(Server server) {
+        LevelManager levelManager = server.getLevelManager();
         JoinGame packet = new JoinGame();
         DimensionProvider dimension = levelManager.getDimension();
 
         packet.setDimensionCodec(dimension.getDimension());
         packet.setWorlds(levelManager.getWorlds());
         packet.setHashedSeed(12345678);                         // TODO: Implement Seed
-        packet.setMaxPlayers(Orion.getServer().getMaxPlayers());
+        packet.setMaxPlayers(server.getMaxPlayers());
         packet.setViewDistance(10);                             // TODO: View distance
         packet.setSimulationDistance(10);                       // TODO: Simulation distance
         packet.setReducedDebugInfo(false);

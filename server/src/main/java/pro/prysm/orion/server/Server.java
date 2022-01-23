@@ -181,6 +181,6 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
     @EventHandler
     public void onReload(ReloadEvent event) {
         loadConfig();
-        protocol.reload();
+        protocol.reload(this);
     }
 }
