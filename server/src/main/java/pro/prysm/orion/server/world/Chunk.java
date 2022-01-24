@@ -24,7 +24,7 @@ public interface Chunk {
      *
      * @return boolean
      */
-    boolean doesExist();
+    boolean exists();
 
     /**
      * Returns if this chunk is fully generated
