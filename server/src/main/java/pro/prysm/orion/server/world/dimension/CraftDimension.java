@@ -42,9 +42,9 @@ public class CraftDimension implements DimensionProvider {
         );
     }
 
-    public CompoundBinaryTag getDimensionType(String name) {
-        if (dimension != null) {
-            CompoundBinaryTag dim = (CompoundBinaryTag) dimension.getCompound("minecraft:dimension_type").getList("value").stream().filter(tag -> ((CompoundBinaryTag) tag).getString("name").equals(name)).collect(toSingleton());
+    public CompoundBinaryTag getDimensionType(Dimension dimension) {
+        if (this.dimension != null) {
+            CompoundBinaryTag dim = (CompoundBinaryTag) this.dimension.getCompound("minecraft:dimension_type").getList("value").stream().filter(tag -> ((CompoundBinaryTag) tag).getString("name").equals(dimension.getName())).collect(toSingleton());
             CompoundBinaryTag element = dim.getCompound("element").remove("element");
             CompoundBinaryTag.Builder result = CompoundBinaryTag.builder();
             result.put(dim);
