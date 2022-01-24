@@ -54,6 +54,20 @@ public interface Player extends Identity, LivingEntity, Audience {
     int getLatency();
 
     /**
+     * Retrieves the player's hidden status
+     *
+     * @return boolean
+     */
+    boolean isHidden();
+
+    /**
+     * Sets the player's hidden status
+     *
+     * @param hidden hidden status
+     */
+    void setHidden(boolean hidden);
+
+    /**
      * Retrieves the display name component of this player
      *
      * @return The player's display name component

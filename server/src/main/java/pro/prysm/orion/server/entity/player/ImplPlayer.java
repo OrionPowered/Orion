@@ -39,6 +39,7 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
     private GameMode gameMode;
     private String brand;
     private int latency;
+    private boolean hidden;
     private Component displayName;
 
     ImplPlayer(Connection connection, GameProfile profile, int entityId) {
