@@ -14,10 +14,10 @@ public interface DimensionProvider {
     /**
      * Gets the NBT data of a specific dimension
      *
-     * @param name Dimension name
+     * @param dimension Dimension
      * @return NBT
      */
-    CompoundBinaryTag getDimensionType(String name);
+    CompoundBinaryTag getDimensionType(Dimension dimension);
 
     /**
      * Gets the NBT data of the provided biome
