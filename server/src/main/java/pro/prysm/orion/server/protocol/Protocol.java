@@ -2,7 +2,6 @@ package pro.prysm.orion.server.protocol;
 
 import com.google.gson.JsonParser;
 import lombok.Getter;
-import pro.prysm.orion.api.entity.player.GameMode;
 import pro.prysm.orion.api.entity.player.GameProfile;
 import pro.prysm.orion.api.entity.player.Player;
 import pro.prysm.orion.api.protocol.status.ServerListResponse;
@@ -11,11 +10,8 @@ import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.server.protocol.outgoing.login.EncryptionRequest;
-import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
 import pro.prysm.orion.server.util.ExceptionHandler;
-import pro.prysm.orion.server.world.LevelManager;
-import pro.prysm.orion.server.world.dimension.DimensionProvider;
 
 import javax.crypto.Cipher;
 import java.io.IOException;
@@ -43,12 +39,10 @@ public class Protocol {
 
     private final PacketRegistry packetRegistry = new PacketRegistry();
     private final ServerListResponse slpData = new ServerListResponse();
-    private final JoinGame joinGamePacket;
     private final KeyPair keyPair = genKeyPair();
 
     public Protocol(Server server) {
         reload(server);
-        joinGamePacket = createJoinGamePacket(server);
     }
 
     public void reload(Server server) {
@@ -67,34 +61,6 @@ public class Protocol {
         if (!server.isOnlineMode())
             Orion.getLogger().warn("Orion is running in offline mode. Players will not be authenticated!");
         else Orion.getLogger().debug("Using session server {}", server.getSessionServer());
-    }
-
-    private JoinGame createJoinGamePacket(Server server) {
-        LevelManager levelManager = server.getLevelManager();
-        JoinGame packet = new JoinGame();
-        DimensionProvider dimension = levelManager.getDimension();
-
-        packet.setDimensionCodec(dimension.getDimension());
-        packet.setWorlds(levelManager.getWorlds());
-        packet.setHashedSeed(12345678);                         // TODO: Implement Seed
-        packet.setMaxPlayers(server.getMaxPlayers());
-        packet.setViewDistance(10);                             // TODO: View distance
-        packet.setSimulationDistance(10);                       // TODO: Simulation distance
-        packet.setReducedDebugInfo(false);
-        packet.setRespawnScreen(true);
-        packet.setDebug(false);
-        packet.setFlat(false);
-
-        if (levelManager.isVoidWorld()) {
-            packet.setGamemode(GameMode.SPECTATOR);
-            packet.setPreviousGamemode(GameMode.SPECTATOR);
-            packet.setDimension(dimension.getDimensionType("minecraft:the_end"));
-            packet.setWorldName("void");
-        } else {
-            packet.setDimension(dimension.getDimensionType("minecraft:overworld"));
-        }
-
-        return packet;
     }
 
     private KeyPair genKeyPair() {
