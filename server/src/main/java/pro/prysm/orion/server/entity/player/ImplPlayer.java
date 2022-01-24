@@ -38,12 +38,14 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
     private ClientSettings settings;
     private GameMode gameMode;
     private String brand;
+    private int latency;
     private Component displayName;
 
     ImplPlayer(Connection connection, GameProfile profile, int entityId) {
         super(entityId, profile.getUniqueId(), EntityType.PLAYER.getId()); // Should I be using profile's uuid for this?
         this.connection = connection;
         this.profile = profile;
+        latency = 0;
         displayName = Component.text(profile.getUsername());
     }
 
