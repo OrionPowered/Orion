@@ -4,9 +4,12 @@ import com.google.gson.JsonParser;
 import lombok.Getter;
 import pro.prysm.orion.api.entity.player.GameMode;
 import pro.prysm.orion.api.entity.player.GameProfile;
+import pro.prysm.orion.api.entity.player.Player;
 import pro.prysm.orion.api.protocol.status.ServerListResponse;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
+import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.server.protocol.outgoing.login.EncryptionRequest;
 import pro.prysm.orion.server.protocol.outgoing.play.JoinGame;
 import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
@@ -23,6 +26,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.security.*;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
@@ -155,5 +159,9 @@ public class Protocol {
         byte[] verifyToken = new byte[4];
         ThreadLocalRandom.current().nextBytes(verifyToken);
         return new EncryptionRequest(keyPair.getPublic().getEncoded(), verifyToken);
+    }
+
+    public void broadcastPacket(List<Player> players, OutgoingPacket packet) {
+        players.parallelStream().map(Player::getConnection).forEach(connection -> ((Connection) connection).sendPacket(packet));
     }
 }
