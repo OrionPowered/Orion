@@ -4,7 +4,6 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.anvilJava)
     implementation(projects.orionApi)
 
     implementation("com.velocitypowered:velocity-native:3.0.1-SNAPSHOT")

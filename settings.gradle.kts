@@ -25,14 +25,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "orion-parent"
 
-setupSubproject("anvil-native") {
-    projectDir = file("anvil/native")
-}
-
-setupSubproject("anvil-java") {
-    projectDir = file("anvil/java")
-}
-
 setupOrionSubproject("server")
 setupOrionSubproject("api")
 
