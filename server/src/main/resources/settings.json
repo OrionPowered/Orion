@@ -6,8 +6,7 @@
     "port": 25565
   },
   "world": {
-    "void": true,
-    "name": "world",
+    "name": "test",
     "render-distance": 10,
     "simulation-distance": 10
   },
