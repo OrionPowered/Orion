@@ -2,6 +2,7 @@ package pro.prysm.orion.server.world;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import pro.prysm.orion.api.data.Location;
+import pro.prysm.orion.server.world.dimension.Dimension;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -21,6 +22,36 @@ public interface World {
      * @return Location
      */
     Location getSpawn();
+
+    /**
+     * Returns true if this World is a void world.
+     *
+     * @return boolean
+     */
+    default boolean isVoid() {
+        return false;
+    }
+
+    /**
+     * Gets this world's dimension
+     *
+     * @return Dimension
+     */
+    Dimension getDimension();
+
+    /**
+     * Returns the hashed seed
+     *
+     * @return long
+     */
+    long getSeedHash();
+
+    /**
+     * Returns true if this world is hardcore
+     *
+     * @return boolean
+     */
+    boolean isHardcore();
 
     /**
      * Gets a {@link Chunk} asynchronously
