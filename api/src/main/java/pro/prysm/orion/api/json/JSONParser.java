@@ -70,10 +70,8 @@ public class JSONParser {
         return e.getAsDouble();
     }
 
-    public String getStringOrDefault(String key, String defaultString) {
-        String string = getString(key);
-        return (string == null)
-                ? defaultString
-                : string;
+    public JsonArray getArray(String key) {
+        JsonElement e = get(key);
+        return e.getAsJsonArray();
     }
 }
