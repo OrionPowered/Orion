@@ -106,7 +106,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
     private void loadConfig() {
         try {
             config = new Config(getClass().getClassLoader(), Path.of("settings.json"), "settings.json");
-            name = config.getString("serverName");
+            name = config.getString("server-name");
             sessionServer = config.getStringOrDefault("session-server", "https://sessionserver.mojang.com");
             onlineMode = config.getBoolean("online-mode");
             maxPlayers = config.getInt("max-players");

@@ -12,7 +12,7 @@
     "simulation-distance": 10
   },
   "motd": "<color:#2fc1fa>Orion Server Software</color>",
-  "serverName": "Orion",
+  "server-name": "§bOrion§r",
   "max-players": "100",
   "online-mode": true,
   "session-server": "https://sessionserver.mojang.com"
