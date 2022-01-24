@@ -6,6 +6,7 @@ import pro.prysm.orion.api.plugin.JavaPlugin;
 import pro.prysm.orion.api.plugin.PluginDescription;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.module.api.JavaModule;
+import pro.prysm.orion.server.world.LevelProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,6 +58,14 @@ public class ModuleClassLoader extends URLClassLoader {
                 descriptionF.set(module, description);
                 eventBusF.set(module, Orion.getEventBus());
                 loader.getModules().add(module);
+
+                if (LevelProvider.class.isAssignableFrom(module.getClass())) { // Module is a level provider
+                    // I don't see a reason to implement some way of handling multiple level providers. The last
+                    // module that implements LevelProvider will be the one used. The server admin should be aware
+                    // of what modules are being loaded and their functionality - Alex.
+                    Orion.getServer().setLevelProvider((LevelProvider) module);
+                }
+
                 module.onEnable();
             } catch (IOException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | InvalidPluginException e) {
                 Orion.getLogger().warn(String.format("Error loading module %s: %s", file.getName(), e.getMessage()));

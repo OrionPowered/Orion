@@ -37,6 +37,7 @@ import pro.prysm.orion.server.scheduler.KeepAliveService;
 import pro.prysm.orion.server.scheduler.TickService;
 import pro.prysm.orion.server.util.ExceptionHandler;
 import pro.prysm.orion.server.world.LevelManager;
+import pro.prysm.orion.server.world.LevelProvider;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -52,13 +53,16 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
     private final CommandHandler commandHandler;
     private final ModuleLoader moduleLoader;
     private final PluginLoader pluginLoader;
-    private final List<Player> players;
-    private Config config;
     private final PlaceholderService placeholderService;
+    private final List<Player> players;
 
     @Setter
     private ChatFormatter chatFormatter;
 
+    @Setter
+    private LevelProvider levelProvider;
+
+    private Config config;
     private String name;
     private String sessionServer;
     private boolean onlineMode;
