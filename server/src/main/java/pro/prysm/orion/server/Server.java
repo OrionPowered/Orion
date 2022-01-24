@@ -30,7 +30,9 @@ import pro.prysm.orion.server.message.placeholder.UptimePlaceholder;
 import pro.prysm.orion.server.module.ModuleLoader;
 import pro.prysm.orion.server.net.TCPListener;
 import pro.prysm.orion.server.plugin.PluginLoader;
+import pro.prysm.orion.server.protocol.PlayerInfoAction;
 import pro.prysm.orion.server.protocol.Protocol;
+import pro.prysm.orion.server.protocol.outgoing.play.PlayerInfo;
 import pro.prysm.orion.server.scheduler.KeepAliveService;
 import pro.prysm.orion.server.scheduler.TickService;
 import pro.prysm.orion.server.util.ExceptionHandler;
@@ -131,6 +133,13 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
 
     public void addPlayer(Player player) {
         players.add(player);
+        if (!player.isHidden()) {
+            PlayerInfo infoPacket = new PlayerInfo(PlayerInfoAction.ADD_PLAYER, List.of(player));
+            players.parallelStream().map(Player::getConnection).forEach(connection -> {
+                ((pro.prysm.orion.server.net.Connection) connection).sendPacket(infoPacket);
+                System.out.println(infoPacket);
+            });
+        }
     }
 
     public void removePlayer(Player player) {
