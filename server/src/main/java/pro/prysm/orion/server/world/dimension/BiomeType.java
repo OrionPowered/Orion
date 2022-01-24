@@ -1,10 +1,12 @@
 package pro.prysm.orion.server.world.dimension;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class BiomeType {
     private String name;
     private int id;
@@ -22,26 +24,4 @@ public class BiomeType {
     private float scale;
     private float downfall;
     private String category;
-
-    public BiomeType() {
-    }
-
-    public BiomeType(String name, int id, String precipitation, long skyColor, long waterFogColor, long fogColor, long waterColor, int moodSoundTickDelay, double moodSoundOffset, String moodSoundSound, int moodSoundBlockSearchExtent, float depth, float temperature, float scale, float downfall, String category) {
-        this.name = name;
-        this.id = id;
-        this.precipitation = precipitation;
-        this.skyColor = skyColor;
-        this.waterFogColor = waterFogColor;
-        this.fogColor = fogColor;
-        this.waterColor = waterColor;
-        this.moodSoundTickDelay = moodSoundTickDelay;
-        this.moodSoundOffset = moodSoundOffset;
-        this.moodSoundSound = moodSoundSound;
-        this.moodSoundBlockSearchExtent = moodSoundBlockSearchExtent;
-        this.depth = depth;
-        this.temperature = temperature;
-        this.scale = scale;
-        this.downfall = downfall;
-        this.category = category;
-    }
 }
