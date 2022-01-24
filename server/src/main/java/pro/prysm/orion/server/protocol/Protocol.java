@@ -60,7 +60,7 @@ public class Protocol {
         } catch (IOException e) {
             ExceptionHandler.error(e);
         }
-        if (server.isOnlineMode())
+        if (!server.isOnlineMode())
             Orion.getLogger().warn("Orion is running in offline mode. Players will not be authenticated!");
         else Orion.getLogger().debug("Using session server {}", server.getSessionServer());
     }
