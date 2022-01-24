@@ -1,6 +1,5 @@
 package pro.prysm.orion.server.protocol.handler.play;
 
-import com.alexsobiek.anvil.Level;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import pro.prysm.orion.api.data.Location;
@@ -18,7 +17,8 @@ import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.handler.ProtocolHandler;
 import pro.prysm.orion.server.protocol.incoming.play.*;
 import pro.prysm.orion.server.protocol.outgoing.play.*;
-import pro.prysm.orion.server.world.LevelManager;
+import pro.prysm.orion.server.world.LevelProvider;
+import pro.prysm.orion.server.world.World;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -39,27 +39,27 @@ public class PlayHandler extends ProtocolHandler {
     private void joinGame() {
         Server server = Orion.getServer();
         Protocol protocol = server.getProtocol();
-        LevelManager levelManager = server.getLevelManager();
-        JoinGame joinGame = protocol.getJoinGamePacket();
+        LevelProvider level = server.getLevelProvider();
+        World world = level.getWorldForPlayer(player.uuid());
+        player.setWorld(world);
+        player.setLocation(world.getSpawn());
+
+        player.setGameMode(GameMode.SPECTATOR);                 // TODO: Implement Gamemode
+
+        JoinGame joinGame = new JoinGame();
         joinGame.setEntityId(player.getEntityId());
+        joinGame.setHashedSeed(world.getSeedHash());
+        joinGame.setGamemode(player.getGameMode());
+        joinGame.setPreviousGamemode(player.getGameMode());
+        joinGame.setDimension(level.getDimensionProvider().getDimensionType(world.getDimension()));
+        joinGame.setWorldName(world.getName());
+        joinGame.setHardcore(world.isHardcore());
 
-        if (!levelManager.isVoidWorld()) {
-            Level level = levelManager.getLevel();
-
-            if (!level.hasSavedPlayerData(player.getProfile().getUniqueId())) {
-                player.setLocation(new Location(level.getSpawnX(), level.getSpawnY(), level.getSpawnZ(), 0F, 90F, false)); // TODO: This is a temp solution
-                player.savePlayerData(level);
-            }
-
-            Optional<CompoundBinaryTag> playerData = level.getPlayerData(player.getProfile().getUniqueId());
-
+        if (!world.isVoid()) {
+            if (!world.hasSavedPlayerData(player.getProfile().getUniqueId()))
+                player.savePlayerData(world); // new player
+            Optional<CompoundBinaryTag> playerData = world.getPlayerData(player.getProfile().getUniqueId());
             player.readPlayerData(playerData.orElseThrow());
-            player.setGameMode(GameMode.SPECTATOR);
-            joinGame.setGamemode(player.getGameMode());             // TODO: Implement Gamemode
-            joinGame.setPreviousGamemode(player.getGameMode());
-            joinGame.setWorldName(level.getName());                // TODO: Implement worlds
-        } else {
-            player.setLocation(new Location(0, 64, 0, 0, 0, true));
         }
 
         connection.sendPacket(joinGame);
@@ -99,7 +99,6 @@ public class PlayHandler extends ProtocolHandler {
     }
 
     public void sendChunks() {
-        LevelManager levelManager = Orion.getServer().getLevelManager();
         Location loc = player.getLocation();
 
         int centerX = loc.getChunkX();
@@ -111,10 +110,10 @@ public class PlayHandler extends ProtocolHandler {
                 if ((x - centerX) * (x - centerX) + (z - centerZ) * (z - centerZ) <= radius * radius) {
                     int chunkX = centerX - (x - centerX);
                     int chunkZ = centerZ - (z - centerZ);
-                    player.sendChunkAsync(levelManager, x, z);
-                    player.sendChunkAsync(levelManager, x, chunkZ);
-                    player.sendChunkAsync(levelManager, chunkX, z);
-                    player.sendChunkAsync(levelManager, chunkX, chunkZ);
+                    player.sendChunkAsync(x, z);
+                    player.sendChunkAsync(x, chunkZ);
+                    player.sendChunkAsync(chunkX, z);
+                    player.sendChunkAsync(chunkX, chunkZ);
                 }
             }
         }

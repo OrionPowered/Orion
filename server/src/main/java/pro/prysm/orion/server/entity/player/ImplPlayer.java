@@ -1,7 +1,5 @@
 package pro.prysm.orion.server.entity.player;
 
-import com.alexsobiek.anvil.Chunk;
-import com.alexsobiek.anvil.Level;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.audience.MessageType;
@@ -26,7 +24,8 @@ import pro.prysm.orion.server.net.Connection;
 import pro.prysm.orion.server.protocol.PlayerInfoAction;
 import pro.prysm.orion.server.protocol.outgoing.play.*;
 import pro.prysm.orion.server.util.TagUtil;
-import pro.prysm.orion.server.world.LevelManager;
+import pro.prysm.orion.server.world.Chunk;
+import pro.prysm.orion.server.world.World;
 
 import java.util.List;
 import java.util.Queue;
@@ -44,6 +43,7 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
     private int latency;
     private boolean hidden;
     private Component displayName;
+    private World world;
 
     ImplPlayer(Connection connection, GameProfile profile, int entityId) {
         super(entityId, profile.getUniqueId(), EntityType.PLAYER.getId()); // Should I be using profile's uuid for this?
@@ -73,7 +73,7 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
         // TODO: Parse rest of player data file
     }
 
-    public void savePlayerData(Level level) {
+    public void savePlayerData(World world) {
         CompoundBinaryTag.Builder tagBuilder = CompoundBinaryTag.builder();
 
         // TODO: Write rest of player data
@@ -82,24 +82,20 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
         // ...
         tagBuilder.putBoolean("OnGround", location.isOnGround());
 
-        level.savePlayerData(uuid(), tagBuilder.build());
+        world.savePlayerData(uuid(), tagBuilder.build());
     }
 
     public void sendChunks(Queue<Chunk> chunks) {
         chunks.parallelStream().dropWhile(chunk -> !chunk.exists()).forEach(this::sendChunk);
     }
 
-    public void sendChunkAsync(LevelManager levelManager, int x, int z) {
-        levelManager.getChunkAsync(x, z)
+    public void sendChunkAsync(int x, int z) {
+        world.getChunkAsync(x, z)
                 .thenAcceptAsync(this::sendChunk);
     }
 
     public void sendChunk(Chunk chunk) {
         sendChunkData(new ChunkWithLight(chunk));
-    }
-
-    public void sendChunk(LevelManager levelManager, int x, int z) {
-        sendChunk(levelManager.getChunk(x, z));
     }
 
     private void sendChunkData(ChunkWithLight data) {

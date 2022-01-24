@@ -1,16 +1,14 @@
 package pro.prysm.orion.server.protocol.outgoing.play;
 
-import com.alexsobiek.anvil.Chunk;
-import com.alexsobiek.anvil.ChunkSection;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import pro.prysm.orion.api.data.Biome;
-import pro.prysm.orion.api.data.Block;
 import pro.prysm.orion.server.data.palette.PalettedContainer;
 import pro.prysm.orion.server.data.palette.PalettedContainer.Type;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
+import pro.prysm.orion.server.world.Chunk;
+import pro.prysm.orion.server.world.ChunkSection;
 
 public class ChunkWithLight extends OutgoingPacket {
     private final Chunk chunk;
@@ -25,7 +23,7 @@ public class ChunkWithLight extends OutgoingPacket {
         this.exists = chunk.exists();
         x = chunk.getX();
         z = chunk.getZ();
-        this.heightmaps = chunk.getHeightmaps().remove("MOTION_BLOCKING_NO_LEAVES").remove("OCEAN_FLOOR");
+        this.heightmaps = chunk.getHeightMaps().remove("MOTION_BLOCKING_NO_LEAVES").remove("OCEAN_FLOOR");
     }
 
     public boolean exists() {
@@ -47,13 +45,11 @@ public class ChunkWithLight extends OutgoingPacket {
     }
 
     private int blockState(ChunkSection section, int index) {
-        // section.getPaletteEntry(i).getCompound("Properties");  TODO: use proper states
-        Block block = Block.getBlock(section.getBlockStatePaletteEntry(index).getString("Name").replace("minecraft:", ""));
-        return block.getDefaultState();
+        return section.getBlockState(index);
     }
 
     private int biomeId(ChunkSection section, int index) {
-        return Biome.getBiome(section.getBiomePaletteEntry(index).replace("minecraft:", "")).getId();
+        return section.getBiomeEntry(index).getId();
     }
 
     @Override
@@ -65,7 +61,7 @@ public class ChunkWithLight extends OutgoingPacket {
         PacketByteBuf paletteBuf = new PacketByteBuf(Unpooled.buffer());
         chunk.getSections().forEach(section -> {
             paletteBuf.writeShort(section.getBlockCount());
-            PalettedContainer blockContainer = PalettedContainer.from(Type.BLOCK_STATES, section.getBitsPerBlock(), generateBlockPaletteData(section), section.getStates());
+            PalettedContainer blockContainer = PalettedContainer.from(Type.BLOCK_STATES, section.getBitsPerBlock(), generateBlockPaletteData(section), section.getBlockStates());
             PalettedContainer biomeContainer = PalettedContainer.from(Type.BIOME, section.getBitsPerBiome(), generateBiomePaletteData(section), section.getBiomes());
             blockContainer.write(paletteBuf);
             biomeContainer.write(paletteBuf);

@@ -1,9 +1,9 @@
 package pro.prysm.orion.server.protocol.outgoing.play;
 
-import com.alexsobiek.anvil.Chunk;
 import lombok.Getter;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
+import pro.prysm.orion.server.world.Chunk;
 
 import java.util.ArrayList;
 import java.util.BitSet;
