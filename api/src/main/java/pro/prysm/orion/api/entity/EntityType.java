@@ -1,10 +1,8 @@
-package pro.prysm.orion.api.data;
+package pro.prysm.orion.api.entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import lombok.EqualsAndHashCode;
-
-import pro.prysm.orion.api.entity.Entity;
 import pro.prysm.orion.api.util.CollectorUtil;
 
 import java.util.ArrayList;

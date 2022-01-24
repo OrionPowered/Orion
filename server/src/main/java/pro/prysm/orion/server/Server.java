@@ -9,7 +9,7 @@ import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.slf4j.LoggerFactory;
-import pro.prysm.orion.api.entity.Player;
+import pro.prysm.orion.api.entity.player.Player;
 import pro.prysm.orion.api.event.EventHandler;
 import pro.prysm.orion.api.event.Listener;
 import pro.prysm.orion.api.event.event.ReloadEvent;

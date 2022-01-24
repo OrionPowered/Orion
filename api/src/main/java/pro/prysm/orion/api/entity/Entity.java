@@ -1,7 +1,6 @@
 package pro.prysm.orion.api.entity;
 
 import net.kyori.adventure.identity.Identity;
-import pro.prysm.orion.api.data.EntityType;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.data.Velocity;
 

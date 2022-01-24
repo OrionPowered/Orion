@@ -1,6 +1,6 @@
 package pro.prysm.orion.server.entity.player;
 
-import pro.prysm.orion.api.data.GameProfile;
+import pro.prysm.orion.api.entity.player.GameProfile;
 import pro.prysm.orion.server.net.Connection;
 
 public class PlayerFactory {

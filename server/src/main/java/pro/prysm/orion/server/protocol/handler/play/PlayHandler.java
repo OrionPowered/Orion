@@ -3,11 +3,11 @@ package pro.prysm.orion.server.protocol.handler.play;
 import com.alexsobiek.anvil.Level;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
-import pro.prysm.orion.api.data.ChatMode;
-import pro.prysm.orion.api.data.GameMode;
-import pro.prysm.orion.api.data.Hand;
 import pro.prysm.orion.api.data.Location;
-import pro.prysm.orion.api.entity.Player;
+import pro.prysm.orion.api.entity.player.ChatMode;
+import pro.prysm.orion.api.entity.player.GameMode;
+import pro.prysm.orion.api.entity.player.Hand;
+import pro.prysm.orion.api.entity.player.Player;
 import pro.prysm.orion.api.event.event.IncomingPluginMessageEvent;
 import pro.prysm.orion.api.event.event.PlayerJoinEvent;
 import pro.prysm.orion.api.message.Message;
@@ -128,7 +128,7 @@ public class PlayHandler extends ProtocolHandler {
 
     @Override
     public void handle(ClientSettings packet) {
-        player.setSettings(new pro.prysm.orion.api.data.ClientSettings(
+        player.setSettings(new pro.prysm.orion.api.entity.player.ClientSettings(
                 packet.getLocale(),
                 packet.getViewDistance(),
                 (packet.getChatMode() == 0) ? ChatMode.ENABLED : (packet.getChatMode() == 1 ? ChatMode.COMMANDS_ONLY : ChatMode.HIDDEN),

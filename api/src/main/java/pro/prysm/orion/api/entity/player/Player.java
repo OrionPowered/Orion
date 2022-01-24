@@ -1,12 +1,10 @@
-package pro.prysm.orion.api.entity;
+package pro.prysm.orion.api.entity.player;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
-import pro.prysm.orion.api.data.ClientSettings;
-import pro.prysm.orion.api.data.GameMode;
-import pro.prysm.orion.api.data.GameProfile;
 import pro.prysm.orion.api.data.Location;
+import pro.prysm.orion.api.entity.LivingEntity;
 import pro.prysm.orion.api.net.Connection;
 
 /**
@@ -47,6 +45,13 @@ public interface Player extends Identity, LivingEntity, Audience {
      * @return The client's brand
      */
     String getBrand();
+
+    /**
+     * Retrieves the player's latency
+     *
+     * @return Latency integer
+     */
+    int getLatency();
 
     /**
      * Retrieves the display name component of this player

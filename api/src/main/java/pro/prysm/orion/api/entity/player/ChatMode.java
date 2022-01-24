@@ -1,4 +1,4 @@
-package pro.prysm.orion.api.data;
+package pro.prysm.orion.api.entity.player;
 
 public enum ChatMode {
     ENABLED,

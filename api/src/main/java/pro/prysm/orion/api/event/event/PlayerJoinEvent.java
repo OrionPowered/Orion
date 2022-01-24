@@ -1,7 +1,7 @@
 package pro.prysm.orion.api.event.event;
 
 import lombok.Getter;
-import pro.prysm.orion.api.entity.Player;
+import pro.prysm.orion.api.entity.player.Player;
 import pro.prysm.orion.api.event.Cancellable;
 import pro.prysm.orion.api.event.Event;
 

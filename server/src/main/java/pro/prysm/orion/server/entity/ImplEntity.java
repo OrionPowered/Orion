@@ -2,10 +2,10 @@ package pro.prysm.orion.server.entity;
 
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
-import pro.prysm.orion.api.data.EntityType;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.data.Velocity;
 import pro.prysm.orion.api.entity.Entity;
+import pro.prysm.orion.api.entity.EntityType;
 
 import java.util.UUID;
 

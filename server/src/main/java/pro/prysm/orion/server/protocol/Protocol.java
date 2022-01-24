@@ -2,8 +2,8 @@ package pro.prysm.orion.server.protocol;
 
 import com.google.gson.JsonParser;
 import lombok.Getter;
-import pro.prysm.orion.api.data.GameMode;
-import pro.prysm.orion.api.data.GameProfile;
+import pro.prysm.orion.api.entity.player.GameMode;
+import pro.prysm.orion.api.entity.player.GameProfile;
 import pro.prysm.orion.api.protocol.status.ServerListResponse;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;

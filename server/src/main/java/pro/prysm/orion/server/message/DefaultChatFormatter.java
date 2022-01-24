@@ -2,7 +2,7 @@ package pro.prysm.orion.server.message;
 
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
-import pro.prysm.orion.api.entity.Player;
+import pro.prysm.orion.api.entity.player.Player;
 import pro.prysm.orion.api.message.ChatFormatter;
 import pro.prysm.orion.server.Orion;
 

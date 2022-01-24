@@ -2,7 +2,7 @@ package pro.prysm.orion.server.protocol.outgoing.play;
 
 import lombok.Setter;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import pro.prysm.orion.api.data.GameMode;
+import pro.prysm.orion.api.entity.player.GameMode;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 

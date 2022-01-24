@@ -2,7 +2,7 @@ package pro.prysm.orion.server.protocol.handler;
 
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
-import pro.prysm.orion.api.data.GameProfile;
+import pro.prysm.orion.api.entity.player.GameProfile;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.entity.player.ImplPlayer;

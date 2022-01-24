@@ -1,6 +1,6 @@
 package pro.prysm.orion.server.entity;
 
-import pro.prysm.orion.api.data.EntityType;
+import pro.prysm.orion.api.entity.EntityType;
 
 import java.util.UUID;
 

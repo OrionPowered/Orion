@@ -1,4 +1,4 @@
-package pro.prysm.orion.api.data;
+package pro.prysm.orion.api.entity.player;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
