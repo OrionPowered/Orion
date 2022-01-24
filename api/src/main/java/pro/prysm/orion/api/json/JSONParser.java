@@ -1,5 +1,6 @@
 package pro.prysm.orion.api.json;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -34,6 +35,13 @@ public class JSONParser {
                 : e.getAsString();
     }
 
+    public String getStringOrDefault(String key, String defaultString) {
+        String string = getString(key);
+        return (string == null)
+                ? defaultString
+                : string;
+    }
+
     public UUID getUUID(String key) {
         return (getString(key) == null)
                 ? null
@@ -44,30 +52,22 @@ public class JSONParser {
 
     public boolean getBoolean(String key) {
         JsonElement e = get(key);
-        return (e == null)
-                ? null
-                : e.getAsBoolean();
+        return e.getAsBoolean();
     }
 
     public int getInt(String key) {
         JsonElement e = get(key);
-        return (e == null)
-                ? null
-                : e.getAsInt();
+        return e.getAsInt();
     }
 
     public long getLong(String key) {
         JsonElement e = get(key);
-        return (e == null)
-                ? null
-                : e.getAsLong();
+        return e.getAsLong();
     }
 
     public double getDouble(String key) {
         JsonElement e = get(key);
-        return (e == null)
-                ? null
-                : e.getAsDouble();
+        return e.getAsDouble();
     }
 
     public String getStringOrDefault(String key, String defaultString) {
