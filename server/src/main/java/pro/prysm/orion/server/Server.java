@@ -135,10 +135,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         players.add(player);
         if (!player.isHidden()) {
             PlayerInfo infoPacket = new PlayerInfo(PlayerInfoAction.ADD_PLAYER, List.of(player));
-            players.parallelStream().map(Player::getConnection).forEach(connection -> {
-                ((pro.prysm.orion.server.net.Connection) connection).sendPacket(infoPacket);
-                System.out.println(infoPacket);
-            });
+            protocol.broadcastPacket(players, infoPacket);
         }
     }
 
