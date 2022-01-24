@@ -36,7 +36,7 @@ import pro.prysm.orion.server.protocol.outgoing.play.PlayerInfo;
 import pro.prysm.orion.server.scheduler.KeepAliveService;
 import pro.prysm.orion.server.scheduler.TickService;
 import pro.prysm.orion.server.util.ExceptionHandler;
-import pro.prysm.orion.server.world.LevelManager;
+import pro.prysm.orion.server.world.DefaultVoidProvider;
 import pro.prysm.orion.server.world.LevelProvider;
 
 import java.io.IOException;
@@ -48,7 +48,6 @@ import java.util.concurrent.CompletableFuture;
 @Getter
 public class Server implements pro.prysm.orion.api.Server, Listener {
     private final TCPListener listener;
-    private final LevelManager levelManager;
     private final Protocol protocol;
     private final CommandHandler commandHandler;
     private final ModuleLoader moduleLoader;
@@ -77,9 +76,6 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         Logger root = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
         root.setLevel(Level.valueOf(config.getString("log-level")));
 
-        // If world.void is true, we create a level manager with no specified world.
-        levelManager = (config.getBoolean("world.void")) ? new LevelManager() : new LevelManager(config.getString("world.name"));
-
         protocol = new Protocol(this);
         commandHandler = new CommandHandler();
         moduleLoader = new ModuleLoader();
@@ -97,6 +93,8 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         Orion.getEventBus().subscribe(this);
         registerCommands();
         registerPlaceholders();
+
+        if (levelProvider == null) levelProvider = new DefaultVoidProvider();
 
         CompletableFuture.runAsync(() -> { // Prevent listening from blocking the thread
             try {
