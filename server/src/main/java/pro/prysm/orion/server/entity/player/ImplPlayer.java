@@ -19,13 +19,16 @@ import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.entity.EntityType;
 import pro.prysm.orion.api.entity.player.*;
 import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.entity.ImplLivingEntity;
 import pro.prysm.orion.server.message.ChatPosition;
 import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.server.protocol.PlayerInfoAction;
 import pro.prysm.orion.server.protocol.outgoing.play.*;
 import pro.prysm.orion.server.util.TagUtil;
 import pro.prysm.orion.server.world.LevelManager;
 
+import java.util.List;
 import java.util.Queue;
 
 // TODO: Fully implement methods from Audience
@@ -102,6 +105,15 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
     private void sendChunkData(ChunkWithLight data) {
         if (data.exists()) connection.sendPacket(data);
         else Orion.getLogger().warn("Missing chunk at {}, {}", data.getX(), data.getZ());
+    }
+
+    @Override
+    public void setDisplayName(Component displayName) {
+        this.displayName = displayName;
+        if (!hidden) {
+            Server server = Orion.getServer();
+            server.getProtocol().broadcastPacket(server.getPlayers(), new PlayerInfo(PlayerInfoAction.UPDATE_DISPLAY_NAME, List.of(this)));
+        }
     }
 
     @Override
