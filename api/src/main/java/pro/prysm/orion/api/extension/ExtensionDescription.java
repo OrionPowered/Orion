@@ -19,9 +19,9 @@ public class ExtensionDescription {
     private final String mainClass;
     private final String author;
 
-    public ExtensionDescription(JarFile file) throws InvalidExtensionDescription {
-        try (InputStream desc = file.getInputStream(file.getEntry("plugin.json"))) {
-            if (desc == null) throw new InvalidExtensionDescription("Missing plugin.json");
+    public ExtensionDescription(JarFile file, String fileName) throws InvalidExtensionDescription {
+        try (InputStream desc = file.getInputStream(file.getEntry(fileName))) {
+            if (desc == null) throw new InvalidExtensionDescription("Missing " + fileName);
 
             try (InputStreamReader isr = new InputStreamReader(desc)) {
                 try (BufferedReader reader = new BufferedReader(isr)) {
