@@ -16,7 +16,6 @@ public class TestPlugin extends JavaPlugin {
         getEventBus().subscribe(new ServerReadyListener());
         getEventBus().subscribe(new PlayerJoin());
         getEventBus().subscribe(new PlayerMove());
-        generateConfig();
     }
 
     @Override

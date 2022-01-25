@@ -62,6 +62,7 @@ public abstract class AbstractClassLoader extends URLClassLoader {
 
                 extensionLoader.extensions.add(extension);
                 Orion.getLogger().info("Enabling plugin {} by {}", description.getName(), description.getAuthor());
+                extension.generateConfig();
                 extension.onEnable();
                 Orion.getLogger().info("Plugin {} enabled", description.getName());
             } catch (IOException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | InvalidExtensionDescription e) {
