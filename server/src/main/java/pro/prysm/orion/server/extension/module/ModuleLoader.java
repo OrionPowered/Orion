@@ -10,6 +10,7 @@ public class ModuleLoader extends AbstractExtensionLoader {
     public ModuleLoader() {
         super(
                 new File("./modules"),
+                "module.json",
                 new ModuleClassLoader(new URL[]{}, ModuleLoader.class.getClassLoader())
         );
     }

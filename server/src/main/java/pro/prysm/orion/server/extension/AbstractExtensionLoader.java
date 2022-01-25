@@ -1,5 +1,6 @@
 package pro.prysm.orion.server.extension;
 
+import lombok.Getter;
 import pro.prysm.orion.api.extension.AbstractExtension;
 import pro.prysm.orion.server.Orion;
 
@@ -8,13 +9,16 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public abstract class AbstractExtensionLoader {
     protected final List<AbstractExtension> extensions = new ArrayList<>();
     protected final File extensionFolder;
+    private final String configFile;
     protected final AbstractClassLoader loader;
 
-    public AbstractExtensionLoader(File extensionFolder, AbstractClassLoader loader) {
+    public AbstractExtensionLoader(File extensionFolder, String configFile, AbstractClassLoader loader) {
         this.extensionFolder = extensionFolder;
+        this.configFile = configFile;
         this.loader = loader;
         loadExtensions();
     }

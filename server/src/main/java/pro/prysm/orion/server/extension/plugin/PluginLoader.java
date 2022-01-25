@@ -15,6 +15,7 @@ public class PluginLoader extends AbstractExtensionLoader {
     public PluginLoader() {
         super(
                 new File("./plugins"),
+                "plugin.json",
                 new PluginClassLoader(new URL[]{}, PluginLoader.class.getClassLoader())
         );
     }
