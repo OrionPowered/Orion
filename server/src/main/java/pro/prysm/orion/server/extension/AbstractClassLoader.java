@@ -5,6 +5,7 @@ import pro.prysm.orion.api.exception.InvalidExtensionDescription;
 import pro.prysm.orion.api.extension.AbstractExtension;
 import pro.prysm.orion.api.extension.ExtensionDescription;
 import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.extension.plugin.PluginLoader;
 import pro.prysm.orion.server.util.ExceptionHandler;
 
 import java.io.File;
@@ -48,7 +49,11 @@ public abstract class AbstractClassLoader extends URLClassLoader {
                 JarFile jarFile = new JarFile(file);
                 loadClasses(jarFile);
 
-                ExtensionDescription description = new ExtensionDescription(jarFile);
+                ExtensionDescription description;
+
+                if (extensionLoader instanceof PluginLoader)
+                    description = new ExtensionDescription(jarFile, "plugin.json");
+                else description = new ExtensionDescription(jarFile, "module.json");
 
                 AbstractExtension extension = (AbstractExtension) Class.forName(description.getMainClass(), false, this)
                         .getConstructors()[0].newInstance();
