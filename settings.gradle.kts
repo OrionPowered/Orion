@@ -29,6 +29,7 @@ setupOrionSubproject("server")
 setupOrionSubproject("api")
 
 include("test-plugin")
+include("test-module")
 
 fun setupOrionSubproject(name: String) {
     setupSubproject("orion-$name") {
