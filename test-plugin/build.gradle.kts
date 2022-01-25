@@ -4,7 +4,7 @@ plugins {
 
 group = "pro.prysm"
 version = "1.0-SNAPSHOT"
-description = "Test my plugin loader"
+description = "Orion test plugin"
 
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
