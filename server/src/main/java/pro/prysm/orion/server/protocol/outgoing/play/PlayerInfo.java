@@ -20,6 +20,10 @@ public class PlayerInfo extends OutgoingPacket {
         this.players = players;
     }
 
+    public PlayerInfo(PlayerInfoAction action, Player player) {
+        this(action, List.of(player));
+    }
+
     @Override
     public void write(PacketByteBuf buf) {
         buf.writeVarInt(action.getId());

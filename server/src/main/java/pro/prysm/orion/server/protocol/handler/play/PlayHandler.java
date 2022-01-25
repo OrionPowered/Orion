@@ -13,6 +13,7 @@ import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
+import pro.prysm.orion.server.protocol.PlayerInfoAction;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.handler.ProtocolHandler;
 import pro.prysm.orion.server.protocol.incoming.play.*;
@@ -21,6 +22,7 @@ import pro.prysm.orion.server.world.LevelProvider;
 import pro.prysm.orion.server.world.World;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Optional;
 
 public class PlayHandler extends ProtocolHandler {
@@ -70,25 +72,23 @@ public class PlayHandler extends ProtocolHandler {
         Server server = Orion.getServer();
         PlayerJoinEvent playerJoinEvent = new PlayerJoinEvent(player);
         Orion.getEventBus().post(playerJoinEvent);
-        if (playerJoinEvent.isCancelled()) {
+        if (playerJoinEvent.isCancelled())
             player.getConnection().disconnect(Component.text("Kicked from server."));   // TODO: Change
-            return;
+        else {
+            server.addPlayer(player);
+
+            Orion.getLogger().info("{} ({}) has logged in", player.getProfile().getUsername(), connection.getAddress());
+            Orion.getLogger().debug("Player {} has logged in at {}", player.getProfile().getUsername(), player.getLocation());
+
+            Orion.getScheduler().schedule(this::sendChunks, 2L);
+            connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
+
+            // Testing
+            connection.sendPacket(new PlayerlistHeaderFooter(
+                    new Message("<color:#2fc1fa>Orion Server Software</color>").toComponent(),
+                    new Message("<color:#2fc1fa>Orion Server Software</color>").toComponent()
+            ));
         }
-
-        server.addPlayer(player);
-
-        Orion.getLogger().info("{} ({}) has logged in", player.getProfile().getUsername(), connection.getAddress());
-        Orion.getLogger().debug("Player {} has logged in at {}", player.getProfile().getUsername(), player.getLocation());
-
-        Orion.getScheduler().schedule(this::sendChunks, 2L);
-        connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
-
-        // Testing
-        connection.sendPacket(new PlayerlistHeaderFooter(
-                new Message("<color:#2fc1fa>Orion Server Software</color>").toComponent(),
-                new Message("<color:#2fc1fa>Orion Server Software</color>").toComponent()
-        ));
-
     }
 
     public void sendKeepAlive() {
@@ -122,6 +122,7 @@ public class PlayHandler extends ProtocolHandler {
     @Override
     public void onDisconnect() {
         Orion.getServer().removePlayer(player);
+        connection.sendPacket(new PlayerInfo(PlayerInfoAction.REMOVE_PLAYER, List.of(player)));
         Orion.getLogger().info("{} ({}) has logged out", player.getProfile().getUsername(), player.getConnection().getAddress());
     }
 

@@ -1,8 +1,8 @@
-package pro.prysm.orion.api.plugin;
+package pro.prysm.orion.api.extension;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import pro.prysm.orion.api.exception.InvalidPluginException;
+import pro.prysm.orion.api.exception.InvalidExtensionDescription;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -14,14 +14,14 @@ import java.util.jar.JarFile;
  * @since 12/20/21 / 10:48 PM
  * This file was created as a part of Orion
  */
-public class PluginDescription {
+public class ExtensionDescription {
     private final String name;
     private final String mainClass;
     private final String author;
 
-    public PluginDescription(JarFile file) throws InvalidPluginException {
+    public ExtensionDescription(JarFile file) throws InvalidExtensionDescription {
         try (InputStream desc = file.getInputStream(file.getEntry("plugin.json"))) {
-            if (desc == null) throw new InvalidPluginException("Missing plugin.json");
+            if (desc == null) throw new InvalidExtensionDescription("Missing plugin.json");
 
             try (InputStreamReader isr = new InputStreamReader(desc)) {
                 try (BufferedReader reader = new BufferedReader(isr)) {
@@ -32,10 +32,10 @@ public class PluginDescription {
                     author = jsonObject.get("author").getAsString();
                 }
             }
-        } catch (InvalidPluginException e) {
+        } catch (InvalidExtensionDescription e) {
             throw e;
         } catch (Exception e) {
-            throw new InvalidPluginException(e.getMessage());
+            throw new InvalidExtensionDescription(e.getMessage());
         }
     }
 
