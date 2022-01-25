@@ -1,9 +1,9 @@
-package pro.prysm.test;
+package pro.prysm.test.plugin;
 
 import pro.prysm.orion.api.extension.plugin.JavaPlugin;
-import pro.prysm.test.listener.PlayerJoin;
-import pro.prysm.test.listener.PlayerMove;
-import pro.prysm.test.listener.ServerReadyListener;
+import pro.prysm.test.plugin.listener.PlayerJoin;
+import pro.prysm.test.plugin.listener.PlayerMove;
+import pro.prysm.test.plugin.listener.ServerReadyListener;
 
 /**
  * @author 254n_m

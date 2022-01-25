@@ -1,4 +1,4 @@
-package pro.prysm.test.listener;
+package pro.prysm.test.plugin.listener;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;

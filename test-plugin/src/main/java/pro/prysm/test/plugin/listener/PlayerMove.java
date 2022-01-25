@@ -1,4 +1,4 @@
-package pro.prysm.test.listener;
+package pro.prysm.test.plugin.listener;
 
 import pro.prysm.orion.api.event.EventHandler;
 import pro.prysm.orion.api.event.Listener;
