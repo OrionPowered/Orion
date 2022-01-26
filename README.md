@@ -30,7 +30,6 @@ lobby, minigames, or any other server that doesn't require advanced vanilla mech
 ## Development Requirements
 
 - JDK 17
-- Rust & Cargo
 
 ## Modules & Plugins
 
