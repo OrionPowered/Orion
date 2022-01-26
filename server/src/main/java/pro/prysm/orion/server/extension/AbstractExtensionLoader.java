@@ -1,25 +1,56 @@
 package pro.prysm.orion.server.extension;
 
 import lombok.Getter;
+import org.slf4j.LoggerFactory;
+import pro.prysm.orion.api.exception.InvalidExtensionDescription;
 import pro.prysm.orion.api.extension.AbstractExtension;
+import pro.prysm.orion.api.extension.ExtensionDescription;
 import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.util.ExceptionHandler;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.JarFile;
 
 @Getter
-public abstract class AbstractExtensionLoader {
+public abstract class AbstractExtensionLoader extends AbstractClassLoader {
     protected final List<AbstractExtension> extensions = new ArrayList<>();
     protected final File extensionFolder;
     private final String configFile;
-    protected final AbstractClassLoader loader;
 
-    public AbstractExtensionLoader(File extensionFolder, String configFile, AbstractClassLoader loader) {
+    protected Field dataFolderField;
+    protected Field loggerField;
+    protected Field descriptionField;
+    protected Field eventBusField;
+
+    public AbstractExtensionLoader(URL[] urls, ClassLoader parent, File extensionFolder, String configFile) {
+        super(urls, parent);
         this.extensionFolder = extensionFolder;
         this.configFile = configFile;
-        this.loader = loader;
+
+        try {
+            dataFolderField = AbstractExtension.class.getDeclaredField("dataFolder");
+            dataFolderField.setAccessible(true);
+
+            loggerField = AbstractExtension.class.getDeclaredField("logger");
+            loggerField.setAccessible(true);
+
+            descriptionField = AbstractExtension.class.getDeclaredField("description");
+            descriptionField.setAccessible(true);
+
+            eventBusField = AbstractExtension.class.getDeclaredField("eventBus");
+            eventBusField.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            ExceptionHandler.error(e);
+        }
+
         loadExtensions();
     }
 
@@ -40,11 +71,41 @@ public abstract class AbstractExtensionLoader {
                     jars.add(file);
                 }
             }
-            loader.loadExtensions(this, jars.toArray(File[]::new));
+
+            File[] jarFiles = jars.toArray(File[]::new);
+
+            for (File file : jarFiles) {
+                try {
+                    addURL(file.toURI().toURL());
+                    JarFile jarFile = new JarFile(file);
+                    loadClasses(jarFile);
+
+                    ExtensionDescription description = new ExtensionDescription(jarFile, configFile);
+
+                    AbstractExtension extension = (AbstractExtension) Class.forName(description.getMainClass(), false, this)
+                            .getConstructors()[0].newInstance();
+
+                    dataFolderField.set(extension, Path.of(extensionFolder.getPath(), description.getName()));
+                    loggerField.set(extension, LoggerFactory.getLogger(description.getName()));
+                    descriptionField.set(extension, description);
+                    eventBusField.set(extension, Orion.getEventBus());
+
+                    initializeExtension(extension);
+
+                    extensions.add(extension);
+                    Orion.getLogger().info("Enabling plugin {} by {}", description.getName(), description.getAuthor());
+                    extension.generateConfig();
+                    extension.onEnable();
+                    Orion.getLogger().info("Plugin {} enabled", description.getName());
+                } catch (IOException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | InvalidExtensionDescription e) {
+                    ExceptionHandler.error(e);
+                }
+            }
             onFinish();
         }
     }
 
-    public abstract void onFinish();
+    public abstract void initializeExtension(AbstractExtension extension) throws IllegalAccessException;
 
+    public abstract void onFinish();
 }
