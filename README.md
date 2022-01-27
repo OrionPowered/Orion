@@ -19,9 +19,9 @@ lobby, minigames, or any other server that doesn't require advanced vanilla mech
 - [ ] Compression
 - [x] Event system
 - [x] Plugin & module loading
-- [ ] Chunk loading (*in progress*)
+- [x] Working chunk system (Requires module)
 - [ ] Player movement & mechanics
-- [ ] Chat
+- [x] Chat
 - [ ] Tab list
 - [ ] Player permissions
 - [ ] Player data containers
@@ -30,7 +30,6 @@ lobby, minigames, or any other server that doesn't require advanced vanilla mech
 ## Development Requirements
 
 - JDK 17
-- Rust & Cargo
 
 ## Modules & Plugins
 
