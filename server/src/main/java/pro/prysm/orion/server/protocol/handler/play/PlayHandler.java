@@ -28,7 +28,8 @@ import java.util.Optional;
 public class PlayHandler extends ProtocolHandler {
     private final ImplPlayer player;
     private final Movement movement;
-    private final int teleportId = 0; // TODO: Implement checking of teleport ids
+    private int teleportId; // TODO: Implement checking of teleport ids
+    private long lastPingTime;
     private long keepAliveId;
 
     public PlayHandler(ImplPlayer player) {
@@ -98,6 +99,12 @@ public class PlayHandler extends ProtocolHandler {
         Orion.getLogger().debug("Sent keepalive to {} ({})", connection.getAddress(), player.getProfile().getUsername());
     }
 
+    public void sendPing() {
+        Ping ping = new Ping();
+        lastPingTime = ping.getTime();
+        connection.sendPacket(ping);
+    }
+
     public void sendChunks() {
         Location loc = player.getLocation();
 
@@ -144,6 +151,14 @@ public class PlayHandler extends ProtocolHandler {
     @Override
     public void handle(KeepAliveIn packet) {
         if (keepAliveId != packet.getKeepAliveId()) connection.disconnect(Component.text("Invalid Keep Alive ID"));
+        else
+            player.setLatency((int) (keepAliveId - packet.getKeepAliveId())); // We can calculate latency from keep alive
+    }
+
+    @Override
+    public void handle(Pong packet) {
+        if (packet.getTime() != lastPingTime) connection.disconnect(Component.text("Invalid Pong ID"));
+        else if (lastPingTime != 0) player.setLatency((int) (System.currentTimeMillis() - lastPingTime));
     }
 
     @Override

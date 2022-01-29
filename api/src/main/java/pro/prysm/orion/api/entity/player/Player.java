@@ -49,7 +49,7 @@ public interface Player extends Identity, LivingEntity, Audience {
     /**
      * Retrieves the player's latency
      *
-     * @return Latency integer
+     * @return Latency in milliseconds
      */
     int getLatency();
 

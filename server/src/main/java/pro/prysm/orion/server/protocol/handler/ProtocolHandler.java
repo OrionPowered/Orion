@@ -56,4 +56,7 @@ public abstract class ProtocolHandler {
 
     public void handle(ChatMessageIn packet) {
     }
+
+    public void handle(Pong packet) {
+    }
 }
