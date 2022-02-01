@@ -22,7 +22,9 @@ tasks {
     }
 
     shadowJar {
-        minimize()
+        minimize() {
+            exclude(dependency("ch.qos.logback:logback-classic"))
+        }
         archiveClassifier.set("shaded")
     }
 
