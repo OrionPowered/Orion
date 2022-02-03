@@ -36,6 +36,7 @@ import pro.prysm.orion.server.protocol.outgoing.play.PlayerInfo;
 import pro.prysm.orion.server.scheduler.KeepAliveService;
 import pro.prysm.orion.server.scheduler.TickService;
 import pro.prysm.orion.server.util.ExceptionHandler;
+import pro.prysm.orion.server.util.OrionThreadFactory;
 import pro.prysm.orion.server.world.DefaultVoidProvider;
 import pro.prysm.orion.server.world.LevelProvider;
 
@@ -43,17 +44,16 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 @Getter
 public class Server implements pro.prysm.orion.api.Server, Listener {
     private final TCPListener listener;
     private final Protocol protocol;
     private final CommandHandler commandHandler;
-    private final ModuleLoader moduleLoader;
-    private final PluginLoader pluginLoader;
     private final PlaceholderService placeholderService;
     private final List<Player> players;
+    private ModuleLoader moduleLoader;
+    private PluginLoader pluginLoader;
 
     @Setter
     private ChatFormatter chatFormatter;
@@ -78,8 +78,6 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
 
         protocol = new Protocol(this);
         commandHandler = new CommandHandler();
-        moduleLoader = new ModuleLoader();
-        pluginLoader = new PluginLoader();
         players = new ArrayList<>();
         placeholderService = new pro.prysm.orion.server.message.PlaceholderService();
         chatFormatter = new DefaultChatFormatter();
@@ -94,9 +92,15 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         registerCommands();
         registerPlaceholders();
 
-        if (levelProvider == null) levelProvider = new DefaultVoidProvider();
 
-        CompletableFuture.runAsync(() -> { // Prevent listening from blocking the thread
+        OrionThreadFactory.singleThread("ExtensionLoader", () -> {
+            moduleLoader = new ModuleLoader();
+            pluginLoader = new PluginLoader();
+
+            if (levelProvider == null) levelProvider = new DefaultVoidProvider();
+        }).start();
+
+        OrionThreadFactory.singleThread("Listener", () -> {
             try {
                 new TickService(); // Start ticking
                 new KeepAliveService();
@@ -104,7 +108,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
             } catch (InterruptedException e) {
                 ExceptionHandler.error(e);
             }
-        });
+        }).start();
     }
 
     private void loadConfig() {
