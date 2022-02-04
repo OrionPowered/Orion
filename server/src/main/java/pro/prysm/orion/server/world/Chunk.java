@@ -2,6 +2,7 @@ package pro.prysm.orion.server.world;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 
+import java.util.BitSet;
 import java.util.List;
 
 public interface Chunk {
@@ -34,18 +35,32 @@ public interface Chunk {
     boolean isFull();
 
     /**
-     * Gets a list of byte arrays with sky light data
+     * Gets the bit set of the block light data
      *
-     * @return Byte array list
+     * @return BitSet
      */
-    List<byte[]> getSkyLight();
+    BitSet getBlockLightMask();
 
     /**
-     * Gets a list of byte arrays with block light data
+     * Gets the empty bit set of the block light data
      *
-     * @return Byte array list
+     * @return BitSet
      */
-    List<byte[]> getBlockLight();
+    BitSet getBlockLightEmptyMask();
+
+    /**
+     * Gets the bit set of the skylight data
+     *
+     * @return BitSet
+     */
+    BitSet getSkyLightMask();
+
+    /**
+     * Gets the empty bit set of the skylight data
+     *
+     * @return BitSet
+     */
+    BitSet getSkyLightEmptyMask();
 
     /**
      * Gets the HeightMaps in NBT format
