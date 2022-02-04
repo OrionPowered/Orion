@@ -3,8 +3,6 @@ package pro.prysm.orion.server.world;
 import net.kyori.adventure.nbt.ListBinaryTag;
 import pro.prysm.orion.api.data.Biome;
 
-import java.util.BitSet;
-
 public interface ChunkSection {
 
     /**
@@ -80,6 +78,20 @@ public interface ChunkSection {
     Biome getBiomeEntry(int index);
 
     /**
+     * Returns block light status
+     *
+     * @return boolean
+     */
+    boolean hasBlockLight();
+
+    /**
+     * Returns sky light status
+     *
+     * @return boolean
+     */
+    boolean hasSkyLight();
+
+    /**
      * Gets the block light data
      *
      * @return byte[]
@@ -92,34 +104,4 @@ public interface ChunkSection {
      * @return byte[]
      */
     byte[] getSkyLight();
-
-    /**
-     * Gets the bit set of the block light data
-     *
-     * @return BitSet
-     */
-    BitSet getBlockLightMask();
-
-    /**
-     * Gets the empty bit set of the block light data
-     *
-     * @return BitSet
-     */
-    BitSet getBlockLightEmptyMask();
-
-    /**
-     * Gets the bit set of the skylight data
-     *
-     * @return BitSet
-     */
-    BitSet getSkyLightMask();
-
-    /**
-     * Gets the empty bit set of the skylight data
-     *
-     * @return BitSet
-     */
-    BitSet getSkyLightEmptyMask();
-
-
 }
