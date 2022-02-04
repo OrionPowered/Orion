@@ -98,6 +98,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
             pluginLoader = new PluginLoader();
 
             if (levelProvider == null) levelProvider = new DefaultVoidProvider();
+            else Orion.getLogger().info("Using {} for level(s)", levelProvider.getClass().getName());
         }).start();
 
         OrionThreadFactory.singleThread("Listener", () -> {
