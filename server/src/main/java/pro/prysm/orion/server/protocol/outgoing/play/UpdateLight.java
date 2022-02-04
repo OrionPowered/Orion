@@ -4,6 +4,7 @@ import lombok.Getter;
 import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.server.world.Chunk;
+import pro.prysm.orion.server.world.ChunkSection;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -12,15 +13,30 @@ import java.util.List;
 public class UpdateLight extends OutgoingPacket {
     @Getter
     private final int x, z;
-    List<byte[]> skyLight;
-    List<byte[]> blockLight;
+    private final BitSet skyLightMask;
+    private final BitSet blockLightMask;
+    private final BitSet emptySkylightMask;
+    private final BitSet emptyBlockLightMask;
+    private final List<byte[]> skyLight;
+    private final List<byte[]> blockLight;
 
     protected UpdateLight(Chunk chunk) {
         super(0x25);
         x = chunk.getX();
         z = chunk.getZ();
-        skyLight = chunk.getSkyLight();
-        blockLight = chunk.getBlockLight();
+
+        skyLightMask = chunk.getSkyLightMask();
+        blockLightMask = chunk.getBlockLightMask();
+        emptySkylightMask = chunk.getSkyLightEmptyMask();
+        emptyBlockLightMask = chunk.getBlockLightEmptyMask();
+
+        skyLight = new ArrayList<>();
+        blockLight = new ArrayList<>();
+        List<ChunkSection> sections = chunk.getSections();
+        sections.forEach(section -> {
+            if (section.hasSkyLight()) skyLight.add(section.getSkyLight());
+            if (section.hasBlockLight()) blockLight.add(section.getBlockLight());
+        });
     }
 
     @Override
@@ -33,16 +49,6 @@ public class UpdateLight extends OutgoingPacket {
     // Used both in this packet and Chunk Data
     public void writePartial(PacketByteBuf buf) {
         buf.writeBoolean(true);   // trust edges? <-- TODO
-
-        BitSet skyLightMask = new BitSet();
-        BitSet blockLightMask = new BitSet();
-        BitSet emptySkylightMask = new BitSet();
-        BitSet emptyBlockLightMask = new BitSet();
-        // Sky lighting
-        skyLight = calculateLighting(skyLightMask, emptySkylightMask, skyLight);
-
-        // Block lighting
-        blockLight = calculateLighting(blockLightMask, emptyBlockLightMask, blockLight);
 
         buf.writeBitSet(skyLightMask);
         buf.writeBitSet(blockLightMask);
@@ -59,20 +65,5 @@ public class UpdateLight extends OutgoingPacket {
         for (byte[] array : blockLight) {
             buf.writeByteArray(array);
         }
-
-    }
-
-    private List<byte[]> calculateLighting(BitSet mask, BitSet emptyMask, List<byte[]> lightData) {
-        ArrayList<byte[]> data = new ArrayList<>();
-        for (int i = 0; i < lightData.size(); i++) {
-            byte[] array = lightData.get(i);
-            if (array.length == 0) {
-                emptyMask.set(i, true);
-            } else {
-                mask.set(i, true);
-                data.add(array);
-            }
-        }
-        return data;
     }
 }
