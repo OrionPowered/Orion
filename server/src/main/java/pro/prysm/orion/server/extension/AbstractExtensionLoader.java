@@ -93,10 +93,10 @@ public abstract class AbstractExtensionLoader extends AbstractClassLoader {
                     initializeExtension(extension);
 
                     extensions.add(extension);
-                    Orion.getLogger().info("Enabling plugin {} by {}", description.getName(), description.getAuthor());
+                    Orion.getLogger().info("Enabling {} by {}", description.getName(), description.getAuthor());
                     extension.generateConfig();
                     extension.onEnable();
-                    Orion.getLogger().info("Plugin {} enabled", description.getName());
+                    Orion.getLogger().info("{} enabled", description.getName());
                 } catch (IOException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | InvalidExtensionDescription e) {
                     ExceptionHandler.error(e);
                 }
