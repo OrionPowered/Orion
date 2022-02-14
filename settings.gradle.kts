@@ -23,9 +23,11 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "orion-parent"
+rootProject.name = "Orion"
 
+setupOrionSubproject("common")
 setupOrionSubproject("server")
+setupOrionSubproject("proxy")
 setupOrionSubproject("api")
 
 include("test-plugin")
