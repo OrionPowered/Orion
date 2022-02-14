@@ -13,6 +13,7 @@ import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
+import pro.prysm.orion.server.net.PacketByteBuf;
 import pro.prysm.orion.server.protocol.PlayerInfoAction;
 import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.handler.ProtocolHandler;
@@ -165,7 +166,8 @@ public class PlayHandler extends ProtocolHandler {
     public void handle(PluginMessageIn packet) {
         if (packet.getChannel().equals("minecraft:brand"))
             player.setBrand(new String(packet.getData(), StandardCharsets.UTF_8));
-        else Orion.getEventBus().post(new IncomingPluginMessageEvent(packet.getChannel(), packet.getData()));
+        else
+            Orion.getEventBus().post(new IncomingPluginMessageEvent(packet.getChannel(), new PacketByteBuf(packet.getData())));
     }
 
     @Override

@@ -2,11 +2,13 @@ package pro.prysm.orion.server.net;
 
 import com.google.gson.JsonSyntaxException;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import pro.prysm.orion.api.data.Location;
+import pro.prysm.orion.api.net.PayloadBuffer;
 import pro.prysm.orion.server.util.ExceptionHandler;
 
 import java.io.ByteArrayOutputStream;
@@ -45,9 +47,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-public class PacketByteBuf extends AbstractPacketByteBuf {
+public class PacketByteBuf extends AbstractPacketByteBuf implements PayloadBuffer {
     public PacketByteBuf(ByteBuf parent) {
         super(parent);
+    }
+
+    public PacketByteBuf(byte[] data) {
+        super(Unpooled.copiedBuffer(data));
     }
 
     /**
@@ -209,7 +215,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf {
      *
      * @return long[]
      */
-    protected long[] readLongArray() {
+    public long[] readLongArray() {
         long[] array = new long[readVarInt()];
         for (int i = 0; i < array.length; i++) array[i] = buf.readLong();
         return array;
