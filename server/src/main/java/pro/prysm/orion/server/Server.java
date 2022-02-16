@@ -20,21 +20,20 @@ import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.api.message.PlaceholderService;
 import pro.prysm.orion.api.net.Connection;
 import pro.prysm.orion.api.util.CollectorUtil;
-import pro.prysm.orion.server.command.CommandHandler;
-import pro.prysm.orion.server.command.commands.HelpCommand;
-import pro.prysm.orion.server.command.commands.ReloadCommand;
-import pro.prysm.orion.server.command.commands.SendPacketCommand;
-import pro.prysm.orion.server.command.commands.UptimeCommand;
-import pro.prysm.orion.server.extension.module.ModuleLoader;
-import pro.prysm.orion.server.extension.plugin.PluginLoader;
+import pro.prysm.orion.common.command.CommandHandler;
+import pro.prysm.orion.common.command.commands.HelpCommand;
+import pro.prysm.orion.common.command.commands.ReloadCommand;
+import pro.prysm.orion.common.command.commands.SendPacketCommand;
+import pro.prysm.orion.common.command.commands.UptimeCommand;
+import pro.prysm.orion.common.extension.module.ModuleLoader;
+import pro.prysm.orion.common.extension.plugin.PluginLoader;
 import pro.prysm.orion.server.message.DefaultChatFormatter;
 import pro.prysm.orion.server.message.placeholder.UptimePlaceholder;
-import pro.prysm.orion.server.net.TCPListener;
-import pro.prysm.orion.server.protocol.PlayerInfoAction;
+import pro.prysm.orion.common.net.TCPListener;
+import pro.prysm.orion.common.protocol.PlayerInfoAction;
 import pro.prysm.orion.server.protocol.Protocol;
-import pro.prysm.orion.server.protocol.outgoing.play.PlayerInfo;
-import pro.prysm.orion.server.scheduler.KeepAliveService;
-import pro.prysm.orion.server.scheduler.TickService;
+import pro.prysm.orion.common.protocol.outgoing.play.PlayerInfo;
+import pro.prysm.orion.common.scheduler.TickService;
 import pro.prysm.orion.server.util.ExceptionHandler;
 import pro.prysm.orion.server.util.OrionThreadFactory;
 import pro.prysm.orion.server.world.DefaultVoidProvider;
@@ -83,7 +82,6 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         chatFormatter = new DefaultChatFormatter();
 
         listener = new TCPListener(
-                protocol,
                 new InetSocketAddress(config.getString("listener.address"), config.getInt("listener.port")),
                 config.getInt("threads")
         );
@@ -142,7 +140,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         players.add(player);
         if (!player.isHidden())
             protocol.broadcastPacket(players, new PlayerInfo(PlayerInfoAction.ADD_PLAYER, List.of(player)));
-        ((pro.prysm.orion.server.net.Connection) player.getConnection()).sendPacket(new PlayerInfo(PlayerInfoAction.ADD_PLAYER, players.stream().filter(p -> !p.isHidden()).toList()));
+        ((pro.prysm.orion.common.net.Connection) player.getConnection()).sendPacket(new PlayerInfo(PlayerInfoAction.ADD_PLAYER, players.stream().filter(p -> !p.isHidden()).toList()));
     }
 
     public void removePlayer(Player player) {

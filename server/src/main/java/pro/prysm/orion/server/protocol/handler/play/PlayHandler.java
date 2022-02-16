@@ -10,15 +10,15 @@ import pro.prysm.orion.api.entity.player.Player;
 import pro.prysm.orion.api.event.event.IncomingPluginMessageEvent;
 import pro.prysm.orion.api.event.event.PlayerJoinEvent;
 import pro.prysm.orion.api.message.Message;
+import pro.prysm.orion.common.protocol.incoming.play.*;
+import pro.prysm.orion.common.protocol.outgoing.play.*;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
-import pro.prysm.orion.server.net.PacketByteBuf;
-import pro.prysm.orion.server.protocol.PlayerInfoAction;
+import pro.prysm.orion.common.net.PacketByteBuf;
+import pro.prysm.orion.common.protocol.PlayerInfoAction;
 import pro.prysm.orion.server.protocol.Protocol;
-import pro.prysm.orion.server.protocol.handler.ProtocolHandler;
-import pro.prysm.orion.server.protocol.incoming.play.*;
-import pro.prysm.orion.server.protocol.outgoing.play.*;
+import pro.prysm.orion.server.protocol.handler.AbstractHandler;
 import pro.prysm.orion.server.world.LevelProvider;
 import pro.prysm.orion.server.world.World;
 
@@ -26,7 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
-public class PlayHandler extends ProtocolHandler {
+public class PlayHandler extends AbstractHandler {
     private final ImplPlayer player;
     private final Movement movement;
     private int teleportId; // TODO: Implement checking of teleport ids

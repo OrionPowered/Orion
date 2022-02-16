@@ -4,7 +4,7 @@ import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.event.event.PlayerMoveEvent;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
-import pro.prysm.orion.server.protocol.outgoing.play.UpdateViewPosition;
+import pro.prysm.orion.common.protocol.outgoing.play.UpdateViewPosition;
 
 public class Movement {
     private final ImplPlayer player;

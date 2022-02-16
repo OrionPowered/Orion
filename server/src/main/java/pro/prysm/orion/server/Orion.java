@@ -2,14 +2,11 @@ package pro.prysm.orion.server;
 
 import ch.qos.logback.classic.Logger;
 import org.slf4j.LoggerFactory;
-import pro.prysm.orion.server.event.EventBus;
-import pro.prysm.orion.server.scheduler.OrionScheduler;
+import pro.prysm.orion.common.AbstractOrion;
+import pro.prysm.orion.common.event.EventBus;
+import pro.prysm.orion.common.scheduler.OrionScheduler;
 
-public class Orion {
-    private static final long startupTime = System.currentTimeMillis();
-    private static Logger logger;
-    private static OrionScheduler scheduler;
-    private static EventBus eventBus;
+public class Orion extends AbstractOrion {
     private static Server server;
 
     public static void main(String[] args) {
@@ -22,18 +19,6 @@ public class Orion {
 
     public static Server getServer() {
         return server;
-    }
-
-    public static Logger getLogger() {
-        return logger;
-    }
-
-    public static EventBus getEventBus() {
-        return eventBus;
-    }
-
-    public static OrionScheduler getScheduler() {
-        return scheduler;
     }
 
     public static long getStartupTime() {

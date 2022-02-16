@@ -1,13 +1,13 @@
 package pro.prysm.orion.server.protocol;
 
 import pro.prysm.orion.api.protocol.PacketState;
-import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
-import pro.prysm.orion.server.protocol.incoming.handshaking.Handshake;
-import pro.prysm.orion.server.protocol.incoming.login.EncryptionResponse;
-import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
-import pro.prysm.orion.server.protocol.incoming.play.*;
-import pro.prysm.orion.server.protocol.incoming.status.Ping;
-import pro.prysm.orion.server.protocol.incoming.status.Request;
+import pro.prysm.orion.common.protocol.incoming.IncomingPacket;
+import pro.prysm.orion.common.protocol.incoming.handshaking.Handshake;
+import pro.prysm.orion.common.protocol.incoming.login.EncryptionResponse;
+import pro.prysm.orion.common.protocol.incoming.login.LoginStart;
+import pro.prysm.orion.common.protocol.incoming.play.*;
+import pro.prysm.orion.common.protocol.incoming.status.Ping;
+import pro.prysm.orion.common.protocol.incoming.status.Request;
 
 import java.util.HashMap;
 

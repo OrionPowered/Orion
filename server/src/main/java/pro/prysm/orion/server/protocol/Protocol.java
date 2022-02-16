@@ -1,30 +1,22 @@
 package pro.prysm.orion.server.protocol;
 
-import com.google.gson.JsonParser;
 import lombok.Getter;
-import pro.prysm.orion.api.entity.player.GameProfile;
 import pro.prysm.orion.api.entity.player.Player;
 import pro.prysm.orion.api.protocol.status.ServerListResponse;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
-import pro.prysm.orion.server.net.Connection;
-import pro.prysm.orion.server.protocol.outgoing.OutgoingPacket;
-import pro.prysm.orion.server.protocol.outgoing.login.EncryptionRequest;
-import pro.prysm.orion.server.protocol.outgoing.status.SLPResponse;
+import pro.prysm.orion.common.net.Connection;
+import pro.prysm.orion.common.protocol.outgoing.OutgoingPacket;
+import pro.prysm.orion.common.protocol.outgoing.login.EncryptionRequest;
+import pro.prysm.orion.common.protocol.outgoing.status.SLPResponse;
 import pro.prysm.orion.server.util.ExceptionHandler;
 
 import javax.crypto.Cipher;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.security.*;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
@@ -104,21 +96,6 @@ public class Protocol {
         slp.setDescription(slpData.getDescription());
 
         return new SLPResponse(slpData);
-    }
-
-    public GameProfile join(String serverId, String username) {
-        try {
-            HttpClient httpClient = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder(
-                    URI.create(String.format("%s/session/minecraft/hasJoined?username=%s&serverId=%s", Orion.getServer().getSessionServer(), username, serverId)
-                    )).header("accept", "application/json").GET().build();
-            CompletableFuture<HttpResponse<String>> future = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
-            HttpResponse<String> response = future.get();
-            return new GameProfile(JsonParser.parseString(response.body()).getAsJsonObject());
-        } catch (InterruptedException | ExecutionException e) {
-            ExceptionHandler.error("Got error when attempting to authenticate session", e);
-            return null;
-        }
     }
 
     public EncryptionRequest newEncryptionRequest() {

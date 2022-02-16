@@ -7,11 +7,11 @@ import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
 import pro.prysm.orion.server.entity.player.PlayerFactory;
-import pro.prysm.orion.server.net.Connection;
+import pro.prysm.orion.common.net.Connection;
 import pro.prysm.orion.server.protocol.Protocol;
-import pro.prysm.orion.server.protocol.incoming.login.EncryptionResponse;
-import pro.prysm.orion.server.protocol.incoming.login.LoginStart;
-import pro.prysm.orion.server.protocol.outgoing.login.LoginSuccess;
+import pro.prysm.orion.common.protocol.incoming.login.EncryptionResponse;
+import pro.prysm.orion.common.protocol.incoming.login.LoginStart;
+import pro.prysm.orion.common.protocol.outgoing.login.LoginSuccess;
 import pro.prysm.orion.server.util.ExceptionHandler;
 
 import java.nio.charset.StandardCharsets;
@@ -19,7 +19,7 @@ import java.security.GeneralSecurityException;
 import java.util.UUID;
 
 @Getter
-public class LoginHandler extends ProtocolHandler {
+public class LoginHandler extends AbstractHandler {
     private String username;
     private ImplPlayer player;
 

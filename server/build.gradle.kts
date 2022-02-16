@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    api(projects.orionCommon)
     api(projects.orionApi)
 
     implementation("com.velocitypowered:velocity-native:3.0.1-SNAPSHOT")
