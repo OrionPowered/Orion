@@ -1,4 +1,4 @@
-package pro.prysm.orion.server.protocol.auth;
+package pro.prysm.orion.common.protocol.auth;
 
 import pro.prysm.orion.api.entity.player.GameProfile;
 
