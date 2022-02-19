@@ -15,10 +15,8 @@ import pro.prysm.orion.common.protocol.outgoing.login.EncryptionRequest;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.GeneralSecurityException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
+import java.math.BigInteger;
+import java.security.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
@@ -45,6 +43,19 @@ public class CipherSuite {
             OrionExceptionHandler.error("Error generating key pair for encryption", e);
         }
         return keyPair;
+    }
+
+    public String generateServerId(byte[] sharedSecret) {
+        String id = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            md.update(sharedSecret);
+            md.update(keyPair.getPublic().getEncoded());
+            id = new BigInteger(md.digest()).toString(16);
+        } catch (NoSuchAlgorithmException e) {
+            OrionExceptionHandler.error("Failed to create server ID. Is your java unsupported?", e);
+        }
+        return id;
     }
 
     public byte[] decryptRSA(byte[] bytes) throws GeneralSecurityException {
