@@ -4,6 +4,7 @@ import lombok.Getter;
 import pro.prysm.orion.api.entity.player.Player;
 import pro.prysm.orion.api.protocol.status.ServerListResponse;
 import pro.prysm.orion.common.net.Connection;
+import pro.prysm.orion.common.protocol.auth.AuthenticationProvider;
 import pro.prysm.orion.common.protocol.outgoing.OutgoingPacket;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class Protocol {
     private final PacketRegistry packetRegistry;
     private final CipherSuite cipherSuite;
     private ServerListResponse slp = new ServerListResponse();
+    private AuthenticationProvider auth;
 
     public Protocol() {
         cipherSuite = new CipherSuite();
