@@ -5,7 +5,7 @@ import pro.prysm.orion.api.entity.player.GameProfile;
 import pro.prysm.orion.api.entity.player.Player;
 import pro.prysm.orion.api.entity.player.ProfileProperty;
 import pro.prysm.orion.common.net.PacketByteBuf;
-import pro.prysm.orion.server.protocol.PlayerInfoAction;
+import pro.prysm.orion.common.protocol.PlayerInfoAction;
 import pro.prysm.orion.common.protocol.outgoing.OutgoingPacket;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class PlayerInfo extends OutgoingPacket {
         players.parallelStream().forEach(player -> {
             buf.writeUuidIntArray(player.uuid());
             switch (action) {
-                case PlayerInfoAction.ADD_PLAYER -> {
+                case ADD_PLAYER -> {
                     GameProfile profile = player.getProfile();
                     buf.writeString(profile.getUsername());
                     // properties
@@ -55,9 +55,9 @@ public class PlayerInfo extends OutgoingPacket {
                         buf.writeComponent(displayName);
                     } else buf.writeBoolean(false);
                 }
-                case PlayerInfoAction.UPDATE_GAMEMODE -> buf.writeVarInt(player.getGameMode().getId());
-                case PlayerInfoAction.UPDATE_LATENCY -> buf.writeVarInt(player.getLatency());
-                case PlayerInfoAction.UPDATE_DISPLAY_NAME -> buf.writeComponent(player.getDisplayName());
+                case UPDATE_GAMEMODE -> buf.writeVarInt(player.getGameMode().getId());
+                case UPDATE_LATENCY -> buf.writeVarInt(player.getLatency());
+                case UPDATE_DISPLAY_NAME -> buf.writeComponent(player.getDisplayName());
                 // case REMOVE_PLAYER -> {} // No fields
             }
         });

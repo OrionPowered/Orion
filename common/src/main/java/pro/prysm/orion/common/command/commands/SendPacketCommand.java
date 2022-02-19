@@ -1,8 +1,7 @@
 package pro.prysm.orion.common.command.commands;
 
-import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.common.command.Command;
-import pro.prysm.orion.server.net.pipeline.ChannelHandler;
+import pro.prysm.orion.common.net.pipeline.ChannelHandler;
 
 /**
  * @author 254n_m

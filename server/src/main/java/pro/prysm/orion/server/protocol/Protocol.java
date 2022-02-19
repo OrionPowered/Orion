@@ -3,35 +3,25 @@ package pro.prysm.orion.server.protocol;
 import lombok.Getter;
 import pro.prysm.orion.api.entity.player.Player;
 import pro.prysm.orion.api.protocol.status.ServerListResponse;
-import pro.prysm.orion.server.Orion;
-import pro.prysm.orion.server.Server;
 import pro.prysm.orion.common.net.Connection;
 import pro.prysm.orion.common.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.common.protocol.outgoing.login.EncryptionRequest;
 import pro.prysm.orion.common.protocol.outgoing.status.SLPResponse;
+import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.util.ExceptionHandler;
 
-import javax.crypto.Cipher;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigInteger;
-import java.security.*;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
 public class Protocol {
-    public static final String ENCODER = "packetEncoder";
-    public static final String DECODER = "packetDecoder";
-    public static final String LENGTH_ENCODER = "lengthEncoder";
-    public static final String LENGTH_DECODER = "lengthDecoder";
-    public static final String CIPHER_ENCODER = "cipherEncoder";
-    public static final String CIPHER_DECODER = "cipherDecoder";
     public static final int PROTOCOL_NUMBER = 757; // 1.18.1
 
     private final PacketRegistry packetRegistry = new PacketRegistry();
     private final ServerListResponse slpData = new ServerListResponse();
-    private final KeyPair keyPair = genKeyPair();
 
     public Protocol(Server server) {
         reload(server);
@@ -53,37 +43,6 @@ public class Protocol {
         if (!server.isOnlineMode())
             Orion.getLogger().warn("Orion is running in offline mode. Players will not be authenticated!");
         else Orion.getLogger().debug("Using session server {}", server.getSessionServer());
-    }
-
-    private KeyPair genKeyPair() {
-        KeyPair keyPair = null;
-        try {
-            KeyPairGenerator gen = KeyPairGenerator.getInstance("RSA");
-            gen.initialize(1024);
-            keyPair = gen.generateKeyPair();
-        } catch (NoSuchAlgorithmException e) {
-            ExceptionHandler.error("Error generating key pair for encryption", e);
-        }
-        return keyPair;
-    }
-
-    public byte[] decryptRSA(byte[] bytes) throws GeneralSecurityException {
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.DECRYPT_MODE, keyPair.getPrivate());
-        return cipher.doFinal(bytes);
-    }
-
-    public String generateServerId(byte[] sharedSecret) {
-        String id = null;
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-1");
-            md.update(sharedSecret);
-            md.update(keyPair.getPublic().getEncoded());
-            id = new BigInteger(md.digest()).toString(16);
-        } catch (NoSuchAlgorithmException e) {
-            ExceptionHandler.error("Failed to create server ID. Is your java unsupported?", e);
-        }
-        return id;
     }
 
     public SLPResponse generateSLP() {

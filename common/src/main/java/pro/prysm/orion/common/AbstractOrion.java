@@ -9,11 +9,6 @@ public abstract class AbstractOrion {
     protected static Logger logger;
     protected static EventBus eventBus;
     protected static OrionScheduler scheduler;
-    protected static AbstractServer server;
-
-    public static AbstractServer getServer() {
-        return server;
-    }
 
     public static Logger getLogger() {
         return logger;
