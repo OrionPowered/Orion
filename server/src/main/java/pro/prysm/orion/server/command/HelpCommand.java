@@ -1,4 +1,4 @@
-package pro.prysm.orion.common.command.commands;
+package pro.prysm.orion.server.command;
 
 import pro.prysm.orion.common.command.Command;
 
