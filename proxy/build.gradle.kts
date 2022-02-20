@@ -3,4 +3,5 @@ plugins {
 }
 
 dependencies {
+    api(projects.orionCommon)
 }
