@@ -1,7 +1,7 @@
 package pro.prysm.orion.common.protocol.outgoing.play;
 
 import net.kyori.adventure.text.Component;
-import pro.prysm.orion.server.message.ChatPosition;
+import pro.prysm.orion.common.message.ChatPosition;
 import pro.prysm.orion.common.net.PacketByteBuf;
 import pro.prysm.orion.common.protocol.outgoing.OutgoingPacket;
 

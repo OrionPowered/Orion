@@ -20,7 +20,7 @@ import pro.prysm.orion.common.protocol.outgoing.play.*;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.entity.ImplLivingEntity;
-import pro.prysm.orion.server.message.ChatPosition;
+import pro.prysm.orion.common.message.ChatPosition;
 import pro.prysm.orion.common.net.Connection;
 import pro.prysm.orion.common.protocol.PlayerInfoAction;
 import pro.prysm.orion.server.util.TagUtil;

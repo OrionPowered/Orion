@@ -1,4 +1,4 @@
-package pro.prysm.orion.server.message;
+package pro.prysm.orion.common.message;
 
 public enum ChatPosition {
     CHAT(0),
