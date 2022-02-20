@@ -10,6 +10,7 @@ import pro.prysm.orion.api.entity.player.Player;
 import pro.prysm.orion.api.event.event.IncomingPluginMessageEvent;
 import pro.prysm.orion.api.event.event.PlayerJoinEvent;
 import pro.prysm.orion.api.message.Message;
+import pro.prysm.orion.common.protocol.Protocol;
 import pro.prysm.orion.common.protocol.incoming.play.*;
 import pro.prysm.orion.common.protocol.outgoing.play.*;
 import pro.prysm.orion.server.Orion;
@@ -17,8 +18,8 @@ import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
 import pro.prysm.orion.common.net.PacketByteBuf;
 import pro.prysm.orion.common.protocol.PlayerInfoAction;
-import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.server.protocol.handler.AbstractHandler;
+import pro.prysm.orion.server.protocol.outgoing.JoinGame;
 import pro.prysm.orion.server.world.LevelProvider;
 import pro.prysm.orion.server.world.World;
 
@@ -42,7 +43,7 @@ public class PlayHandler extends AbstractHandler {
 
     private void joinGame() {
         Server server = Orion.getServer();
-        Protocol protocol = server.getProtocol();
+        Protocol protocol = Orion.getProtocol();
         LevelProvider level = server.getLevelProvider();
         World world = level.getWorldForPlayer(player.uuid());
         player.setWorld(world);
@@ -67,7 +68,7 @@ public class PlayHandler extends AbstractHandler {
         }
 
         connection.sendPacket(joinGame);
-        connection.sendPacket(new PluginMessageOut("minecraft:brand", protocol.getSlpData().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
+        connection.sendPacket(new PluginMessageOut("minecraft:brand", Orion.getProtocol().getSlp().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
     }
 
     private void finalizeJoin() {

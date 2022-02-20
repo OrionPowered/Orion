@@ -23,6 +23,7 @@ import pro.prysm.orion.server.entity.ImplLivingEntity;
 import pro.prysm.orion.common.message.ChatPosition;
 import pro.prysm.orion.common.net.Connection;
 import pro.prysm.orion.common.protocol.PlayerInfoAction;
+import pro.prysm.orion.server.protocol.outgoing.ChunkWithLight;
 import pro.prysm.orion.server.util.TagUtil;
 import pro.prysm.orion.server.world.Chunk;
 import pro.prysm.orion.server.world.World;
@@ -108,7 +109,7 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
         this.displayName = displayName;
         if (!hidden) {
             Server server = Orion.getServer();
-            server.getProtocol().broadcastPacket(server.getPlayers(), new PlayerInfo(PlayerInfoAction.UPDATE_DISPLAY_NAME, List.of(this)));
+            Orion.getProtocol().broadcastPacket(server.getPlayers(), new PlayerInfo(PlayerInfoAction.UPDATE_DISPLAY_NAME, List.of(this)));
         }
     }
 

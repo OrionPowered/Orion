@@ -6,7 +6,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.Getter;
 import pro.prysm.orion.common.net.Channel;
-import pro.prysm.orion.server.protocol.Protocol;
 
 @Getter
 public class Pipeline extends ChannelInitializer<SocketChannel> {
