@@ -6,13 +6,13 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import lombok.RequiredArgsConstructor;
 import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.api.protocol.PacketState;
+import pro.prysm.orion.common.AbstractOrion;
 import pro.prysm.orion.common.net.Connection;
 import pro.prysm.orion.common.net.PacketByteBuf;
+import pro.prysm.orion.common.protocol.Protocol;
 import pro.prysm.orion.common.protocol.incoming.IncomingPacket;
-import pro.prysm.orion.server.Orion;
+
 import pro.prysm.orion.common.event.events.IncomingPacketEvent;
-import pro.prysm.orion.server.protocol.Protocol;
-import pro.prysm.orion.server.protocol.incoming.IncomingPacket;
 
 import java.util.List;
 
@@ -29,15 +29,15 @@ public class PacketDecoder extends ByteToMessageDecoder {
         PacketByteBuf buf = new PacketByteBuf(byteBuf);
         int id = buf.readVarInt();
 
-        Protocol protocol = Orion.getServer().getProtocol();
+        Protocol protocol = AbstractOrion.getProtocol();
 
         if (protocol.getPacketRegistry().getIncoming(state, id) != null) {
-            Orion.getLogger().trace("Received packet with ID 0x{} and state: {}", Integer.toHexString(id).toUpperCase(), state);
+            AbstractOrion.getLogger().trace("Received packet with ID 0x{} and state: {}", Integer.toHexString(id).toUpperCase(), state);
             Class<? extends IncomingPacket> packetClass = protocol.getPacketRegistry().getIncoming(state, id);
             if (packetClass != null && packetClass != IncomingPacket.class) {
                 IncomingPacket packet = (IncomingPacket) packetClass.getConstructors()[0].newInstance(connection);
                 packet.read(buf);
-                Orion.getEventBus().post(new IncomingPacketEvent(), packet);
+                AbstractOrion.getEventBus().post(new IncomingPacketEvent(), packet);
             }
         } else {
             connection.disconnect(new Message(String.format("<red>Invalid packet ID: 0x%s</red>", Integer.toHexString(id).toUpperCase())).toComponent());
