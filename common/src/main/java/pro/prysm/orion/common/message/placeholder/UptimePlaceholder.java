@@ -1,12 +1,12 @@
-package pro.prysm.orion.server.message.placeholder;
+package pro.prysm.orion.common.message.placeholder;
 
 import pro.prysm.orion.api.message.Placeholder;
-import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.common.AbstractOrion;
 
 public class UptimePlaceholder implements Placeholder<String> {
     @Override
     public String call() {
-        long elapsed = System.currentTimeMillis() - Orion.getStartupTime();
+        long elapsed = System.currentTimeMillis() - AbstractOrion.getStartupTime();
 
         long x = elapsed / 1000;
         long seconds = x % 60;
