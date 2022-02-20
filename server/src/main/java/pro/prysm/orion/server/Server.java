@@ -19,19 +19,22 @@ import pro.prysm.orion.api.message.ChatFormatter;
 import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.api.message.PlaceholderService;
 import pro.prysm.orion.api.net.Connection;
+import pro.prysm.orion.api.protocol.status.ServerListResponse;
 import pro.prysm.orion.api.util.CollectorUtil;
 import pro.prysm.orion.common.command.CommandHandler;
-import pro.prysm.orion.common.command.commands.HelpCommand;
-import pro.prysm.orion.common.command.commands.ReloadCommand;
-import pro.prysm.orion.common.command.commands.SendPacketCommand;
-import pro.prysm.orion.common.command.commands.UptimeCommand;
+import pro.prysm.orion.common.protocol.Protocol;
+import pro.prysm.orion.common.protocol.auth.OfflineAuth;
+import pro.prysm.orion.common.protocol.auth.YggdrasilAuth;
+import pro.prysm.orion.server.command.HelpCommand;
+import pro.prysm.orion.server.command.ReloadCommand;
+import pro.prysm.orion.server.command.SendPacketCommand;
+import pro.prysm.orion.server.command.UptimeCommand;
 import pro.prysm.orion.common.extension.module.ModuleLoader;
 import pro.prysm.orion.common.extension.plugin.PluginLoader;
-import pro.prysm.orion.server.message.DefaultChatFormatter;
-import pro.prysm.orion.server.message.placeholder.UptimePlaceholder;
+import pro.prysm.orion.common.message.DefaultChatFormatter;
+import pro.prysm.orion.common.message.placeholder.UptimePlaceholder;
 import pro.prysm.orion.common.net.TCPListener;
 import pro.prysm.orion.common.protocol.PlayerInfoAction;
-import pro.prysm.orion.server.protocol.Protocol;
 import pro.prysm.orion.common.protocol.outgoing.play.PlayerInfo;
 import pro.prysm.orion.common.scheduler.TickService;
 import pro.prysm.orion.server.util.ExceptionHandler;
@@ -40,6 +43,7 @@ import pro.prysm.orion.server.world.DefaultVoidProvider;
 import pro.prysm.orion.server.world.LevelProvider;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.nio.file.Path;
 import java.util.*;
@@ -47,7 +51,6 @@ import java.util.*;
 @Getter
 public class Server implements pro.prysm.orion.api.Server, Listener {
     private final TCPListener listener;
-    private final Protocol protocol;
     private final CommandHandler commandHandler;
     private final PlaceholderService placeholderService;
     private final List<Player> players;
@@ -75,10 +78,12 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         Logger root = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
         root.setLevel(Level.valueOf(config.getString("log-level")));
 
-        protocol = new Protocol(this);
+        Orion.getProtocol().setAuth((onlineMode) ? new YggdrasilAuth(sessionServer) : new OfflineAuth());
+        loadSLP();
+
         commandHandler = new CommandHandler();
         players = new ArrayList<>();
-        placeholderService = new pro.prysm.orion.server.message.PlaceholderService();
+        placeholderService = new pro.prysm.orion.common.message.PlaceholderService();
         chatFormatter = new DefaultChatFormatter();
 
         listener = new TCPListener(
@@ -89,7 +94,6 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         Orion.getEventBus().subscribe(this);
         registerCommands();
         registerPlaceholders();
-
 
         OrionThreadFactory.singleThread("ExtensionLoader", () -> {
             moduleLoader = new ModuleLoader();
@@ -125,6 +129,23 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         }
     }
 
+    private void loadSLP() {
+        ServerListResponse slp = Orion.getProtocol().getSlp();
+        slp.getVersion().setProtocol(Protocol.PROTOCOL_NUMBER);
+
+        slp.getVersion().setName(name);
+        slp.setDescription(motdComponent);
+        slp.getPlayers().setMax(maxPlayers);
+        // TODO: load from server-icon.png if exists
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("prysm.png")) {
+            if (is == null)
+                return;
+            slp.setFavicon(ServerListResponse.generateFavicon(is));
+        } catch (IOException e) {
+            ExceptionHandler.error(e);
+        }
+    }
+
     private void registerCommands() {
         commandHandler.registerCommand(new HelpCommand());
         commandHandler.registerCommand(new ReloadCommand());
@@ -139,7 +160,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
     public void addPlayer(Player player) {
         players.add(player);
         if (!player.isHidden())
-            protocol.broadcastPacket(players, new PlayerInfo(PlayerInfoAction.ADD_PLAYER, List.of(player)));
+            Orion.getProtocol().broadcastPacket(players, new PlayerInfo(PlayerInfoAction.ADD_PLAYER, List.of(player)));
         ((pro.prysm.orion.common.net.Connection) player.getConnection()).sendPacket(new PlayerInfo(PlayerInfoAction.ADD_PLAYER, players.stream().filter(p -> !p.isHidden()).toList()));
     }
 
@@ -191,6 +212,6 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
     @EventHandler
     public void onReload(ReloadEvent event) {
         loadConfig();
-        protocol.reload(this);
+        loadSLP();
     }
 }
