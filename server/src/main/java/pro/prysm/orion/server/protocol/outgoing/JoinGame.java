@@ -1,14 +1,12 @@
-package pro.prysm.orion.common.protocol.outgoing.play;
+package pro.prysm.orion.server.protocol.outgoing;
 
 import lombok.Setter;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import pro.prysm.orion.api.Server;
 import pro.prysm.orion.api.entity.player.GameMode;
-import pro.prysm.orion.common.AbstractServer;
-import pro.prysm.orion.server.Orion;
-import pro.prysm.orion.server.Server;
 import pro.prysm.orion.common.net.PacketByteBuf;
 import pro.prysm.orion.common.protocol.outgoing.OutgoingPacket;
+import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.world.LevelProvider;
 import pro.prysm.orion.server.world.dimension.DimensionProvider;
 
@@ -40,7 +38,7 @@ public class JoinGame extends OutgoingPacket {
         super(0x26);
 
         // Set default values
-        AbstractServer server = AbstractServer.getServer();
+        Server server = Orion.getServer();
         LevelProvider level = server.getLevelProvider();
         DimensionProvider dimensionProvider = level.getDimensionProvider();
         dimensionCodec = dimensionProvider.getDimension();

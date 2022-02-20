@@ -1,4 +1,4 @@
-package pro.prysm.orion.common.protocol.outgoing.play;
+package pro.prysm.orion.server.protocol.outgoing;
 
 import lombok.Getter;
 import pro.prysm.orion.common.net.PacketByteBuf;
