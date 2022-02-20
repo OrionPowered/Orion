@@ -3,9 +3,8 @@ package pro.prysm.orion.server.protocol.outgoing;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import pro.prysm.orion.server.data.palette.PalettedContainer;
-import pro.prysm.orion.server.data.palette.PalettedContainer.Type;
 import pro.prysm.orion.common.net.PacketByteBuf;
+import pro.prysm.orion.common.palette.PalettedContainer;
 import pro.prysm.orion.common.protocol.outgoing.OutgoingPacket;
 import pro.prysm.orion.server.world.Chunk;
 import pro.prysm.orion.server.world.ChunkSection;
@@ -61,8 +60,8 @@ public class ChunkWithLight extends OutgoingPacket {
         PacketByteBuf paletteBuf = new PacketByteBuf(Unpooled.buffer());
         chunk.getSections().forEach(section -> {
             paletteBuf.writeShort(section.getBlockCount());
-            PalettedContainer blockContainer = PalettedContainer.from(Type.BLOCK_STATES, section.getBitsPerBlock(), generateBlockPaletteData(section), section.getBlockStates());
-            PalettedContainer biomeContainer = PalettedContainer.from(Type.BIOME, section.getBitsPerBiome(), generateBiomePaletteData(section), section.getBiomes());
+            PalettedContainer blockContainer = PalettedContainer.from(PalettedContainer.Type.BLOCK_STATES, section.getBitsPerBlock(), generateBlockPaletteData(section), section.getBlockStates());
+            PalettedContainer biomeContainer = PalettedContainer.from(PalettedContainer.Type.BIOME, section.getBitsPerBiome(), generateBiomePaletteData(section), section.getBiomes());
             blockContainer.write(paletteBuf);
             biomeContainer.write(paletteBuf);
         });
