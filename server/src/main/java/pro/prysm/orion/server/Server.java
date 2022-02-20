@@ -31,7 +31,7 @@ import pro.prysm.orion.server.command.SendPacketCommand;
 import pro.prysm.orion.server.command.UptimeCommand;
 import pro.prysm.orion.common.extension.module.ModuleLoader;
 import pro.prysm.orion.common.extension.plugin.PluginLoader;
-import pro.prysm.orion.common.message.DefaultChatFormatter;
+import pro.prysm.orion.server.message.DefaultChatFormatter;
 import pro.prysm.orion.common.message.placeholder.UptimePlaceholder;
 import pro.prysm.orion.common.net.TCPListener;
 import pro.prysm.orion.common.protocol.PlayerInfoAction;
