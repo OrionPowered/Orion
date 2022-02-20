@@ -1,7 +1,7 @@
-package pro.prysm.orion.server.message;
+package pro.prysm.orion.common.message;
 
 import pro.prysm.orion.api.message.Placeholder;
-import pro.prysm.orion.server.util.ExceptionHandler;
+import pro.prysm.orion.common.OrionExceptionHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +39,7 @@ public class PlaceholderService implements pro.prysm.orion.api.message.Placehold
                         String res = ((Callable<?>) replacement).call().toString();
                         message = message.replace(matcher.group(), res);
                     } catch (Exception e) {
-                        ExceptionHandler.error("Failed to invoke placeholder method", e);
+                        OrionExceptionHandler.error("Failed to invoke placeholder method", e);
                     }
                 }
             }
