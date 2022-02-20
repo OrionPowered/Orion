@@ -2,16 +2,22 @@ package pro.prysm.orion.common;
 
 import ch.qos.logback.classic.Logger;
 import pro.prysm.orion.common.event.EventBus;
+import pro.prysm.orion.common.protocol.Protocol;
 import pro.prysm.orion.common.scheduler.OrionScheduler;
 
 public abstract class AbstractOrion {
     protected static final long startupTime = System.currentTimeMillis();
     protected static Logger logger;
+    protected static Protocol protocol;
     protected static EventBus eventBus;
     protected static OrionScheduler scheduler;
 
     public static Logger getLogger() {
         return logger;
+    }
+
+    public static Protocol getProtocol() {
+        return protocol;
     }
 
     public static EventBus getEventBus() {
