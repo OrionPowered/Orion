@@ -9,8 +9,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.net.PayloadBuffer;
-import pro.prysm.orion.server.util.ExceptionHandler;
-
+import pro.prysm.orion.common.OrionExceptionHandler;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -280,7 +279,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf implements PayloadBuffe
         try {
             BinaryTagIO.writer().write(tag, out);
         } catch (IOException e) {
-            ExceptionHandler.error(e);
+            OrionExceptionHandler.error(e);
         }
         buf.writeBytes(stream.toByteArray());
     }
