@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Logger;
 import org.slf4j.LoggerFactory;
 import pro.prysm.orion.common.AbstractOrion;
 import pro.prysm.orion.common.event.EventBus;
+import pro.prysm.orion.common.protocol.Protocol;
 import pro.prysm.orion.common.scheduler.OrionScheduler;
 
 public class Orion extends AbstractOrion {
@@ -14,6 +15,7 @@ public class Orion extends AbstractOrion {
         logger.info("Starting Orion...");
         scheduler = new OrionScheduler();
         eventBus = new EventBus();
+        protocol = new Protocol();
         server = new Server();
     }
 
