@@ -4,7 +4,6 @@ import lombok.Getter;
 import pro.prysm.orion.common.net.Connection;
 import pro.prysm.orion.common.net.PacketByteBuf;
 import pro.prysm.orion.common.protocol.Packet;
-import pro.prysm.orion.server.protocol.Packet;
 
 @Getter
 public abstract class IncomingPacket extends Packet {
