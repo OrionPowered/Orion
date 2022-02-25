@@ -1,4 +1,4 @@
-package pro.prysm.orion.common.protocol.outgoing.play;
+package pro.prysm.orion.server.protocol.outgoing;
 
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.data.Velocity;

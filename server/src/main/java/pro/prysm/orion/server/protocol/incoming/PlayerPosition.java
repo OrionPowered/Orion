@@ -1,4 +1,4 @@
-package pro.prysm.orion.common.protocol.incoming.play;
+package pro.prysm.orion.server.protocol.incoming;
 
 import lombok.Getter;
 import pro.prysm.orion.common.net.Connection;
@@ -6,18 +6,19 @@ import pro.prysm.orion.common.net.PacketByteBuf;
 import pro.prysm.orion.common.protocol.incoming.IncomingPacket;
 
 @Getter
-public class PlayerRotation extends IncomingPacket {
-    private float yaw, pitch;
+public class PlayerPosition extends IncomingPacket {
+    private double x, y, z;
     private boolean onGround;
 
-    public PlayerRotation(Connection connection) {
+    public PlayerPosition(Connection connection) {
         super(connection);
     }
 
     @Override
     public void read(PacketByteBuf buf) {
-        yaw = buf.readFloat();
-        pitch = buf.readFloat();
+        x = buf.readDouble();
+        y = buf.readDouble();
+        z = buf.readDouble();
         onGround = buf.readBoolean();
         connection.getHandler().handle(this);
     }

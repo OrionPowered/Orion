@@ -47,6 +47,7 @@ public class PacketRegistry {
             case LOGIN -> incomingLogin.put(id, packet);
             case PLAY -> incomingPlay.put(id, packet);
         }
+        return this;
     }
 }
 

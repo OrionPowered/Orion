@@ -8,6 +8,10 @@ import pro.prysm.orion.common.protocol.incoming.login.LoginStart;
 import pro.prysm.orion.common.protocol.incoming.play.*;
 import pro.prysm.orion.common.protocol.incoming.status.Ping;
 import pro.prysm.orion.common.protocol.incoming.status.Request;
+import pro.prysm.orion.server.protocol.incoming.PlayerPosition;
+import pro.prysm.orion.server.protocol.incoming.PlayerPositionAndRotation;
+import pro.prysm.orion.server.protocol.incoming.PlayerRotation;
+import pro.prysm.orion.server.protocol.incoming.TeleportConfirm;
 
 import java.util.HashMap;
 
