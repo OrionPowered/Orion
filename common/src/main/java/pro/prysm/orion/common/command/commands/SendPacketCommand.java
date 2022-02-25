@@ -1,5 +1,6 @@
 package pro.prysm.orion.common.command.commands;
 
+import pro.prysm.orion.common.AbstractOrion;
 import pro.prysm.orion.common.command.Command;
 import pro.prysm.orion.common.net.pipeline.ChannelHandler;
 
@@ -20,6 +21,6 @@ public class SendPacketCommand extends Command {
     public void execute(String[] args, String name) {
         if (args.length > 2) {
 
-        } else Orion.getLogger().warn("sendpacket <PacketID> <PacketParameters <DataType::Value>>");
+        } else AbstractOrion.getLogger().warn("sendpacket <PacketID> <PacketParameters <DataType::Value>>");
     }
 }
