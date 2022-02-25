@@ -6,9 +6,9 @@ import pro.prysm.orion.common.protocol.Packet;
 
 @Getter
 public abstract class OutgoingPacket extends Packet {
-
+    protected final int id;
     protected OutgoingPacket(int id) {
-        super(id);
+        this.id = id;
     }
 
     public void writeId(PacketByteBuf buf) {
