@@ -6,6 +6,7 @@ import pro.prysm.orion.common.AbstractOrion;
 import pro.prysm.orion.common.event.EventBus;
 import pro.prysm.orion.common.protocol.Protocol;
 import pro.prysm.orion.common.scheduler.OrionScheduler;
+import pro.prysm.orion.server.protocol.handler.HandshakeHandler;
 
 public class Orion extends AbstractOrion {
     private static Server server;
@@ -16,6 +17,7 @@ public class Orion extends AbstractOrion {
         scheduler = new OrionScheduler();
         eventBus = new EventBus();
         protocol = new Protocol();
+        protocol.setDefaultHandlerClass(HandshakeHandler.class);
         server = new Server();
         IServer = server;
     }

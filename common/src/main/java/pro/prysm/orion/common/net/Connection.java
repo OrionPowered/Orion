@@ -19,7 +19,6 @@ import java.net.SocketAddress;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 @EqualsAndHashCode
 public class Connection implements pro.prysm.orion.api.net.Connection {
     private final ChannelHandlerContext ctx;
@@ -28,6 +27,11 @@ public class Connection implements pro.prysm.orion.api.net.Connection {
     private byte[] sharedSecret;
     private byte[] verifyToken;
     private boolean active = true;
+
+    public Connection(ChannelHandlerContext ctx) {
+        this.ctx = ctx;
+        this.handler = AbstractOrion.getProtocol().getDefaultHandler(this);
+    }
 
     public SocketAddress getAddress() {
         return ctx.channel().remoteAddress();
