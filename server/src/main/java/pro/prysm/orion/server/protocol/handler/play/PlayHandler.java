@@ -215,7 +215,7 @@ public class PlayHandler extends AbstractHandler {
     @Override
     public void handle(ChatMessageIn packet) {
         Server server = Orion.getServer();
-        Player sender = server.getPlayer(packet.getConnection()).orElseThrow();
+        Player sender = server.getPlayer(connection).orElseThrow();
         Component message = packet.getMessage();
         // TODO: post chat event
         server.broadcast(sender, message);
