@@ -1,6 +1,6 @@
 package pro.prysm.orion.common.scheduler;
 
-import pro.prysm.orion.server.util.OrionThreadFactory;
+import pro.prysm.orion.common.OrionThreadFactory;
 
 import java.util.Map;
 import java.util.UUID;
