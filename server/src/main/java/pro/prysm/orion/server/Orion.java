@@ -17,6 +17,7 @@ public class Orion extends AbstractOrion {
         eventBus = new EventBus();
         protocol = new Protocol();
         server = new Server();
+        IServer = server;
     }
 
     public static Server getServer() {
