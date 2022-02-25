@@ -9,11 +9,13 @@ import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.common.AbstractOrion;
 import pro.prysm.orion.common.net.Connection;
 import pro.prysm.orion.common.net.PacketByteBuf;
+import pro.prysm.orion.common.protocol.Handler;
 import pro.prysm.orion.common.protocol.Protocol;
 import pro.prysm.orion.common.protocol.incoming.IncomingPacket;
 
 import pro.prysm.orion.common.event.events.IncomingPacketEvent;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -35,8 +37,13 @@ public class PacketDecoder extends ByteToMessageDecoder {
             AbstractOrion.getLogger().trace("Received packet with ID 0x{} and state: {}", Integer.toHexString(id).toUpperCase(), state);
             Class<? extends IncomingPacket> packetClass = protocol.getPacketRegistry().getIncoming(state, id);
             if (packetClass != null && packetClass != IncomingPacket.class) {
-                IncomingPacket packet = (IncomingPacket) packetClass.getConstructors()[0].newInstance(connection);
+                IncomingPacket packet = (IncomingPacket) packetClass.getConstructors()[0].newInstance();
                 packet.read(buf);
+
+                Handler handler = connection.getHandler();
+                Method handleMethod = handler.getClass().getMethod("handle", packetClass);
+                handleMethod.invoke(handler, packet);
+
                 AbstractOrion.getEventBus().post(new IncomingPacketEvent(), packet);
             }
         } else {

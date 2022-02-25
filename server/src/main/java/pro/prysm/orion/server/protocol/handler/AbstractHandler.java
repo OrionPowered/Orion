@@ -37,9 +37,6 @@ public abstract class AbstractHandler implements Handler {
     public void onDisconnect() {
     }
 
-    public void handle(IncomingPacket packet) {
-    }
-
     public void handle(Handshake packet) {
     }
 

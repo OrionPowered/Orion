@@ -7,11 +7,5 @@ import pro.prysm.orion.common.protocol.Packet;
 
 @Getter
 public abstract class IncomingPacket extends Packet {
-    protected Connection connection;
-
-    public IncomingPacket(Connection connection) {
-        this.connection = connection;
-    }
-
     public abstract void read(PacketByteBuf buf);
 }

@@ -1,7 +1,6 @@
 package pro.prysm.orion.common.protocol.incoming.play;
 
 import lombok.Getter;
-import pro.prysm.orion.common.net.Connection;
 import pro.prysm.orion.common.net.PacketByteBuf;
 import pro.prysm.orion.common.protocol.incoming.IncomingPacket;
 
@@ -16,10 +15,6 @@ public class ClientSettings extends IncomingPacket {
     private boolean textFiltering;
     private boolean showInList;
 
-    public ClientSettings(Connection connection) {
-        super(connection);
-    }
-
     @Override
     public void read(PacketByteBuf buf) {
         locale = buf.readString();
@@ -30,6 +25,5 @@ public class ClientSettings extends IncomingPacket {
         mainHand = buf.readVarInt();
         textFiltering = buf.readBoolean();
         showInList = buf.readBoolean();
-        connection.getHandler().handle(this);
     }
 }
