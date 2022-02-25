@@ -2,9 +2,9 @@ package pro.prysm.orion.common.extension.plugin;
 
 import pro.prysm.orion.api.extension.AbstractExtension;
 import pro.prysm.orion.api.extension.plugin.JavaPlugin;
+import pro.prysm.orion.common.AbstractOrion;
+import pro.prysm.orion.common.OrionExceptionHandler;
 import pro.prysm.orion.common.extension.AbstractExtensionLoader;
-import pro.prysm.orion.server.Orion;
-import pro.prysm.orion.server.util.ExceptionHandler;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -30,18 +30,18 @@ public class PluginLoader extends AbstractExtensionLoader {
             serverF = JavaPlugin.class.getDeclaredField("server");
             serverF.setAccessible(true);
         } catch (Exception e) {
-            ExceptionHandler.error(e);
+            OrionExceptionHandler.error(e);
         }
 
     }
 
     @Override
     public void initializeExtension(AbstractExtension extension) throws IllegalAccessException {
-        serverF.set(extension, Orion.getServer());
+        serverF.set(extension, AbstractOrion.getIServer());
     }
 
     @Override
     public void onFinish() {
-        Orion.getLogger().info("Loaded {} plugin(s)", extensions.size());
+        AbstractOrion.getLogger().info("Loaded {} plugin(s)", extensions.size());
     }
 }

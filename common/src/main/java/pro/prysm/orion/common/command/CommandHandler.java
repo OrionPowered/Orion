@@ -1,6 +1,6 @@
 package pro.prysm.orion.common.command;
 
-import pro.prysm.orion.server.Orion;
+import pro.prysm.orion.common.AbstractOrion;
 
 import java.util.HashMap;
 
@@ -29,7 +29,7 @@ public class CommandHandler {
                 Command command = commands.get(name);
                 command.execute(args, name);
             } else {
-                Orion.getLogger().warn("Unknown command. Type \"/help\" for help.");
+                AbstractOrion.getLogger().warn("Unknown command. Type \"/help\" for help.");
             }
         }
     }
