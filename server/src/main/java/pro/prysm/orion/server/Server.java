@@ -95,15 +95,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
         registerCommands();
         registerPlaceholders();
 
-        OrionThreadFactory.singleThread("ExtensionLoader", () -> {
-            moduleLoader = new ModuleLoader();
-            pluginLoader = new PluginLoader();
-
-            if (levelProvider == null) levelProvider = new DefaultVoidProvider();
-            else Orion.getLogger().info("Using {} for level(s)", levelProvider.getClass().getName());
-        }).start();
-
-        OrionThreadFactory.singleThread("Listener", () -> {
+        Thread listenerThread = OrionThreadFactory.singleThread("Listener", () -> {
             try {
                 new TickService(); // Start ticking
                 new KeepAliveService();
@@ -111,6 +103,16 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
             } catch (InterruptedException e) {
                 ExceptionHandler.error(e);
             }
+        });
+
+        OrionThreadFactory.singleThread("ExtensionLoader", () -> {
+            moduleLoader = new ModuleLoader();
+            pluginLoader = new PluginLoader();
+
+            if (levelProvider == null) levelProvider = new DefaultVoidProvider();
+            else Orion.getLogger().info("Using {} for level(s)", levelProvider.getClass().getName());
+
+            listenerThread.start(); // Start listening AFTER all extensions have been loaded
         }).start();
     }
 
