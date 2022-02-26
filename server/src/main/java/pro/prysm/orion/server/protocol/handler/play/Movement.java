@@ -18,7 +18,7 @@ public class Movement {
 
         PlayerMoveEvent event = new PlayerMoveEvent(player, to, player.getLocation());
         Orion.getEventBus().post(event);
-        if (!event.isCancelled()) {
+        if (!player.getWorld().isVoid() && !event.isCancelled()) {
             if (!to.isSameChunk(from)) {
                 player.getConnection().sendPacket(new UpdateViewPosition(to.getChunkX(), to.getChunkZ()));
                 ((PlayHandler) player.getConnection().getHandler()).sendChunks();
