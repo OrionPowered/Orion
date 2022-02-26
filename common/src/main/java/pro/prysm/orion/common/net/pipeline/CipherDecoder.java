@@ -33,6 +33,15 @@ import java.util.List;
 public class CipherDecoder extends MessageToMessageDecoder<ByteBuf> {
     private final VelocityCipher cipher;
 
+    /**
+     * Decode from one message to an other. This method will be called for each written message that can be handled
+     * by this decoder.
+     *
+     * @param ctx the {@link ChannelHandlerContext} which this {@link MessageToMessageDecoder} belongs to
+     * @param buf the message to decode to another one
+     * @param list the {@link List} to which decoded messages should be added
+     * @throws Exception is thrown if an error occurs
+     */
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> list) {
         ByteBuf compatible = MoreByteBufUtils.ensureCompatible(ctx.alloc(), cipher, buf).slice();
