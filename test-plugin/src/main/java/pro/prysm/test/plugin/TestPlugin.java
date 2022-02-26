@@ -16,6 +16,8 @@ public class TestPlugin extends JavaPlugin {
         getEventBus().subscribe(new ServerReadyListener());
         getEventBus().subscribe(new PlayerJoin());
         getEventBus().subscribe(new PlayerMove());
+        ExampleChatFormatter formatter = new ExampleChatFormatter(server);
+        server.setChatFormatter(formatter);
     }
 
     @Override
