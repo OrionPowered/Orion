@@ -126,6 +126,8 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
             viewDistance = config.getInt("world.render-distance");
             simulationDistance = config.getInt("world.simulation-distance");
             motdComponent = new Message(config.getString("motd")).toComponent();
+
+            if (!onlineMode) Orion.getLogger().warn("Orion is running in offline mode. Players will not be authenticated!");
         } catch (IOException e) {
             ExceptionHandler.error("Failed to load settings.json", e);
         }
