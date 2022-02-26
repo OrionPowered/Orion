@@ -21,6 +21,8 @@ import pro.prysm.orion.api.message.PlaceholderService;
 import pro.prysm.orion.api.net.Connection;
 import pro.prysm.orion.api.protocol.status.ServerListResponse;
 import pro.prysm.orion.api.util.CollectorUtil;
+import pro.prysm.orion.common.OrionExceptionHandler;
+import pro.prysm.orion.common.OrionThreadFactory;
 import pro.prysm.orion.common.command.CommandHandler;
 import pro.prysm.orion.common.command.commands.SendPacketCommand;
 import pro.prysm.orion.common.protocol.Protocol;
@@ -37,8 +39,6 @@ import pro.prysm.orion.common.net.TCPListener;
 import pro.prysm.orion.common.protocol.PlayerInfoAction;
 import pro.prysm.orion.common.protocol.outgoing.play.PlayerInfo;
 import pro.prysm.orion.common.scheduler.TickService;
-import pro.prysm.orion.server.util.ExceptionHandler;
-import pro.prysm.orion.server.util.OrionThreadFactory;
 import pro.prysm.orion.server.world.DefaultVoidProvider;
 import pro.prysm.orion.server.world.LevelProvider;
 
@@ -101,7 +101,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
                 new KeepAliveService();
                 listener.listen(); // Start listening
             } catch (InterruptedException e) {
-                ExceptionHandler.error(e);
+                OrionExceptionHandler.error(e);
             }
         });
 
@@ -129,7 +129,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
 
             if (!onlineMode) Orion.getLogger().warn("Orion is running in offline mode. Players will not be authenticated!");
         } catch (IOException e) {
-            ExceptionHandler.error("Failed to load settings.json", e);
+            OrionExceptionHandler.error("Failed to load settings.json", e);
         }
     }
 
@@ -146,7 +146,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
                 return;
             slp.setFavicon(ServerListResponse.generateFavicon(is));
         } catch (IOException e) {
-            ExceptionHandler.error(e);
+            OrionExceptionHandler.error(e);
         }
     }
 

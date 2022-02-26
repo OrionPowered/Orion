@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import pro.prysm.orion.api.entity.player.GameProfile;
 import pro.prysm.orion.api.protocol.PacketState;
+import pro.prysm.orion.common.OrionExceptionHandler;
 import pro.prysm.orion.common.protocol.CipherSuite;
 import pro.prysm.orion.common.protocol.Protocol;
 import pro.prysm.orion.server.Orion;
@@ -13,7 +14,6 @@ import pro.prysm.orion.common.net.Connection;
 import pro.prysm.orion.common.protocol.incoming.login.EncryptionResponse;
 import pro.prysm.orion.common.protocol.incoming.login.LoginStart;
 import pro.prysm.orion.common.protocol.outgoing.login.LoginSuccess;
-import pro.prysm.orion.server.util.ExceptionHandler;
 import java.security.GeneralSecurityException;
 
 
@@ -60,7 +60,7 @@ public class LoginHandler extends AbstractHandler {
             cipher.startEncryption(connection, sharedSecret);
             Orion.getLogger().debug("Started encryption for {}", connection.getAddress());
         } catch (GeneralSecurityException e) {
-            ExceptionHandler.error("Failed to enable encryption for " +  connection.getAddress(), e);
+            OrionExceptionHandler.error("Failed to enable encryption for " +  connection.getAddress(), e);
         }
 
         // If the above executes properly, we can now authenticate the user with the Mojang Session service
