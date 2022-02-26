@@ -68,7 +68,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
     private String sessionServer;
     private boolean onlineMode;
     private int maxPlayers;
-    private int renderDistance;
+    private int viewDistance;
     private int simulationDistance;
     private Component motdComponent;
 
@@ -123,7 +123,7 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
             sessionServer = config.getStringOrDefault("session-server", "https://sessionserver.mojang.com");
             onlineMode = config.getBoolean("online-mode");
             maxPlayers = config.getInt("max-players");
-            renderDistance = config.getInt("world.render-distance");
+            viewDistance = config.getInt("world.render-distance");
             simulationDistance = config.getInt("world.simulation-distance");
             motdComponent = new Message(config.getString("motd")).toComponent();
         } catch (IOException e) {

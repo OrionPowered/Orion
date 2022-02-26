@@ -44,7 +44,7 @@ public class JoinGame extends OutgoingPacket {
         dimensionCodec = dimensionProvider.getDimension();
         worlds = level.getWorldNames();
         maxPlayers = server.getMaxPlayers();
-        viewDistance = server.getRenderDistance();
+        viewDistance = server.getViewDistance();
         simulationDistance = server.getSimulationDistance();
         reducedDebugInfo = false;
         respawnScreen = true;

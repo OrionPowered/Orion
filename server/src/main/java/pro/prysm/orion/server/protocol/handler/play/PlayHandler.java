@@ -47,7 +47,7 @@ public class PlayHandler extends AbstractHandler {
     }
 
     public void updateViewDistance(int distance) {
-        this.viewDistance = Math.min(distance, Orion.getServer().getRenderDistance());
+        this.viewDistance = Math.min(distance, Orion.getServer().getViewDistance());
     }
 
     private void joinGame() {
