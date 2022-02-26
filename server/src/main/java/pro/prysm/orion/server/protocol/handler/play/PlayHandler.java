@@ -52,7 +52,6 @@ public class PlayHandler extends AbstractHandler {
 
     private void joinGame() {
         Server server = Orion.getServer();
-        Protocol protocol = Orion.getProtocol();
         LevelProvider level = server.getLevelProvider();
         World world = level.getWorldForPlayer(player.uuid());
         player.setWorld(world);
