@@ -34,6 +34,7 @@ import java.util.Optional;
 public class PlayHandler extends AbstractHandler {
     private final ImplPlayer player;
     private final Movement movement;
+    private int viewDistance;
     private int teleportId; // TODO: Implement checking of teleport ids
     private long lastPingTime;
     private long keepAliveId;
@@ -43,6 +44,10 @@ public class PlayHandler extends AbstractHandler {
         this.player = player;
         movement = new Movement(player);
         joinGame();
+    }
+
+    public void updateViewDistance(int distance) {
+        this.viewDistance = Math.min(distance, Orion.getServer().getRenderDistance());
     }
 
     private void joinGame() {
@@ -116,11 +121,10 @@ public class PlayHandler extends AbstractHandler {
 
         int centerX = loc.getChunkX();
         int centerZ = loc.getChunkZ();
-        int radius = Math.min(player.getSettings().getViewDistance(), Orion.getServer().getRenderDistance());
 
-        for (int x = centerX - radius; x <= centerX; x++) {
-            for (int z = centerZ - radius; z <= centerZ; z++) {
-                if ((x - centerX) * (x - centerX) + (z - centerZ) * (z - centerZ) <= radius * radius) {
+        for (int x = centerX - viewDistance; x <= centerX; x++) {
+            for (int z = centerZ - viewDistance; z <= centerZ; z++) {
+                if ((x - centerX) * (x - centerX) + (z - centerZ) * (z - centerZ) <= viewDistance * viewDistance) {
                     int chunkX = centerX - (x - centerX);
                     int chunkZ = centerZ - (z - centerZ);
                     player.sendChunkAsync(x, z);
@@ -149,6 +153,7 @@ public class PlayHandler extends AbstractHandler {
                 packet.getSkinParts(),
                 (packet.getMainHand() == 0) ? Hand.LEFT : Hand.RIGHT
         ));
+        updateViewDistance(packet.getViewDistance());
 
         // Once we know the player's settings, we can let them join.
         finalizeJoin();
