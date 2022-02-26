@@ -10,15 +10,20 @@ import pro.prysm.orion.api.entity.player.Player;
 import pro.prysm.orion.api.event.event.IncomingPluginMessageEvent;
 import pro.prysm.orion.api.event.event.PlayerJoinEvent;
 import pro.prysm.orion.api.message.Message;
+import pro.prysm.orion.common.protocol.Protocol;
+import pro.prysm.orion.common.protocol.incoming.play.*;
+import pro.prysm.orion.common.protocol.outgoing.play.*;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
-import pro.prysm.orion.server.net.PacketByteBuf;
-import pro.prysm.orion.server.protocol.PlayerInfoAction;
-import pro.prysm.orion.server.protocol.Protocol;
-import pro.prysm.orion.server.protocol.handler.ProtocolHandler;
-import pro.prysm.orion.server.protocol.incoming.play.*;
-import pro.prysm.orion.server.protocol.outgoing.play.*;
+import pro.prysm.orion.common.net.PacketByteBuf;
+import pro.prysm.orion.common.protocol.PlayerInfoAction;
+import pro.prysm.orion.server.protocol.handler.AbstractHandler;
+import pro.prysm.orion.server.protocol.incoming.PlayerPosition;
+import pro.prysm.orion.server.protocol.incoming.PlayerPositionAndRotation;
+import pro.prysm.orion.server.protocol.incoming.PlayerRotation;
+import pro.prysm.orion.server.protocol.incoming.TeleportConfirm;
+import pro.prysm.orion.server.protocol.outgoing.JoinGame;
 import pro.prysm.orion.server.world.LevelProvider;
 import pro.prysm.orion.server.world.World;
 
@@ -26,7 +31,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
-public class PlayHandler extends ProtocolHandler {
+public class PlayHandler extends AbstractHandler {
     private final ImplPlayer player;
     private final Movement movement;
     private int teleportId; // TODO: Implement checking of teleport ids
@@ -42,7 +47,7 @@ public class PlayHandler extends ProtocolHandler {
 
     private void joinGame() {
         Server server = Orion.getServer();
-        Protocol protocol = server.getProtocol();
+        Protocol protocol = Orion.getProtocol();
         LevelProvider level = server.getLevelProvider();
         World world = level.getWorldForPlayer(player.uuid());
         player.setWorld(world);
@@ -67,7 +72,7 @@ public class PlayHandler extends ProtocolHandler {
         }
 
         connection.sendPacket(joinGame);
-        connection.sendPacket(new PluginMessageOut("minecraft:brand", protocol.getSlpData().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
+        connection.sendPacket(new PluginMessageOut("minecraft:brand", Orion.getProtocol().getSlp().getVersion().getName().getBytes(StandardCharsets.UTF_8)));
     }
 
     private void finalizeJoin() {
@@ -210,7 +215,7 @@ public class PlayHandler extends ProtocolHandler {
     @Override
     public void handle(ChatMessageIn packet) {
         Server server = Orion.getServer();
-        Player sender = server.getPlayer(packet.getConnection()).orElseThrow();
+        Player sender = server.getPlayer(connection).orElseThrow();
         Component message = packet.getMessage();
         // TODO: post chat event
         server.broadcast(sender, message);

@@ -1,7 +1,7 @@
 <configuration>
     <property name="HOME_LOG" value="logs/orion.log"/>
-    <conversionRule conversionWord="color" converterClass="pro.prysm.orion.server.util.ColorLoggerConverter"/>
-    <conversionRule conversionWord="reset" converterClass="pro.prysm.orion.server.util.ResetLoggerConverter"/>
+    <conversionRule conversionWord="color" converterClass="pro.prysm.orion.common.logger.ColorLoggerConverter"/>
+    <conversionRule conversionWord="reset" converterClass="pro.prysm.orion.common.logger.ResetLoggerConverter"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender" withJansi="true">
         <!-- encoders are assigned the type

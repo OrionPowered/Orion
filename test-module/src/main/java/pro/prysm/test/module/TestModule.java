@@ -1,6 +1,6 @@
 package pro.prysm.test.module;
 
-import pro.prysm.orion.server.extension.module.JavaModule;
+import pro.prysm.orion.common.extension.module.JavaModule;
 
 public class TestModule extends JavaModule {
     @Override

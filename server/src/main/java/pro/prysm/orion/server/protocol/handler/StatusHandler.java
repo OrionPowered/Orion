@@ -1,12 +1,13 @@
 package pro.prysm.orion.server.protocol.handler;
 
+import pro.prysm.orion.common.protocol.outgoing.status.SLPResponse;
 import pro.prysm.orion.server.Orion;
-import pro.prysm.orion.server.net.Connection;
-import pro.prysm.orion.server.protocol.incoming.status.Ping;
-import pro.prysm.orion.server.protocol.incoming.status.Request;
-import pro.prysm.orion.server.protocol.outgoing.status.Pong;
+import pro.prysm.orion.common.net.Connection;
+import pro.prysm.orion.common.protocol.incoming.status.Ping;
+import pro.prysm.orion.common.protocol.incoming.status.Request;
+import pro.prysm.orion.common.protocol.outgoing.status.Pong;
 
-public class StatusHandler extends ProtocolHandler {
+public class StatusHandler extends AbstractHandler {
     public StatusHandler(Connection connection) {
         super(connection);
     }
@@ -14,7 +15,7 @@ public class StatusHandler extends ProtocolHandler {
     @Override
     public void handle(Request packet) {
         Orion.getLogger().debug("{} has pinged", connection.getAddress());
-        connection.sendPacket(Orion.getServer().getProtocol().generateSLP());
+        connection.sendPacket(new SLPResponse(Orion.getProtocol().getSlp()));
     }
 
     @Override
