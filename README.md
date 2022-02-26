@@ -1,4 +1,5 @@
 # Orion
+### [![PrysmNetwork](https://circleci.com/gh/PrysmNetwork/Orion.svg?style=svg)]()
 Orion is a 1.18 (757) Minecraft Server and Proxy implementation written to be the absolute bare-bones to run a network, 
 but extendable for maximum customization.
 
