@@ -18,6 +18,10 @@ public class ModuleLoader extends AbstractExtensionLoader {
     }
 
     @Override
+    protected void loadFields() throws NoSuchFieldException {
+    }
+
+    @Override
     public void initializeExtension(AbstractExtension extension) throws IllegalAccessException {
         // TODO: let modules on server set levels
         // if (LevelProvider.class.isAssignableFrom(extension.getClass())) {

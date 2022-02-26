@@ -47,6 +47,8 @@ public abstract class AbstractExtensionLoader extends AbstractClassLoader {
 
             eventBusField = AbstractExtension.class.getDeclaredField("eventBus");
             eventBusField.setAccessible(true);
+
+            loadFields();
         } catch (NoSuchFieldException e) {
             OrionExceptionHandler.error(e);
         }
@@ -104,6 +106,8 @@ public abstract class AbstractExtensionLoader extends AbstractClassLoader {
             onFinish();
         }
     }
+
+    protected abstract void loadFields() throws NoSuchFieldException;
 
     public abstract void initializeExtension(AbstractExtension extension) throws IllegalAccessException;
 

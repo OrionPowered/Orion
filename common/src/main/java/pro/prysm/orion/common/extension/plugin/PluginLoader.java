@@ -25,14 +25,12 @@ public class PluginLoader extends AbstractExtensionLoader {
                 new File("./plugins"),
                 "plugin.json"
         );
+    }
 
-        try {
-            serverF = JavaPlugin.class.getDeclaredField("server");
-            serverF.setAccessible(true);
-        } catch (Exception e) {
-            OrionExceptionHandler.error(e);
-        }
-
+    @Override
+    protected void loadFields() throws NoSuchFieldException {
+        serverF = JavaPlugin.class.getDeclaredField("server");
+        serverF.setAccessible(true);
     }
 
     @Override
