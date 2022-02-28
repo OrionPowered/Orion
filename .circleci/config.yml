@@ -14,7 +14,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "server/build.gradle.kts" }}dV
+            - v1-dependencies-{{ checksum "server/build.gradle.kts" }}
       - run:
           name: "Testing"
           command: gradle test
