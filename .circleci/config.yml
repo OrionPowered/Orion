@@ -3,10 +3,10 @@ executors:
   main:
     docker:
       - image: asobiek/cimg-openjdk-rust:jdk-17.0.2-rust-1.59
-      working_directory: ~/orion
-      environment:
-        JVM_OPTS: -Xmx3200m
-        TERM: dumb
+    working_directory: ~/orion
+    environment:
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
 jobs:
   test:
     executor: main
