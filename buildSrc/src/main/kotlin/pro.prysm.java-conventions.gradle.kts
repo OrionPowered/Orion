@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "pro.prysm"
-version = "1.0-SNAPSHOT"
+version = "1.18-SNAPSHOT"
 
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
@@ -37,6 +37,12 @@ tasks {
     "javadoc"(Javadoc::class) {
         dependsOn(delombok)
         setSource(delombok)
+    }
+}
+
+tasks.register("version"){
+    doLast {
+        println(version)
     }
 }
 
