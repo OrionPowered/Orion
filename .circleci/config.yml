@@ -1,46 +1,51 @@
-# Java Gradle CircleCI 2.0 configuration file
-# See: https://circleci.com/docs/2.0/language-java/
 version: 2
-
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
-jobs:
-  build:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+executors:
+  main:
     docker:
-      # specify the version you desire here
-      - image: cimg/openjdk:17.0.2
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    working_directory: ~/repo
-
-    environment:
-      # Customize the JVM maximum heap limit
-      JVM_OPTS: -Xmx3200m
-      TERM: dumb
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: asobiek/cimg-openjdk-rust:jdk-17.0.2-rust-1.59
+      working_directory: ~/orion
+      environment:
+        JVM_OPTS: -Xmx3200m
+        TERM: dumb
+jobs:
+  test:
+    executor: main
     steps:
       - checkout
-
-      # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run: gradle dependencies
-
+            - v1-dependencies-{{ checksum "server/build.gradle.kts" }}dV
+      - run:
+          name: "Testing"
+          command: gradle test
       - save_cache:
           paths:
             - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
-
-      # run tests!
-      - run: gradle test
+          key: v1-dependencies-{{ checksum "server/build.gradle.kts" }}
+  build:
+    filters:
+      branches:
+        only:
+          - main
+    executor: main
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "server/build.gradle.kts" }}d
+      - run:
+          name: "Setup Environment"
+          command: mkdir -p /tmp/artifacts && echo "export ORION_VERSION=$(gradle --quiet :orion-server:version)" >> $BASH_ENV
+      # - run: gradle test
+      - run: |
+          gradle :orion-api:build
+          cp api/build/libs/orion-api-$ORION_VERSION-shaded.jar /tmp/artifacts/orion-api-$ORION_VERSION-${CIRCLE_BUILD_NUM:="UNKNOWN"}.jar
+      - run: |
+          gradle :orion-server:build
+          cp server/build/libs/orion-server-$ORION_VERSION-shaded.jar /tmp/artifacts/orion-server-$ORION_VERSION-${CIRCLE_BUILD_NUM:="UNKNOWN"}.jar
+      - store_artifacts:
+          path: /tmp/artifacts
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "server/build.gradle.kts" }}
