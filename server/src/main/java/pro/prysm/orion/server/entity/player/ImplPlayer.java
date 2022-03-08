@@ -16,21 +16,19 @@ import org.jetbrains.annotations.NotNull;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.entity.EntityType;
 import pro.prysm.orion.api.entity.player.*;
+import pro.prysm.orion.common.message.ChatPosition;
+import pro.prysm.orion.common.net.Connection;
+import pro.prysm.orion.common.protocol.PlayerInfoAction;
 import pro.prysm.orion.common.protocol.outgoing.play.*;
 import pro.prysm.orion.common.util.TagUtil;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.entity.ImplLivingEntity;
-import pro.prysm.orion.common.message.ChatPosition;
-import pro.prysm.orion.common.net.Connection;
-import pro.prysm.orion.common.protocol.PlayerInfoAction;
 import pro.prysm.orion.server.protocol.outgoing.ChunkWithLight;
-import pro.prysm.orion.server.util.TagUtil;
-import pro.prysm.orion.server.world.Chunk;
 import pro.prysm.orion.server.world.World;
 
 import java.util.List;
-import java.util.Queue;
+import java.util.concurrent.CompletableFuture;
 
 // TODO: Fully implement methods from Audience
 // TODO: Write JavaDoc comments
@@ -87,22 +85,8 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
         world.savePlayerData(uuid(), tagBuilder.build());
     }
 
-    public void sendChunks(Queue<Chunk> chunks) {
-        chunks.parallelStream().dropWhile(chunk -> !chunk.exists()).forEach(this::sendChunk);
-    }
-
-    public void sendChunkAsync(int x, int z) {
-        world.getChunkAsync(x, z)
-                .thenAcceptAsync(this::sendChunk);
-    }
-
-    public void sendChunk(Chunk chunk) {
-        sendChunkData(new ChunkWithLight(chunk));
-    }
-
-    private void sendChunkData(ChunkWithLight data) {
-        if (data.exists()) connection.sendPacket(data);
-        else Orion.getLogger().warn("Missing chunk at {}, {}", data.getX(), data.getZ());
+    public CompletableFuture<Void> sendChunkAsync(int x, int z) {
+        return world.getChunkAsync(x, z).thenApplyAsync(ChunkWithLight::new).thenAcceptAsync(connection::sendPacket);
     }
 
     @Override
