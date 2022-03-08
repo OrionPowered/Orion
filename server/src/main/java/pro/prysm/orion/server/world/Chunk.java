@@ -21,18 +21,10 @@ public interface Chunk {
     int getZ();
 
     /**
-     * Returns if this chunk exists or is empty
-     *
-     * @return boolean
+     * Returns the status of this chunk
+     * @return ChunkStatus
      */
-    boolean exists();
-
-    /**
-     * Returns if this chunk is fully generated
-     *
-     * @return boolean
-     */
-    boolean isFull();
+    ChunkStatus getStatus();
 
     /**
      * Gets the bit set of the block light data
@@ -83,4 +75,8 @@ public interface Chunk {
      * @return ChunkSection
      */
     ChunkSection getSection(int index);
+
+    static Chunk empty() {
+        return new EmptyChunk();
+    }
 }
