@@ -16,7 +16,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "server/build.gradle.kts" }}
-            - v1-cargo-cache-{{ arch }}-{{ checkcum "lib/anvil/Cargo.lock" }}
+            - v1-cargo-cache-{{ arch }}-{{ checksum "lib/anvil/Cargo.lock" }}
       - run:
           name: "Testing"
           command: gradle test
@@ -29,7 +29,7 @@ jobs:
             - lib/anvil/target/release/.fingerprint
             - lib/anvil/target/release/build
             - lib/anvil/target/release/deps
-          key: v1-cargo-cache-{{ arch }}-{{ checkcum "lib/anvil/Cargo.lock" }}
+          key: v1-cargo-cache-{{ arch }}-{{ checksum "lib/anvil/Cargo.lock" }}
   build:
     executor: main
     steps:
@@ -37,7 +37,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "server/build.gradle.kts" }}
-            - v1-cargo-cache-{{ arch }}-{{ checkcum "lib/anvil/Cargo.lock" }}
+            - v1-cargo-cache-{{ arch }}-{{ checksum "lib/anvil/Cargo.lock" }}
       - run:
           name: "Setup Environment"
           command: mkdir -p /tmp/artifacts && echo "export ORION_VERSION=$(gradle --quiet :orion-server:version)" >> $BASH_ENV
@@ -59,7 +59,7 @@ jobs:
             - lib/anvil/target/release/.fingerprint
             - lib/anvil/target/release/build
             - lib/anvil/target/release/deps
-          key: v1-cargo-cache-{{ arch }}-{{ checkcum "lib/anvil/Cargo.lock" }}
+          key: v1-cargo-cache-{{ arch }}-{{ checksum "lib/anvil/Cargo.lock" }}
 workflows:
   version: 2
   build:
