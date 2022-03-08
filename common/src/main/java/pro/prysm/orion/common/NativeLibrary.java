@@ -16,7 +16,7 @@ public class NativeLibrary {
     private final String name;
 
     public NativeLibrary(String name) {
-        this.name = System.mapLibraryName(name);
+        this.name = System.mapLibraryName("orion_" + name);
     }
 
     public void load() throws ResourceNotFoundException {
@@ -24,22 +24,24 @@ public class NativeLibrary {
         if (!libDir.exists()) libDir.mkdirs();
         File lib = new File(libDir, name);
 
-        InputStream is = NativeLibrary.class.getClassLoader().getResourceAsStream("META-INF/native/" + name);
-        if (is == null) throw new ResourceNotFoundException("Could not find lib " + name + " in jar");
-
         try {
-            if (!lib.exists() || (lib.exists() && !Arrays.equals(getDigest(is), getDigest(new FileInputStream(lib))))) {
-                replaceFromJar(lib, is);
+            if (!lib.exists() || (lib.exists() && !Arrays.equals(getDigest(getResource(name)), getDigest(new FileInputStream(lib))))) {
+                replaceFromJar(lib, getResource(name));
             }
         } catch (NoSuchAlgorithmException | IOException e) {
             OrionExceptionHandler.error(e);
         }
-
         System.load(lib.getAbsolutePath());
     }
 
-    private void replaceFromJar(File outputDir, InputStream is) throws IOException {
-        Files.copy(is, outputDir.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    private InputStream getResource(String name) throws ResourceNotFoundException {
+        InputStream is = NativeLibrary.class.getClassLoader().getResourceAsStream("META-INF/native/" + name);
+        if (is == null) throw new ResourceNotFoundException("Could not find lib " + name + " in jar");
+        return is;
+    }
+
+    private void replaceFromJar(File output, InputStream is) throws IOException {
+        Files.copy(is, output.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
 
     private byte[] getDigest(InputStream is) throws IOException, NoSuchAlgorithmException {
@@ -47,7 +49,7 @@ public class NativeLibrary {
         MessageDigest complete = MessageDigest.getInstance("MD5");
         int numRead = 0;
 
-        while(numRead != -1) {
+        while (numRead != -1) {
             numRead = is.read(buffer);
             if (numRead > 0) {
                 complete.update(buffer, 0, numRead);
