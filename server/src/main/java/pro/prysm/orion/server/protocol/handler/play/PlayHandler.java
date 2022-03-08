@@ -10,7 +10,6 @@ import pro.prysm.orion.api.entity.player.Player;
 import pro.prysm.orion.api.event.event.IncomingPluginMessageEvent;
 import pro.prysm.orion.api.event.event.PlayerJoinEvent;
 import pro.prysm.orion.api.message.Message;
-import pro.prysm.orion.common.protocol.Protocol;
 import pro.prysm.orion.common.protocol.incoming.play.*;
 import pro.prysm.orion.common.protocol.outgoing.play.*;
 import pro.prysm.orion.server.Orion;
@@ -116,20 +115,27 @@ public class PlayHandler extends AbstractHandler {
     }
 
     public void sendChunks() {
-        Location loc = player.getLocation();
+        sendChunks(player.getLocation());
+    }
 
-        int centerX = loc.getChunkX();
-        int centerZ = loc.getChunkZ();
+    public void sendChunks(Location center) {
+        int centerX = center.getChunkX();
+        int centerZ = center.getChunkZ();
 
+        // this has an execution time of O(n^2) which is not preferred.
+        // TODO: Rewrite chunk sending
         for (int x = centerX - viewDistance; x <= centerX; x++) {
             for (int z = centerZ - viewDistance; z <= centerZ; z++) {
                 if ((x - centerX) * (x - centerX) + (z - centerZ) * (z - centerZ) <= viewDistance * viewDistance) {
                     int chunkX = centerX - (x - centerX);
                     int chunkZ = centerZ - (z - centerZ);
-                    player.sendChunkAsync(x, z);
-                    player.sendChunkAsync(x, chunkZ);
-                    player.sendChunkAsync(chunkX, z);
-                    player.sendChunkAsync(chunkX, chunkZ);
+                    int finalX = x;
+                    int finalZ = z;
+                    player.sendChunkAsync(x, z)
+                            .thenRunAsync(() -> player.sendChunkAsync(finalX, finalZ)
+                                .thenRunAsync(() -> player.sendChunkAsync(finalX, chunkZ))
+                                    .thenRunAsync(() -> player.sendChunkAsync(chunkX, finalZ))
+                                        .thenRunAsync(() -> player.sendChunkAsync(chunkX, chunkZ)));
                 }
             }
         }
