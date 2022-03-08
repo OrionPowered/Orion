@@ -1,4 +1,4 @@
-package pro.prysm.orion.server.util;
+package pro.prysm.orion.common.util;
 
 public class MathUtil {
     public static float clamp(double val, double min, double max) {
