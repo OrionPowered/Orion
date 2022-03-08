@@ -1,8 +1,10 @@
-package pro.prysm.orion.server.world;
+package pro.prysm.orion.server.world.voidworld;
 
 import lombok.Getter;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import pro.prysm.orion.api.data.Location;
+import pro.prysm.orion.server.world.Chunk;
+import pro.prysm.orion.server.world.World;
 import pro.prysm.orion.server.world.dimension.Dimension;
 
 import java.util.Optional;

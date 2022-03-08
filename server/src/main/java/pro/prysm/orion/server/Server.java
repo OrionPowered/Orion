@@ -39,7 +39,8 @@ import pro.prysm.orion.common.net.TCPListener;
 import pro.prysm.orion.common.protocol.PlayerInfoAction;
 import pro.prysm.orion.common.protocol.outgoing.play.PlayerInfo;
 import pro.prysm.orion.common.scheduler.TickService;
-import pro.prysm.orion.server.world.DefaultVoidProvider;
+import pro.prysm.orion.server.world.anvilworld.DefaultWorldProvider;
+import pro.prysm.orion.server.world.voidworld.DefaultVoidProvider;
 import pro.prysm.orion.server.world.LevelProvider;
 
 import java.io.IOException;
@@ -109,8 +110,10 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
             moduleLoader = new ModuleLoader();
             pluginLoader = new PluginLoader();
 
-            if (levelProvider == null) levelProvider = new DefaultVoidProvider();
-            else Orion.getLogger().info("Using {} for level(s)", levelProvider.getClass().getName());
+            if (levelProvider == null) {
+                levelProvider = (config.getBoolean("world.void")) ? new DefaultVoidProvider() : new DefaultWorldProvider();
+                Orion.getLogger().info("Using {} for level(s)", levelProvider.getClass().getSimpleName());
+            } else Orion.getLogger().info("Using {} for level(s)", levelProvider.getClass().getName());
 
             listenerThread.start(); // Start listening AFTER all extensions have been loaded
         }).start();

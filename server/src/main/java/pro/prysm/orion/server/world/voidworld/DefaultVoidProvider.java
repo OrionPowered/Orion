@@ -1,6 +1,8 @@
-package pro.prysm.orion.server.world;
+package pro.prysm.orion.server.world.voidworld;
 
 import lombok.Getter;
+import pro.prysm.orion.server.world.LevelProvider;
+import pro.prysm.orion.server.world.World;
 import pro.prysm.orion.server.world.dimension.CraftDimension;
 import pro.prysm.orion.server.world.dimension.DimensionProvider;
 
