@@ -25,24 +25,25 @@ import pro.prysm.orion.common.OrionExceptionHandler;
 import pro.prysm.orion.common.OrionThreadFactory;
 import pro.prysm.orion.common.command.CommandHandler;
 import pro.prysm.orion.common.command.commands.SendPacketCommand;
-import pro.prysm.orion.common.protocol.Protocol;
-import pro.prysm.orion.common.protocol.auth.OfflineAuth;
-import pro.prysm.orion.common.protocol.auth.YggdrasilAuth;
-import pro.prysm.orion.server.command.HelpCommand;
-import pro.prysm.orion.server.command.ReloadCommand;
-import pro.prysm.orion.server.command.UptimeCommand;
 import pro.prysm.orion.common.extension.module.ModuleLoader;
 import pro.prysm.orion.common.extension.plugin.PluginLoader;
-import pro.prysm.orion.server.message.DefaultChatFormatter;
 import pro.prysm.orion.common.message.placeholder.UptimePlaceholder;
 import pro.prysm.orion.common.net.TCPListener;
 import pro.prysm.orion.common.protocol.PlayerInfoAction;
+import pro.prysm.orion.common.protocol.Protocol;
+import pro.prysm.orion.common.protocol.auth.OfflineAuth;
+import pro.prysm.orion.common.protocol.auth.YggdrasilAuth;
 import pro.prysm.orion.common.protocol.outgoing.play.PlayerInfo;
 import pro.prysm.orion.common.scheduler.TickService;
+import pro.prysm.orion.server.command.HelpCommand;
+import pro.prysm.orion.server.command.ReloadCommand;
+import pro.prysm.orion.server.command.UptimeCommand;
+import pro.prysm.orion.server.message.DefaultChatFormatter;
+import pro.prysm.orion.server.world.LevelProvider;
 import pro.prysm.orion.server.world.anvilworld.DefaultWorldProvider;
 import pro.prysm.orion.server.world.voidworld.DefaultVoidProvider;
-import pro.prysm.orion.server.world.LevelProvider;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
@@ -111,7 +112,14 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
             pluginLoader = new PluginLoader();
 
             if (levelProvider == null) {
-                levelProvider = (config.getBoolean("world.void")) ? new DefaultVoidProvider() : new DefaultWorldProvider();
+                if (config.getBoolean("world.void")) levelProvider = new DefaultVoidProvider();
+                else {
+                    String worldName = config.getString("world.name");
+                    if (!new File(worldName, "level.dat").exists()) {
+                        Orion.getLogger().error("Failed to load world \"{}\". Using void world.", worldName);
+                        Orion.getServer().setLevelProvider(new DefaultVoidProvider());
+                    } else levelProvider = new DefaultWorldProvider(worldName);
+                }
                 Orion.getLogger().info("Using {} for level(s)", levelProvider.getClass().getSimpleName());
             } else Orion.getLogger().info("Using {} for level(s)", levelProvider.getClass().getName());
 
