@@ -5,7 +5,7 @@ import pro.prysm.orion.api.data.Velocity;
 import pro.prysm.orion.server.entity.ImplEntity;
 import pro.prysm.orion.common.net.PacketByteBuf;
 import pro.prysm.orion.common.protocol.outgoing.OutgoingPacket;
-import pro.prysm.orion.server.util.MathUtil;
+import pro.prysm.orion.common.util.MathUtil;
 
 import java.util.UUID;
 

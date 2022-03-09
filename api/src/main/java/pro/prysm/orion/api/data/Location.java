@@ -13,6 +13,7 @@ public class Location implements Cloneable {
     private float yaw, pitch;
     private boolean onGround;
     private int chunkX, chunkZ;
+    private int regionX, regionZ;
 
     public Location(double x, double y, double z, float yaw, float pitch, boolean onGround) {
         this.x = x;
@@ -35,11 +36,13 @@ public class Location implements Cloneable {
     public void setX(double x) {
         this.x = x;
         this.chunkX = (int) x >> 4;
+        this.regionX = chunkX >> 5;
     }
 
     public void setZ(double z) {
         this.z = z;
         this.chunkZ = (int) z >> 4;
+        this.regionZ = chunkZ >> 5;
     }
 
     public boolean isSameChunk(Location other) {
