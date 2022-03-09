@@ -27,10 +27,11 @@ public class ImplChunk implements Chunk {
     private final BitSet blockLightEmptyMask = new BitSet();
     private final List<ChunkSection> sections;
 
-    public ImplChunk(int x, int z, CompoundBinaryTag nbt) {
+    public ImplChunk(CompoundBinaryTag nbt) {
         this.nbt = nbt;
-        this.x = x;
-        this.z = z;
+
+        this.x = nbt.getInt("xPos");
+        this.z = nbt.getInt("zPos");
         status = ChunkStatus.valueOf(nbt.getString("Status").toUpperCase());
         heightMaps = nbt.getCompound("Heightmaps");
         sections = new ArrayList<>();
@@ -54,14 +55,15 @@ public class ImplChunk implements Chunk {
     private void calculateLighting() {
         for (int i = 0; i < sections.size(); i++) {
             ChunkSection section = sections.get(i);
-            calculateSectionLighting(section.getSkyLight(), skyLightMask, skyLightEmptyMask, i);
-            calculateSectionLighting(section.getBlockLight(), blockLightMask, blockLightEmptyMask, i);
-        }
-    }
 
-    private void calculateSectionLighting(byte[] data, BitSet mask, BitSet empty, int i) {
-        if ((data.length == 0)) empty.set(i, true);
-        else mask.set(i, true);
+            // Sky light
+            if (section.hasSkyLight()) skyLightMask.set(i);
+            else skyLightEmptyMask.set(i);
+
+            // Block light
+            if (section.hasBlockLight()) blockLightMask.set(i);
+            else blockLightEmptyMask.set(i);
+        }
     }
 
     @Override

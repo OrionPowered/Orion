@@ -38,7 +38,7 @@ public class ImplRegion {
     public CompletableFuture<Chunk> getChunkAsync(int x, int z) {
         try {
             Optional<CompoundBinaryTag> nbt = getChunkNBT(x, z);
-            return CompletableFuture.completedFuture((nbt.isPresent()) ? new ImplChunk(x, z, nbt.orElseThrow()) : Chunk.empty());
+            return CompletableFuture.completedFuture((nbt.isPresent()) ? new ImplChunk(nbt.orElseThrow()) : Chunk.empty());
         } catch (IOException e) {
             OrionExceptionHandler.error(e);
             return CompletableFuture.failedFuture(e);
