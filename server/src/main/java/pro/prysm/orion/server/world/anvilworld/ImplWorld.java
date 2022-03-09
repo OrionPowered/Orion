@@ -11,6 +11,7 @@ import pro.prysm.orion.server.world.Chunk;
 import pro.prysm.orion.server.world.World;
 import pro.prysm.orion.server.world.dimension.Dimension;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -73,8 +74,25 @@ public class ImplWorld implements World {
 
     @Override
     public CompletableFuture<Chunk> getChunkAsync(int x, int z) {
-        return new ImplRegion(this, x >> 5, z >> 5).getChunkAsync(x, z); // Temporary
+        try {
+            Optional<CompoundBinaryTag> nbt = getChunkNBT(x, z);
+            return CompletableFuture.completedFuture((nbt.isPresent()) ? new ImplChunk(nbt.orElseThrow()) : Chunk.empty());
+        } catch (IOException e) {
+            OrionExceptionHandler.error(e);
+            return CompletableFuture.failedFuture(e);
+        }
     }
+
+    private Optional<CompoundBinaryTag> getChunkNBT(int x, int z) throws IOException {
+        byte[] data = getChunkData(worldPath.resolve("region").resolve(String.format("r.%d.%d.mca", x >> 5, z >> 5)).toString(), x, z);
+        if (data.length <= 0) return Optional.empty();
+        else {
+            ByteArrayInputStream is = new ByteArrayInputStream(data);
+            return Optional.of(BinaryTagIO.reader().read(is));
+        }
+    }
+
+    private native byte[] getChunkData(String filePath, int x, int z);
 
     @Override
     public boolean hasSavedPlayerData(UUID uuid) {
