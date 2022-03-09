@@ -70,4 +70,10 @@ public class ImplChunk implements Chunk {
     public ChunkSection getSection(int i) {
         return sections.get(i);
     }
+
+    public Block getBlockAt(int x, int y, int z) {
+        int sectionIndex = (int) Math.floor((double) y / 16) + 4;
+        ImplChunkSection section = (ImplChunkSection) sections.get(sectionIndex);
+        return section.getBlockAt(x & 15, y & 15, z & 15);
+    }
 }

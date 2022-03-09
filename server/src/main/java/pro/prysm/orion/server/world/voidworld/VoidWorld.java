@@ -2,6 +2,7 @@ package pro.prysm.orion.server.world.voidworld;
 
 import lombok.Getter;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import pro.prysm.orion.api.data.Block;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.server.world.Chunk;
 import pro.prysm.orion.server.world.World;
@@ -104,5 +105,18 @@ public class VoidWorld implements World {
     @Override
     public void savePlayerData(UUID uuid, CompoundBinaryTag data) {
         throw new UnsupportedOperationException("Void world does not have player data!");
+    }
+
+    /**
+     * Gets the block at the provided coordinates
+     *
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param z Z coordinate
+     * @return Block
+     */
+    @Override
+    public Block getBlockAt(int x, int y, int z) {
+        return null;
     }
 }

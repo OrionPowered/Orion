@@ -67,6 +67,24 @@ public class ImplChunkSection implements ChunkSection {
         return Biome.getBiome(biomePalette.getString(i).replace("minecraft:", ""));
     }
 
+    private int blockIndex(int x, int y, int z) {
+        return (y & 0xf) << 8 | z << 4 | x;
+    }
+
+    public Block getBlockAt(int x, int y, int z) {
+        int blockIndex = blockIndex(x, y, z);
+        int startLong = (blockIndex * bitsPerBlock) / 64;
+        int startOffset = (blockIndex * bitsPerBlock) % 64;
+        int endLong = ((blockIndex + 1) * bitsPerBlock - 1) / 64;
+
+        int paletteIndex;
+        if (startLong == endLong) paletteIndex = (int) blockStates[startLong] >> startOffset;
+        else paletteIndex = (int)(blockStates[startLong] >> startOffset | blockStates[endLong] << (64 - startOffset));
+        paletteIndex &= ((1 << bitsPerBlock) - 1);
+
+        return Block.getBlock(blockStatePalette.getCompound(paletteIndex).getString("Name").replace("minecraft:", ""));
+    }
+
     @Override
     public boolean hasBlockLight() {
         return blockLight.length != 0;

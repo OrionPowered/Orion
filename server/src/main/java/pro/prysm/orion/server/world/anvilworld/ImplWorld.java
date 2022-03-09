@@ -3,6 +3,7 @@ package pro.prysm.orion.server.world.anvilworld;
 import lombok.Getter;
 import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import pro.prysm.orion.api.data.Block;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.common.OrionExceptionHandler;
 import pro.prysm.orion.server.Orion;
@@ -17,6 +18,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Getter
 public class ImplWorld implements World {
@@ -102,5 +104,17 @@ public class ImplWorld implements World {
             Orion.getLogger().warn("Failed to save {}", fileName);
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Block getBlockAt(int x, int y, int z) {
+        Block block = null;
+        try {
+            Chunk chunk = getChunkAsync(x >> 4, z >> 4).get();
+            block = chunk.getBlockAt(x & 15, y, z & 15);
+        } catch (ExecutionException | InterruptedException e) {
+            OrionExceptionHandler.error(e);
+        }
+        return block;
     }
 }
