@@ -87,7 +87,8 @@ public class PlayHandler extends AbstractHandler {
             Orion.getLogger().info("{} ({}) has logged in", player.getProfile().getUsername(), connection.getAddress());
             Orion.getLogger().debug("Player {} has logged in at {}", player.getProfile().getUsername(), player.getLocation());
 
-            sendChunks();
+            if (!player.getWorld().isVoid()) sendChunks();
+            else player.setLocation(player.getWorld().getSpawn());
 
             Orion.getScheduler().schedule(() -> { // This is simply to give the client time to receive some chunks
                 connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
