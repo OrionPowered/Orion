@@ -3,16 +3,14 @@ package pro.prysm.orion.server.protocol.handler.play;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import pro.prysm.orion.api.data.Location;
-import pro.prysm.orion.api.entity.player.ChatMode;
-import pro.prysm.orion.api.entity.player.GameMode;
-import pro.prysm.orion.api.entity.player.Hand;
-import pro.prysm.orion.api.entity.player.Player;
+import pro.prysm.orion.api.entity.player.*;
 import pro.prysm.orion.api.event.event.IncomingPluginMessageEvent;
 import pro.prysm.orion.api.event.event.PlayerJoinEvent;
 import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.common.net.PacketByteBuf;
 import pro.prysm.orion.common.protocol.PlayerInfoAction;
 import pro.prysm.orion.common.protocol.incoming.play.*;
+import pro.prysm.orion.common.protocol.incoming.play.ClientSettings;
 import pro.prysm.orion.common.protocol.outgoing.play.*;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
@@ -54,7 +52,6 @@ public class PlayHandler extends AbstractHandler {
         LevelProvider level = server.getLevelProvider();
         World world = level.getWorldForPlayer(player.uuid());
         player.setWorld(world);
-        player.setLocation(world.getSpawn());
 
         player.setGameMode(GameMode.SPECTATOR);                 // TODO: Implement Gamemode
 
@@ -90,8 +87,12 @@ public class PlayHandler extends AbstractHandler {
             Orion.getLogger().info("{} ({}) has logged in", player.getProfile().getUsername(), connection.getAddress());
             Orion.getLogger().debug("Player {} has logged in at {}", player.getProfile().getUsername(), player.getLocation());
 
-            Orion.getScheduler().schedule(this::sendChunks, 2L);
-            connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
+            sendChunks();
+
+            Orion.getScheduler().schedule(() -> { // This is simply to give the client time to receive some chunks
+                connection.sendPacket(new PlayerPositionAndLook(player.getLocation()));
+                player.setStatus(PlayerStatus.ACTIVE); // Client is fully logged in now
+            }, 20L);
 
             // Testing
             connection.sendPacket(new PlayerlistHeaderFooter(
@@ -184,6 +185,7 @@ public class PlayHandler extends AbstractHandler {
 
     @Override
     public void handle(PlayerPosition packet) {
+        if (player.getStatus() == PlayerStatus.CONNECTING) return;
         Location to = player.getLocation().clone();
         to.setX(packet.getX());
         to.setY(packet.getY());
@@ -195,6 +197,7 @@ public class PlayHandler extends AbstractHandler {
 
     @Override
     public void handle(PlayerRotation packet) {
+        if (player.getStatus() == PlayerStatus.CONNECTING) return;
         Location to = player.getLocation().clone();
         to.setYaw(packet.getYaw());
         to.setPitch(packet.getPitch());
@@ -204,6 +207,7 @@ public class PlayHandler extends AbstractHandler {
 
     @Override
     public void handle(PlayerPositionAndRotation packet) {
+        if (player.getStatus() == PlayerStatus.CONNECTING) return;
         Location to = player.getLocation().clone();
         to.setX(packet.getX());
         to.setY(packet.getY());
