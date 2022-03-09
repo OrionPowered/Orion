@@ -6,68 +6,96 @@ import pro.prysm.orion.api.data.Block;
 import java.util.BitSet;
 import java.util.List;
 
-public interface Chunk {
+public class EmptyChunk implements Chunk {
     /**
      * Gets X coordinate of this Chunk
      *
      * @return Integer - X Coordinate
      */
-    int getX();
+    @Override
+    public int getX() {
+        return 0;
+    }
 
     /**
      * Gets Y coordinate of this Chunk
      *
      * @return Integer - Y Coordinate
      */
-    int getZ();
+    @Override
+    public int getZ() {
+        return 0;
+    }
 
     /**
      * Returns the status of this chunk
+     *
      * @return ChunkStatus
      */
-    ChunkStatus getStatus();
+    @Override
+    public ChunkStatus getStatus() {
+        return ChunkStatus.EMPTY;
+    }
 
     /**
      * Gets the bit set of the block light data
      *
      * @return BitSet
      */
-    BitSet getBlockLightMask();
+    @Override
+    public BitSet getBlockLightMask() {
+        return null;
+    }
 
     /**
      * Gets the empty bit set of the block light data
      *
      * @return BitSet
      */
-    BitSet getBlockLightEmptyMask();
+    @Override
+    public BitSet getBlockLightEmptyMask() {
+        return null;
+    }
 
     /**
      * Gets the bit set of the skylight data
      *
      * @return BitSet
      */
-    BitSet getSkyLightMask();
+    @Override
+    public BitSet getSkyLightMask() {
+        return null;
+    }
 
     /**
      * Gets the empty bit set of the skylight data
      *
      * @return BitSet
      */
-    BitSet getSkyLightEmptyMask();
+    @Override
+    public BitSet getSkyLightEmptyMask() {
+        return null;
+    }
 
     /**
      * Gets the HeightMaps in NBT format
      *
      * @return CompoundBinaryTag NBT
      */
-    CompoundBinaryTag getHeightMaps();
+    @Override
+    public CompoundBinaryTag getHeightMaps() {
+        return null;
+    }
 
     /**
      * Gets a list of ChunkSections
      *
      * @return ChunkSection list
      */
-    List<ChunkSection> getSections();
+    @Override
+    public List<ChunkSection> getSections() {
+        return null;
+    }
 
     /**
      * Gets a chunk section
@@ -75,18 +103,21 @@ public interface Chunk {
      * @param index Index of chunk section
      * @return ChunkSection
      */
-    ChunkSection getSection(int index);
+    @Override
+    public ChunkSection getSection(int index) {
+        return null;
+    }
 
     /**
      * Gets the block at the provided coordinates
+     *
      * @param x X coordinate (relative to chunk)
      * @param y Y coordinate
      * @param z Z coordinate (relative to chunk)
      * @return Block
      */
-    Block getBlockAt(int x, int y, int z);
-
-    static Chunk empty() {
-        return new EmptyChunk();
+    @Override
+    public Block getBlockAt(int x, int y, int z) {
+        return null;
     }
 }

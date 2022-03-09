@@ -12,6 +12,12 @@ import pro.prysm.orion.api.net.Connection;
  */
 public interface Player extends Identity, LivingEntity, Audience {
     /**
+     * Returns the status of this player
+     * @return PlayerStatus
+     */
+    PlayerStatus getStatus();
+
+    /**
      * Retrieves this player's current gamemode.
      *
      * @return This player's current {@link GameMode}

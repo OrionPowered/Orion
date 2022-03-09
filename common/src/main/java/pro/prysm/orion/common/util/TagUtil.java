@@ -1,4 +1,4 @@
-package pro.prysm.orion.server.util;
+package pro.prysm.orion.common.util;
 
 import net.kyori.adventure.nbt.*;
 

@@ -6,27 +6,20 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import pro.prysm.orion.common.net.PacketByteBuf;
 import pro.prysm.orion.common.palette.PalettedContainer;
 import pro.prysm.orion.common.protocol.outgoing.OutgoingPacket;
+import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.world.Chunk;
 import pro.prysm.orion.server.world.ChunkSection;
+import pro.prysm.orion.server.world.ChunkStatus;
 
+@Getter
 public class ChunkWithLight extends OutgoingPacket {
     private final Chunk chunk;
-    private final boolean exists;
     private final CompoundBinaryTag heightmaps;
-    @Getter
-    private final int x, z;
 
     public ChunkWithLight(Chunk chunk) {
         super(0x22);
         this.chunk = chunk;
-        this.exists = chunk.exists();
-        x = chunk.getX();
-        z = chunk.getZ();
         this.heightmaps = chunk.getHeightMaps().remove("MOTION_BLOCKING_NO_LEAVES").remove("OCEAN_FLOOR");
-    }
-
-    public boolean exists() {
-        return exists;
     }
 
     private int[] generateBlockPaletteData(ChunkSection section) {
@@ -53,25 +46,28 @@ public class ChunkWithLight extends OutgoingPacket {
 
     @Override
     public void write(PacketByteBuf buf) {
-        buf.writeInt(x);
-        buf.writeInt(z);
-        buf.writeNBT(heightmaps);
+        if (chunk.getStatus() != ChunkStatus.FULL) {
+            Orion.getLogger().warn("Tried to send non-full chunk to player at {}, {}", chunk.getX(), chunk.getZ());
+        } else {
+            buf.writeInt(chunk.getX());
+            buf.writeInt(chunk.getZ());
+            buf.writeNBT(heightmaps);
+            PacketByteBuf paletteBuf = new PacketByteBuf(Unpooled.buffer());
+            chunk.getSections().forEach(section -> {
+                paletteBuf.writeShort(section.getBlockCount());
+                PalettedContainer blockContainer = PalettedContainer.from(PalettedContainer.Type.BLOCK_STATES, section.getBitsPerBlock(), generateBlockPaletteData(section), section.getBlockStates());
+                PalettedContainer biomeContainer = PalettedContainer.from(PalettedContainer.Type.BIOME, section.getBitsPerBiome(), generateBiomePaletteData(section), section.getBiomes());
+                blockContainer.write(paletteBuf);
+                biomeContainer.write(paletteBuf);
+            });
 
-        PacketByteBuf paletteBuf = new PacketByteBuf(Unpooled.buffer());
-        chunk.getSections().forEach(section -> {
-            paletteBuf.writeShort(section.getBlockCount());
-            PalettedContainer blockContainer = PalettedContainer.from(PalettedContainer.Type.BLOCK_STATES, section.getBitsPerBlock(), generateBlockPaletteData(section), section.getBlockStates());
-            PalettedContainer biomeContainer = PalettedContainer.from(PalettedContainer.Type.BIOME, section.getBitsPerBiome(), generateBiomePaletteData(section), section.getBiomes());
-            blockContainer.write(paletteBuf);
-            biomeContainer.write(paletteBuf);
-        });
+            buf.writeVarInt(paletteBuf.readableBytes());
+            buf.writeBytes(paletteBuf);
+            paletteBuf.release();
 
-        buf.writeVarInt(paletteBuf.readableBytes());
-        buf.writeBytes(paletteBuf);
-        paletteBuf.release();
+            buf.writeVarInt(0); // No block entities
 
-        buf.writeVarInt(0); // No block entities
-
-        new UpdateLight(chunk).writePartial(buf);
+            new UpdateLight(chunk).writePartial(buf);
+        }
     }
 }

@@ -2,9 +2,9 @@ package pro.prysm.orion.server.protocol.handler.play;
 
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.event.event.PlayerMoveEvent;
+import pro.prysm.orion.common.protocol.outgoing.play.UpdateViewPosition;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
-import pro.prysm.orion.common.protocol.outgoing.play.UpdateViewPosition;
 
 public class Movement {
     private final ImplPlayer player;
@@ -21,9 +21,8 @@ public class Movement {
         if (!player.getWorld().isVoid() && !event.isCancelled()) {
             if (!to.isSameChunk(from)) {
                 player.getConnection().sendPacket(new UpdateViewPosition(to.getChunkX(), to.getChunkZ()));
-                ((PlayHandler) player.getConnection().getHandler()).sendChunks();
+                ((PlayHandler) player.getConnection().getHandler()).sendChunks(to);
             }
-
             return to;
         } else {
             player.teleport(from);
