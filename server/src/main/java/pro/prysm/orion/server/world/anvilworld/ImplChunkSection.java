@@ -77,9 +77,9 @@ public class ImplChunkSection implements ChunkSection {
         int startOffset = (blockIndex * bitsPerBlock) % 64;
         int endLong = ((blockIndex + 1) * bitsPerBlock - 1) / 64;
 
-        int paletteIndex;
-        if (startLong == endLong) paletteIndex = (int) blockStates[startLong] >> startOffset;
-        else paletteIndex = (int)(blockStates[startLong] >> startOffset | blockStates[endLong] << (64 - startOffset));
+        int paletteIndex = (int) blockStates[startLong] >> startOffset;
+        if (startLong != endLong) paletteIndex |= blockStates[endLong] << (64 - startOffset);
+
         paletteIndex &= ((1 << bitsPerBlock) - 1);
 
         return Block.getBlock(blockStatePalette.getCompound(paletteIndex).getString("Name").replace("minecraft:", ""));
