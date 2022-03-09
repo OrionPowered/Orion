@@ -239,8 +239,7 @@ public class PacketByteBuf extends AbstractPacketByteBuf implements PayloadBuffe
      * @param bitSet BitSet to write
      */
     public void writeBitSet(BitSet bitSet) {
-        long[] data = bitSet.toLongArray();
-        writeLongArray(data);
+        writeLongArray(bitSet.toLongArray());
     }
 
     /**
