@@ -3,6 +3,7 @@ package pro.prysm.orion.server.world.anvilworld;
 import lombok.Getter;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.ListBinaryTag;
+import pro.prysm.orion.api.data.Block;
 import pro.prysm.orion.server.world.Chunk;
 import pro.prysm.orion.server.world.ChunkSection;
 import pro.prysm.orion.server.world.ChunkStatus;
