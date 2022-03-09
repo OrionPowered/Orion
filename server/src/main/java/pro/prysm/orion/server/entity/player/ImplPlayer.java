@@ -25,6 +25,7 @@ import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.entity.ImplLivingEntity;
 import pro.prysm.orion.server.protocol.outgoing.ChunkWithLight;
+import pro.prysm.orion.server.world.Chunk;
 import pro.prysm.orion.server.world.World;
 
 import java.util.List;
@@ -87,6 +88,10 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
 
     public CompletableFuture<Void> sendChunkAsync(int x, int z) {
         return world.getChunkAsync(x, z).thenApplyAsync(ChunkWithLight::new).thenAcceptAsync(connection::sendPacket);
+    }
+
+    public CompletableFuture<Void> sendChunkAsync(Chunk chunk) {
+        return CompletableFuture.completedFuture(new ChunkWithLight(chunk)).thenAcceptAsync(connection::sendPacket);
     }
 
     @Override
