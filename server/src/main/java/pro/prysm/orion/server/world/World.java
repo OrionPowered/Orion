@@ -1,6 +1,7 @@
 package pro.prysm.orion.server.world;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import pro.prysm.orion.api.data.Block;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.server.world.dimension.Dimension;
 
@@ -85,4 +86,13 @@ public interface World {
      * @param data NBT data to save
      */
     void savePlayerData(UUID uuid, CompoundBinaryTag data);
+
+    /**
+     * Gets the block at the provided coordinates
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param z Z coordinate
+     * @return Block
+     */
+    Block getBlockAt(int x, int y, int z);
 }

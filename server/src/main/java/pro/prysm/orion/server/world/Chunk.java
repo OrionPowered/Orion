@@ -1,6 +1,7 @@
 package pro.prysm.orion.server.world;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import pro.prysm.orion.api.data.Block;
 
 import java.util.BitSet;
 import java.util.List;
@@ -75,6 +76,15 @@ public interface Chunk {
      * @return ChunkSection
      */
     ChunkSection getSection(int index);
+
+    /**
+     * Gets the block at the provided coordinates
+     * @param x X coordinate (relative to chunk)
+     * @param y Y coordinate
+     * @param z Z coordinate (relative to chunk)
+     * @return Block
+     */
+    Block getBlockAt(int x, int y, int z);
 
     static Chunk empty() {
         return new EmptyChunk();
