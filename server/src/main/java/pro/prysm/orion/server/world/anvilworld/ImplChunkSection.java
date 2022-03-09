@@ -53,7 +53,8 @@ public class ImplChunkSection implements ChunkSection {
         //64 / biomes.length
         bitsPerBiome = biomes.length;
 
-        blockCount = (short) (ImplChunk.WIDTH * ImplChunk.WIDTH * HEIGHT);  // TODO: Calculate actual block count
+        if (blockStates.length == 0) blockCount = 0;
+        else blockCount = (short) (ImplChunk.WIDTH * ImplChunk.WIDTH * HEIGHT);  // TODO: Calculate actual block count
     }
 
     @Override
