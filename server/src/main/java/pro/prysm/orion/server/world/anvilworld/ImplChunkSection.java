@@ -73,6 +73,7 @@ public class ImplChunkSection implements ChunkSection {
     }
 
     public Block getBlockAt(int x, int y, int z) {
+        if (blockStates.length == 0) return Block.AIR;
         int blockIndex = blockIndex(x, y, z);
         int startLong = (blockIndex * bitsPerBlock) / 64;
         int startOffset = (blockIndex * bitsPerBlock) % 64;
