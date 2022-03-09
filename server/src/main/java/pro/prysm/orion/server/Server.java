@@ -163,15 +163,14 @@ public class Server implements pro.prysm.orion.api.Server, Listener {
 
     public void addPlayer(Player player) {
         players.add(player);
-        if (!player.isHidden())
-            Orion.getProtocol().broadcastPacket(players, new PlayerInfo(PlayerInfoAction.ADD_PLAYER, List.of(player)));
         ((pro.prysm.orion.common.net.Connection) player.getConnection()).sendPacket(new PlayerInfo(PlayerInfoAction.ADD_PLAYER, players.stream().filter(p -> !p.isHidden()).toList()));
+        if (!player.isHidden()) Orion.getProtocol().broadcastPacket(players, new PlayerInfo(PlayerInfoAction.ADD_PLAYER, List.of(player)));
     }
 
     public void removePlayer(Player player) {
         players.remove(player);
+        Orion.getProtocol().broadcastPacket(players, new PlayerInfo(PlayerInfoAction.REMOVE_PLAYER, List.of(player)));
     }
-
     @Override
     public Optional<Player> getPlayer(UUID uuid) {
         return Optional.of(players.stream().filter(p -> p.uuid().equals(uuid)).collect(CollectorUtil.toSingleton()));

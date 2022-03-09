@@ -28,7 +28,7 @@ public class PlayerInfo extends OutgoingPacket {
     public void write(PacketByteBuf buf) {
         buf.writeVarInt(action.getId());
         buf.writeVarInt(players.size());
-        players.parallelStream().forEach(player -> {
+        players.forEach(player -> {
             buf.writeUuidIntArray(player.uuid());
             switch (action) {
                 case ADD_PLAYER -> {
@@ -58,7 +58,7 @@ public class PlayerInfo extends OutgoingPacket {
                 case UPDATE_GAMEMODE -> buf.writeVarInt(player.getGameMode().getId());
                 case UPDATE_LATENCY -> buf.writeVarInt(player.getLatency());
                 case UPDATE_DISPLAY_NAME -> buf.writeComponent(player.getDisplayName());
-                // case REMOVE_PLAYER -> {} // No fields
+                case REMOVE_PLAYER -> {} // No fields
             }
         });
 
