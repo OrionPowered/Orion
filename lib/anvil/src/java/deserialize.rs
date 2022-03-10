@@ -4,7 +4,7 @@ use jni::sys::{jbyteArray, jint};
 
 #[no_mangle]
 #[allow(non_snake_case)]
-pub extern "system" fn Java_pro_prysm_orion_server_world_anvilworld_ImplRegion_getChunkData(
+pub extern "system" fn Java_pro_prysm_orion_server_world_anvilworld_ImplWorld_getChunkData(
     env: JNIEnv,
     _class: JClass,
     path: JString,
