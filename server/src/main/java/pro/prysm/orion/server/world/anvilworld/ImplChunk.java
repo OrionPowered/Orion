@@ -1,6 +1,7 @@
 package pro.prysm.orion.server.world.anvilworld;
 
 import lombok.Getter;
+import lombok.Setter;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.ListBinaryTag;
 import pro.prysm.orion.api.data.Block;
@@ -18,6 +19,10 @@ public class ImplChunk implements Chunk {
     public static final int HEIGHT = 384;
     public static final int WIDTH = 16;
 
+    // Caching purposes
+    @Setter
+    private long lastAccessed;
+
     private final int x, z;
     private final CompoundBinaryTag nbt;
     private final ChunkStatus status;
@@ -29,6 +34,8 @@ public class ImplChunk implements Chunk {
     private final List<ChunkSection> sections;
 
     public ImplChunk(CompoundBinaryTag nbt) {
+        lastAccessed = System.currentTimeMillis();
+
         this.nbt = nbt;
 
         this.x = nbt.getInt("xPos");
