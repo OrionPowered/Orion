@@ -5,7 +5,6 @@ import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import pro.prysm.orion.api.data.Block;
 import pro.prysm.orion.api.data.Location;
-import pro.prysm.orion.api.util.CollectorUtil;
 import pro.prysm.orion.common.OrionExceptionHandler;
 import pro.prysm.orion.common.scheduler.OrionScheduler;
 import pro.prysm.orion.server.Orion;
@@ -30,9 +29,8 @@ public class ImplWorld implements World {
     private final Dimension dimension;
     private final Boolean hardcore;
     private final Location spawn;
-    private CompoundBinaryTag levelData;
-
     private final Set<ImplChunk> chunkCache;
+    private CompoundBinaryTag levelData;
 
     public ImplWorld(Path worldPath) {
         this.worldPath = worldPath;
@@ -93,8 +91,7 @@ public class ImplWorld implements World {
                             if (nbt.isPresent()) {
                                 chunk = new ImplChunk(nbt.orElseThrow());
                                 chunkCache.add(chunk);
-                            }
-                            else return CompletableFuture.completedFuture(Chunk.empty());
+                            } else return CompletableFuture.completedFuture(Chunk.empty());
                         } catch (IOException e) {
                             OrionExceptionHandler.error(e);
                             return CompletableFuture.failedFuture(e);
