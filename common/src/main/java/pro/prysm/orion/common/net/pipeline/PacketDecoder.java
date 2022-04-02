@@ -3,24 +3,27 @@ package pro.prysm.orion.common.net.pipeline;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import lombok.RequiredArgsConstructor;
 import pro.prysm.orion.api.message.Message;
 import pro.prysm.orion.api.protocol.PacketState;
 import pro.prysm.orion.common.AbstractOrion;
+import pro.prysm.orion.common.event.events.IncomingPacketEvent;
 import pro.prysm.orion.common.net.Connection;
 import pro.prysm.orion.common.net.PacketByteBuf;
 import pro.prysm.orion.common.protocol.Handler;
-import pro.prysm.orion.common.protocol.Protocol;
+import pro.prysm.orion.common.protocol.PacketRegistry;
 import pro.prysm.orion.common.protocol.incoming.IncomingPacket;
-
-import pro.prysm.orion.common.event.events.IncomingPacketEvent;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
-@RequiredArgsConstructor
 public class PacketDecoder extends ByteToMessageDecoder {
     private final ChannelHandler channelHandler;
+    private final PacketRegistry registry;
+
+    public PacketDecoder(ChannelHandler channelHandler) {
+        this.channelHandler = channelHandler;
+        this.registry = AbstractOrion.getProtocol().getPacketRegistry();
+    }
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> list) throws Exception {
@@ -31,11 +34,9 @@ public class PacketDecoder extends ByteToMessageDecoder {
         PacketByteBuf buf = new PacketByteBuf(byteBuf);
         int id = buf.readVarInt();
 
-        Protocol protocol = AbstractOrion.getProtocol();
-
-        if (protocol.getPacketRegistry().getIncoming(state, id) != null) {
+        if (registry.getIncoming(state, id) != null) {
             AbstractOrion.getLogger().trace("Received packet with ID 0x{} and state: {}", Integer.toHexString(id).toUpperCase(), state);
-            Class<? extends IncomingPacket> packetClass = protocol.getPacketRegistry().getIncoming(state, id);
+            Class<? extends IncomingPacket> packetClass = registry.getIncoming(state, id);
             if (packetClass != null && packetClass != IncomingPacket.class) {
                 IncomingPacket packet = (IncomingPacket) packetClass.getConstructors()[0].newInstance();
                 packet.read(buf);
