@@ -1,6 +1,6 @@
 # Orion
 ### [![PrysmNetwork](https://circleci.com/gh/PrysmNetwork/Orion.svg?style=svg)]()
-Orion is a 1.18 (757) Minecraft Server and Proxy implementation written to be the absolute bare-bones to run a network, 
+Orion is a 1.18.2 (758) Minecraft Server and Proxy implementation written to be the absolute bare-bones to run a network, 
 but extendable for maximum customization.
 
 <p align="center">
@@ -17,12 +17,14 @@ but extendable for maximum customization.
 - [x] Plugin & module loading
 - [x] Mojang Authentication
 - [x] Offline Mode Support
-- [ ] In memory shared object storage
-- [ ] Tab list 
+- [x] Tab list 
 - [x] Chat
 
 ### Server
 - [x] Packet handlers
+- [x] Async chunk loading
+- [ ] Entity Loading (from pre-existing chunks)
+- [ ] Entity Spawning
 - [ ] Player movement & mechanics
 - [ ] Player permissions
 - [ ] Player data containers
@@ -35,7 +37,7 @@ but extendable for maximum customization.
 - [ ] Persistent connection to backend Orion servers (for custom protocols)
 
 ## Development Requirements
-- JDK 17 & Gradle
+- JDK 17, Gradle, Cargo
 
 ## Modules & Plugins
 

@@ -5,20 +5,23 @@ import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import pro.prysm.orion.api.data.Block;
 import pro.prysm.orion.api.data.Location;
+import pro.prysm.orion.api.util.CollectorUtil;
 import pro.prysm.orion.common.OrionExceptionHandler;
+import pro.prysm.orion.common.scheduler.OrionScheduler;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.world.Chunk;
 import pro.prysm.orion.server.world.World;
 import pro.prysm.orion.server.world.dimension.Dimension;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Getter
 public class ImplWorld implements World {
@@ -28,6 +31,8 @@ public class ImplWorld implements World {
     private final Boolean hardcore;
     private final Location spawn;
     private CompoundBinaryTag levelData;
+
+    private final Set<ImplChunk> chunkCache;
 
     public ImplWorld(Path worldPath) {
         this.worldPath = worldPath;
@@ -49,6 +54,11 @@ public class ImplWorld implements World {
                 0.0F,
                 false
         );
+
+        chunkCache = Collections.synchronizedSet(new HashSet<>());
+
+        // Check cache for outdated chunks every 1 minute
+        Orion.getScheduler().scheduleAtFixedRate(cacheTask(), 0, 60 * OrionScheduler.TPS);
     }
 
     private void generate(Path path) {
@@ -73,8 +83,38 @@ public class ImplWorld implements World {
 
     @Override
     public CompletableFuture<Chunk> getChunkAsync(int x, int z) {
-        return new ImplRegion(this, x >> 5, z >> 5).getChunkAsync(x, z); // Temporary
+        return chunkCache.stream()
+                .filter(c -> c.getX() == x && c.getZ() == z)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
+                    ImplChunk chunk;
+                    if (list.size() == 0) {
+                        try {
+                            Optional<CompoundBinaryTag> nbt = getChunkNBT(x, z);
+                            if (nbt.isPresent()) {
+                                chunk = new ImplChunk(nbt.orElseThrow());
+                                chunkCache.add(chunk);
+                            }
+                            else return CompletableFuture.completedFuture(Chunk.empty());
+                        } catch (IOException e) {
+                            OrionExceptionHandler.error(e);
+                            return CompletableFuture.failedFuture(e);
+                        }
+                    } else chunk = list.get(0);
+                    chunk.setLastAccessed(System.currentTimeMillis());
+                    return CompletableFuture.completedFuture(chunk);
+                }));
     }
+
+    private Optional<CompoundBinaryTag> getChunkNBT(int x, int z) throws IOException {
+        byte[] data = getChunkData(worldPath.resolve("region").resolve(String.format("r.%d.%d.mca", x >> 5, z >> 5)).toString(), x, z);
+        if (data.length <= 0) return Optional.empty();
+        else {
+            ByteArrayInputStream is = new ByteArrayInputStream(data);
+            return Optional.of(BinaryTagIO.reader().read(is));
+        }
+    }
+
+    private native byte[] getChunkData(String filePath, int x, int z);
 
     @Override
     public boolean hasSavedPlayerData(UUID uuid) {
@@ -116,5 +156,13 @@ public class ImplWorld implements World {
             OrionExceptionHandler.error(e);
         }
         return block;
+    }
+
+    private Runnable cacheTask() {
+        return () -> {
+            Orion.getLogger().debug("Running chunk cache TTL check task");
+            long ttl = System.currentTimeMillis() - 60000; // cache TTL = 1 min
+            chunkCache.stream().filter(chunk -> chunk.getLastAccessed() < ttl).forEach(chunkCache::remove);
+        };
     }
 }

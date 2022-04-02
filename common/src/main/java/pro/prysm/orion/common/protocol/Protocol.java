@@ -14,7 +14,7 @@ import java.util.List;
 
 @Getter
 public class Protocol {
-    public static final int PROTOCOL_NUMBER = 757; // 1.18.1
+    public static final int PROTOCOL_NUMBER = 758; // 1.18.2
     private final PacketRegistry packetRegistry;
     private final CipherSuite cipherSuite;
     private final ServerListResponse slp = new ServerListResponse();
