@@ -5,13 +5,12 @@ import lombok.Setter;
 import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import pro.prysm.orion.api.exception.ResourceNotFoundException;
+import pro.prysm.orion.api.util.CollectorUtil;
 import pro.prysm.orion.common.OrionExceptionHandler;
 import pro.prysm.orion.server.Orion;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 // Vanilla implementation of the dimension codec
 
@@ -31,33 +30,20 @@ public class CraftDimension implements DimensionProvider {
         }
     }
 
-    public static <T> Collector<T, ?, T> toSingleton() {
-        return Collectors.collectingAndThen(
-                Collectors.toList(),
-                list -> {
-                    if (list.size() == 0) throw new NullPointerException();
-                    else if (list.size() > 1) throw new IllegalStateException();
-                    else return list.get(0);
-                }
-        );
-    }
-
     public CompoundBinaryTag getDimensionType(Dimension dimension) {
         if (this.dimension != null) {
-            CompoundBinaryTag dim = (CompoundBinaryTag) this.dimension.getCompound("minecraft:dimension_type").getList("value").stream().filter(tag -> ((CompoundBinaryTag) tag).getString("name").equals(dimension.getName())).collect(toSingleton());
+            CompoundBinaryTag dim = (CompoundBinaryTag) this.dimension.getCompound("minecraft:dimension_type").getList("value").stream().filter(tag -> ((CompoundBinaryTag) tag).getString("name").equals(dimension.getName())).collect(CollectorUtil.toSingleton());
             CompoundBinaryTag element = dim.getCompound("element").remove("element");
             CompoundBinaryTag.Builder result = CompoundBinaryTag.builder();
             result.put(dim);
             result.put(element);
             return result.build();
-        }
-        throw new NullPointerException("Codec must be built before attempting to get a dimension!");
+        } else throw new NullPointerException("Codec must be built before attempting to get a dimension!");
     }
 
     public CompoundBinaryTag getBiomeType(String name) {
         if (dimension != null) {
-            return (CompoundBinaryTag) dimension.getCompound("minecraft:worldgen/biome").getList("value").stream().filter(tag -> ((CompoundBinaryTag) tag).getString("name").equals(name)).collect(toSingleton());
-        }
-        throw new NullPointerException("Codec must be built before attempting to get a biome!");
+            return (CompoundBinaryTag) dimension.getCompound("minecraft:worldgen/biome").getList("value").stream().filter(tag -> ((CompoundBinaryTag) tag).getString("name").equals(name)).collect(CollectorUtil.toSingleton());
+        } else throw new NullPointerException("Codec must be built before attempting to get a biome!");
     }
 }
