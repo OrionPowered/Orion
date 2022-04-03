@@ -55,6 +55,9 @@ public abstract class AbstractHandler implements Handler {
     public void handle(PluginMessageIn packet) {
     }
 
+    public void handle(PlayerMovement packet) {
+    }
+
     public void handle(PlayerPosition packet) {
     }
 

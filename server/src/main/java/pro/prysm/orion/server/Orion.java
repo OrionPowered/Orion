@@ -29,6 +29,7 @@ public class Orion extends AbstractOrion {
                 .registerIncoming(PacketState.PLAY, 0x11, PlayerPosition.class)
                 .registerIncoming(PacketState.PLAY, 0x12, PlayerPositionAndRotation.class)
                 .registerIncoming(PacketState.PLAY, 0x13, PlayerRotation.class)
+                .registerIncoming(PacketState.PLAY, 0x14, PlayerMovement.class)
                 .registerIncoming(PacketState.PLAY, 0x0F, KeepAliveIn.class)
                 .registerIncoming(PacketState.PLAY, 0x30, Pong.class)
                 .registerIncoming(PacketState.PLAY, 0x1B, EntityAction.class);

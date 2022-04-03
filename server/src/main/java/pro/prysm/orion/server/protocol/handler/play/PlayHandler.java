@@ -16,11 +16,8 @@ import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
 import pro.prysm.orion.server.protocol.handler.AbstractHandler;
+import pro.prysm.orion.server.protocol.incoming.*;
 import pro.prysm.orion.server.protocol.incoming.EntityAction;
-import pro.prysm.orion.server.protocol.incoming.PlayerPosition;
-import pro.prysm.orion.server.protocol.incoming.PlayerPositionAndRotation;
-import pro.prysm.orion.server.protocol.incoming.PlayerRotation;
-import pro.prysm.orion.server.protocol.incoming.TeleportConfirm;
 import pro.prysm.orion.server.protocol.outgoing.JoinGame;
 import pro.prysm.orion.server.world.LevelProvider;
 import pro.prysm.orion.server.world.World;
@@ -183,6 +180,11 @@ public class PlayHandler extends AbstractHandler {
             player.setBrand(new String(packet.getData(), StandardCharsets.UTF_8));
         else
             Orion.getEventBus().post(new IncomingPluginMessageEvent(packet.getChannel(), new PacketByteBuf(packet.getData())));
+    }
+
+    public void handle(PlayerMovement packet) {
+        if (player.getStatus() == PlayerStatus.CONNECTING) return;
+        player.getLocation().setOnGround(packet.isOnGround());
     }
 
     @Override
