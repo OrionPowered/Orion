@@ -11,10 +11,7 @@ import pro.prysm.orion.common.protocol.incoming.play.*;
 import pro.prysm.orion.common.protocol.incoming.status.Ping;
 import pro.prysm.orion.common.protocol.incoming.status.Request;
 import pro.prysm.orion.server.protocol.handler.play.PlayHandler;
-import pro.prysm.orion.server.protocol.incoming.PlayerPosition;
-import pro.prysm.orion.server.protocol.incoming.PlayerPositionAndRotation;
-import pro.prysm.orion.server.protocol.incoming.PlayerRotation;
-import pro.prysm.orion.server.protocol.incoming.TeleportConfirm;
+import pro.prysm.orion.server.protocol.incoming.*;
 
 public abstract class AbstractHandler implements Handler {
     protected final Connection connection;
@@ -77,5 +74,8 @@ public abstract class AbstractHandler implements Handler {
     }
 
     public void handle(Pong packet) {
+    }
+
+    public void handle(EntityAction packet) {
     }
 }
