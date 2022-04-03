@@ -163,7 +163,7 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
     }
 
     public void setSprinting(boolean sprinting) {
-        this.sneaking = sprinting;
+        this.sprinting = sprinting;
         if (sprinting) Orion.getEventBus().post(new PlayerSprintEvent(this));
     }
 
