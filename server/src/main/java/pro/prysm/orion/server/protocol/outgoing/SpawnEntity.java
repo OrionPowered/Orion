@@ -1,7 +1,6 @@
 package pro.prysm.orion.server.protocol.outgoing;
 
 import pro.prysm.orion.api.data.Location;
-import pro.prysm.orion.api.data.Velocity;
 import pro.prysm.orion.server.entity.ImplEntity;
 import pro.prysm.orion.common.net.PacketByteBuf;
 import pro.prysm.orion.common.protocol.outgoing.OutgoingPacket;
@@ -15,7 +14,6 @@ public class SpawnEntity extends OutgoingPacket {
     private final int entityType;
     private final Location location;
     private final int data;
-    private final Velocity velocity;
 
     public SpawnEntity(ImplEntity entity) {
         super(0x00);
@@ -24,7 +22,6 @@ public class SpawnEntity extends OutgoingPacket {
         this.entityType = entity.getEntityTypeId();
         this.location = entity.getLocation();
         this.data = 0; // TODO: Implement support for data
-        this.velocity = entity.getVelocity();
     }
 
     @Override
