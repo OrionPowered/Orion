@@ -26,6 +26,7 @@ import pro.prysm.orion.common.util.TagUtil;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.entity.ImplLivingEntity;
+import pro.prysm.orion.server.protocol.bidirectional.PlayerAbilities;
 import pro.prysm.orion.server.protocol.outgoing.ChunkWithLight;
 import pro.prysm.orion.server.world.Chunk;
 import pro.prysm.orion.server.world.World;
@@ -48,8 +49,14 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
     private boolean hidden;
     private Component displayName;
     private World world;
+    private boolean invulnerable;
+    private boolean instantBreak;
+    private boolean allowFlight;
     private boolean sneaking;
     private boolean sprinting;
+    private boolean flying;
+    private float flySpeed = 0.05F; // Default, vanilla fly speed
+    private float fieldOfViewModifier = 0.1F; // Default, vanilla modifier
 
     ImplPlayer(Connection connection, GameProfile profile, int entityId) {
         super(entityId, profile.getUniqueId(), EntityType.PLAYER.getId()); // Should I be using profile's uuid for this?
@@ -100,6 +107,11 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
         return CompletableFuture.completedFuture(new ChunkWithLight(chunk)).thenAcceptAsync(connection::sendPacket);
     }
 
+    public void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
+        allowFlight = (gameMode == GameMode.CREATIVE);
+    }
+
     @Override
     public void setDisplayName(Component displayName) {
         this.displayName = displayName;
@@ -114,6 +126,37 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
         connection.sendPacket(new PlayerPositionAndLook(location));
     }
 
+    @Override
+    public void setAllowFlight(boolean allowed) {
+        allowFlight = allowed;
+        updateAbilities();
+    }
+
+    @Override
+    public void setInstantBreak(boolean instantBreak) {
+        this.instantBreak = instantBreak;
+        updateAbilities();
+    }
+
+    @Override
+    public void setInvulnerable(boolean invulnerable) {
+        this.invulnerable = invulnerable;
+        updateAbilities();
+    }
+
+    @Override
+    public void setFlySpeed(float flySpeed) {
+        this.flySpeed = flySpeed;
+        updateAbilities();
+    }
+
+    @Override
+    public void setFieldOfViewModifier(float fieldOfViewModifier) {
+        this.fieldOfViewModifier = fieldOfViewModifier;
+        updateAbilities();
+    }
+
+
     public void setSneaking(boolean sneaking) {
         this.sneaking = sneaking;
         if (sneaking) Orion.getEventBus().post(new PlayerSneakEvent(this));
@@ -122,6 +165,12 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
     public void setSprinting(boolean sprinting) {
         this.sneaking = sprinting;
         if (sprinting) Orion.getEventBus().post(new PlayerSprintEvent(this));
+    }
+
+    private void updateAbilities() {
+        PlayerAbilities.Outgoing p = new PlayerAbilities.Outgoing(invulnerable, flying, allowFlight, instantBreak, flySpeed, fieldOfViewModifier);
+        System.out.println(p);
+        connection.sendPacket(p);
     }
 
     // ===============================================================================================================

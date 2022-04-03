@@ -93,6 +93,36 @@ public interface Player extends Identity, LivingEntity, Audience {
     void teleport(Location location);
 
     /**
+     * Allows/disallows flight ability
+     * @param allowed boolean
+     */
+    void setAllowFlight(boolean allowed);
+
+    /**
+     * Allows/disallows instant break
+     * @param instantBreak boolean
+     */
+    void setInstantBreak(boolean instantBreak);
+
+    /**
+     * Allows/disallows the player to be invulnerable
+     * @param invulnerable boolean
+     */
+    void setInvulnerable(boolean invulnerable);
+
+    /**
+     * Sets the player's fly speed
+     * @param flySpeed float
+     */
+    void setFlySpeed(float flySpeed);
+
+    /**
+     * Sets the player's field of view modifier
+     * @param fieldOfViewModifier float
+     */
+    void setFieldOfViewModifier(float fieldOfViewModifier);
+
+    /**
      * Retrieves the players couching status
      * @return boolean
      */
@@ -103,4 +133,10 @@ public interface Player extends Identity, LivingEntity, Audience {
      * @return boolean
      */
     boolean isSprinting();
+
+    /**
+     * Retrieves the players flying status
+     * @return boolean
+     */
+    boolean isFlying();
 }

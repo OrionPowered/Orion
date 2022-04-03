@@ -8,6 +8,7 @@ import pro.prysm.orion.common.event.EventBus;
 import pro.prysm.orion.common.protocol.Protocol;
 import pro.prysm.orion.common.protocol.incoming.play.*;
 import pro.prysm.orion.common.scheduler.OrionScheduler;
+import pro.prysm.orion.server.protocol.bidirectional.PlayerAbilities;
 import pro.prysm.orion.server.protocol.handler.HandshakeHandler;
 import pro.prysm.orion.server.protocol.incoming.*;
 
@@ -30,6 +31,7 @@ public class Orion extends AbstractOrion {
                 .registerIncoming(PacketState.PLAY, 0x12, PlayerPositionAndRotation.class)
                 .registerIncoming(PacketState.PLAY, 0x13, PlayerRotation.class)
                 .registerIncoming(PacketState.PLAY, 0x14, PlayerMovement.class)
+                .registerIncoming(PacketState.PLAY, 0x19, PlayerAbilities.Incoming.class)
                 .registerIncoming(PacketState.PLAY, 0x0F, KeepAliveIn.class)
                 .registerIncoming(PacketState.PLAY, 0x30, Pong.class)
                 .registerIncoming(PacketState.PLAY, 0x1B, EntityAction.class);

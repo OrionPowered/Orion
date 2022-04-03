@@ -15,6 +15,7 @@ import pro.prysm.orion.common.protocol.outgoing.play.*;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
+import pro.prysm.orion.server.protocol.bidirectional.PlayerAbilities;
 import pro.prysm.orion.server.protocol.handler.AbstractHandler;
 import pro.prysm.orion.server.protocol.incoming.*;
 import pro.prysm.orion.server.protocol.incoming.EntityAction;
@@ -237,13 +238,22 @@ public class PlayHandler extends AbstractHandler {
     }
 
     @Override
-    public  void handle(EntityAction packet) {
+    public void handle(EntityAction packet) {
         switch(packet.getAction()) {
             case START_SNEAKING -> player.setSneaking(true);
             case STOP_SNEAKING -> player.setSneaking(false);
             case START_SPRINTING -> player.setSprinting(true);
             case STOP_SPRINTING -> player.setSprinting(false);
-            default -> Orion.getLogger().warn("Unimplemented EntityAction: " + packet.getAction());
+            default -> Orion.getLogger().warn("Unimplemented EntityAction {}", packet.getAction());
+        }
+    }
+
+    @Override
+    public void handle(PlayerAbilities.Incoming packet) {
+        switch(packet.getAbility()) {
+            case FLYING -> player.setFlying(true);
+            case NONE -> player.setFlying(false);
+            default -> Orion.getLogger().warn("Unimplemented PlayerAbility: {}", packet.getAbility());
         }
     }
 }
