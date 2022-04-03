@@ -173,6 +173,10 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
         connection.sendPacket(p);
     }
 
+    public boolean isFalling() {
+        return velocity.getY() < 0;
+    }
+
     // ===============================================================================================================
     // Kyori Adventure Identity Implementation
     // ===============================================================================================================

@@ -139,4 +139,10 @@ public interface Player extends Identity, LivingEntity, Audience {
      * @return boolean
      */
     boolean isFlying();
+
+    /**
+     * Retrieves the players falling status
+     * @return boolean
+     */
+    boolean isFalling();
 }
