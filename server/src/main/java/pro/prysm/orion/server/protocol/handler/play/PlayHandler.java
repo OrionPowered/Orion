@@ -16,6 +16,7 @@ import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
 import pro.prysm.orion.server.protocol.handler.AbstractHandler;
+import pro.prysm.orion.server.protocol.incoming.EntityAction;
 import pro.prysm.orion.server.protocol.incoming.PlayerPosition;
 import pro.prysm.orion.server.protocol.incoming.PlayerPositionAndRotation;
 import pro.prysm.orion.server.protocol.incoming.PlayerRotation;
@@ -231,5 +232,16 @@ public class PlayHandler extends AbstractHandler {
         Component message = packet.getMessage();
         // TODO: post chat event
         server.broadcast(sender, message);
+    }
+
+    @Override
+    public  void handle(EntityAction packet) {
+        switch(packet.getAction()) {
+            case START_SNEAKING -> player.setSneaking(true);
+            case STOP_SNEAKING -> player.setSneaking(false);
+            case START_SPRINTING -> player.setSprinting(true);
+            case STOP_SPRINTING -> player.setSprinting(false);
+            default -> Orion.getLogger().warn("Unimplemented EntityAction: " + packet.getAction());
+        }
     }
 }
