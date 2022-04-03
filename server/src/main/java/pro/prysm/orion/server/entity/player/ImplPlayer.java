@@ -16,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 import pro.prysm.orion.api.data.Location;
 import pro.prysm.orion.api.entity.EntityType;
 import pro.prysm.orion.api.entity.player.*;
+import pro.prysm.orion.api.event.event.PlayerSneakEvent;
+import pro.prysm.orion.api.event.event.PlayerSprintEvent;
 import pro.prysm.orion.common.message.ChatPosition;
 import pro.prysm.orion.common.net.Connection;
 import pro.prysm.orion.common.protocol.PlayerInfoAction;
@@ -110,6 +112,16 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
     @Override
     public void teleport(Location location) {
         connection.sendPacket(new PlayerPositionAndLook(location));
+    }
+
+    public void setSneaking(boolean sneaking) {
+        this.sneaking = sneaking;
+        if (sneaking) Orion.getEventBus().post(new PlayerSneakEvent(this));
+    }
+
+    public void setSprinting(boolean sprinting) {
+        this.sneaking = sprinting;
+        if (sprinting) Orion.getEventBus().post(new PlayerSprintEvent(this));
     }
 
     // ===============================================================================================================

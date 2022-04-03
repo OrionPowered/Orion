@@ -54,7 +54,7 @@ public class PlayHandler extends AbstractHandler {
         World world = level.getWorldForPlayer(player.uuid());
         player.setWorld(world);
 
-        player.setGameMode(GameMode.SPECTATOR);                 // TODO: Implement Gamemode
+        player.setGameMode(GameMode.CREATIVE);                 // TODO: Implement Gamemode
 
         JoinGame joinGame = new JoinGame();
         joinGame.setEntityId(player.getEntityId());
