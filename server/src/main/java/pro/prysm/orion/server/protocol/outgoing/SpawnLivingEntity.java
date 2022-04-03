@@ -1,7 +1,7 @@
 package pro.prysm.orion.server.protocol.outgoing;
 
 import pro.prysm.orion.api.data.Location;
-import pro.prysm.orion.api.data.Velocity;
+import pro.prysm.orion.server.math.Velocity;
 import pro.prysm.orion.server.entity.ImplLivingEntity;
 import pro.prysm.orion.common.net.PacketByteBuf;
 import pro.prysm.orion.common.protocol.outgoing.OutgoingPacket;
