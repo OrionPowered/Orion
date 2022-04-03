@@ -91,4 +91,16 @@ public interface Player extends Identity, LivingEntity, Audience {
      * @param location Location to teleport this player to
      */
     void teleport(Location location);
+
+    /**
+     * Retrieves the players couching status
+     * @return boolean
+     */
+    boolean isSneaking();
+
+    /**
+     * Retrieves the players sprinting status
+     * @return boolean
+     */
+    boolean isSprinting();
 }

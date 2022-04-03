@@ -46,6 +46,8 @@ public class ImplPlayer extends ImplLivingEntity implements Player {
     private boolean hidden;
     private Component displayName;
     private World world;
+    private boolean sneaking;
+    private boolean sprinting;
 
     ImplPlayer(Connection connection, GameProfile profile, int entityId) {
         super(entityId, profile.getUniqueId(), EntityType.PLAYER.getId()); // Should I be using profile's uuid for this?
