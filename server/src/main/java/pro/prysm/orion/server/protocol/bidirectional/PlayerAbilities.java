@@ -13,6 +13,7 @@ import java.util.Arrays;
 
 
 public class PlayerAbilities {
+
     @Getter
     public static class Incoming extends IncomingPacket {
         private PlayerAbility ability;
@@ -25,7 +26,6 @@ public class PlayerAbilities {
     }
 
     @Setter
-    @ToString
     public static class Outgoing extends OutgoingPacket {
         private boolean invulnerable;   // bit 0x01
         private boolean flying;         // bit 0x02
