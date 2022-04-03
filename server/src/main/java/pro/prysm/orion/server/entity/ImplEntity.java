@@ -3,7 +3,6 @@ package pro.prysm.orion.server.entity;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
 import pro.prysm.orion.api.data.Location;
-import pro.prysm.orion.api.data.Velocity;
 import pro.prysm.orion.api.entity.Entity;
 import pro.prysm.orion.api.entity.EntityType;
 
@@ -36,10 +35,6 @@ public class ImplEntity implements Entity {
      */
     @Setter
     protected Location location;
-    @Setter
-    protected Velocity velocity = Velocity.NONE;
-    @Setter
-    protected float fallDistance;
 
     /**
      * Peeks the next entity id without using it.
@@ -69,12 +64,6 @@ public class ImplEntity implements Entity {
     public void setLocation(double x, double y, double z) {
         if (location != null) location.set(x, y, z);
         else location = new Location(x, y, z, 0, 0, true);
-
-    }
-
-    @Override
-    public void setVelocity(double xMot, double yMot, double zMot) {
-        velocity.set(xMot, yMot, zMot);
     }
 
     @Override
