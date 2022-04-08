@@ -10,20 +10,12 @@ import pro.prysm.orion.server.math.Velocity;
 public class Movement {
     private final ImplPlayer player;
 
-    private final float sprintingMax = 0.74F;
-
     public Movement(ImplPlayer player) {
         this.player = player;
     }
 
     private boolean validMovement(Velocity velocity) {
-        double distance = velocity.distance();
-        if (player.isSprinting()) {
-            if (player.isFlying()) return true; // TODO
-            if (player.isFalling()) return true; // TODO
-            return !(distance > sprintingMax);
-        }
-        return true;
+        return true; // TODO
     }
 
     public Location playerMove(Location to, Location from) {
