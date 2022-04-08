@@ -15,11 +15,10 @@ import pro.prysm.orion.common.protocol.outgoing.play.*;
 import pro.prysm.orion.server.Orion;
 import pro.prysm.orion.server.Server;
 import pro.prysm.orion.server.entity.player.ImplPlayer;
+import pro.prysm.orion.server.protocol.bidirectional.PlayerAbilities;
 import pro.prysm.orion.server.protocol.handler.AbstractHandler;
-import pro.prysm.orion.server.protocol.incoming.PlayerPosition;
-import pro.prysm.orion.server.protocol.incoming.PlayerPositionAndRotation;
-import pro.prysm.orion.server.protocol.incoming.PlayerRotation;
-import pro.prysm.orion.server.protocol.incoming.TeleportConfirm;
+import pro.prysm.orion.server.protocol.incoming.*;
+import pro.prysm.orion.server.protocol.incoming.EntityAction;
 import pro.prysm.orion.server.protocol.outgoing.JoinGame;
 import pro.prysm.orion.server.world.LevelProvider;
 import pro.prysm.orion.server.world.World;
@@ -53,7 +52,7 @@ public class PlayHandler extends AbstractHandler {
         World world = level.getWorldForPlayer(player.uuid());
         player.setWorld(world);
 
-        player.setGameMode(GameMode.SPECTATOR);                 // TODO: Implement Gamemode
+        player.setGameMode(GameMode.CREATIVE);                 // TODO: Implement Gamemode
 
         JoinGame joinGame = new JoinGame();
         joinGame.setEntityId(player.getEntityId());
@@ -184,6 +183,11 @@ public class PlayHandler extends AbstractHandler {
             Orion.getEventBus().post(new IncomingPluginMessageEvent(packet.getChannel(), new PacketByteBuf(packet.getData())));
     }
 
+    public void handle(PlayerMovement packet) {
+        if (player.getStatus() == PlayerStatus.CONNECTING) return;
+        player.getLocation().setOnGround(packet.isOnGround());
+    }
+
     @Override
     public void handle(PlayerPosition packet) {
         if (player.getStatus() == PlayerStatus.CONNECTING) return;
@@ -231,5 +235,25 @@ public class PlayHandler extends AbstractHandler {
         Component message = packet.getMessage();
         // TODO: post chat event
         server.broadcast(sender, message);
+    }
+
+    @Override
+    public void handle(EntityAction packet) {
+        switch(packet.getAction()) {
+            case START_SNEAKING -> player.setSneaking(true);
+            case STOP_SNEAKING -> player.setSneaking(false);
+            case START_SPRINTING -> player.setSprinting(true);
+            case STOP_SPRINTING -> player.setSprinting(false);
+            default -> Orion.getLogger().warn("Unimplemented EntityAction {}", packet.getAction());
+        }
+    }
+
+    @Override
+    public void handle(PlayerAbilities.Incoming packet) {
+        switch(packet.getAbility()) {
+            case FLYING -> player.setFlying(true);
+            case NONE -> player.setFlying(false);
+            default -> Orion.getLogger().warn("Unimplemented PlayerAbility: {}", packet.getAbility());
+        }
     }
 }

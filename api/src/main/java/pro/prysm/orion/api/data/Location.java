@@ -50,6 +50,18 @@ public class Location implements Cloneable {
         else return (chunkZ == other.getChunkZ());
     }
 
+    public int getBlockX() {
+        return (int) x;
+    }
+
+    public int getBlockY() {
+        return (int) y;
+    }
+
+    public int getBlockZ() {
+        return (int) z;
+    }
+
     @Override
     public Location clone() {
         try {

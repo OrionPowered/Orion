@@ -27,6 +27,11 @@ public class LoginHandler extends AbstractHandler {
     }
 
     @Override
+    public void onDisconnect() {
+        Orion.getServer().removePlayer(player);
+    }
+
+    @Override
     public void handle(LoginStart packet) {
         username = packet.getUsername();
         Protocol protocol = Orion.getProtocol();
