@@ -26,6 +26,7 @@ dependencyResolutionManagement {
 rootProject.name = "Orion"
 
 setupLibraryProject("anvil");
+setupLibraryProject("fastanvil");
 
 setupOrionSubproject("common")
 setupOrionSubproject("server")
