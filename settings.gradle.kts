@@ -30,7 +30,6 @@ setupLibraryProject("anvil");
 setupOrionSubproject("common")
 setupOrionSubproject("server")
 setupOrionSubproject("proxy")
-setupOrionSubproject("api")
 
 fun setupOrionSubproject(name: String) {
     setupSubproject("orion-$name") {
