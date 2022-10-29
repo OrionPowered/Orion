@@ -32,9 +32,6 @@ setupOrionSubproject("server")
 setupOrionSubproject("proxy")
 setupOrionSubproject("api")
 
-include("test-plugin")
-include("test-module")
-
 fun setupOrionSubproject(name: String) {
     setupSubproject("orion-$name") {
         projectDir = file(name)
